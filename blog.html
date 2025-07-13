@@ -6,6 +6,155 @@
     <title>Blog - DabbeWale</title>
     <link rel="stylesheet" href="frontend/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+      .blog-posts-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        justify-content: center;
+        margin: 24px 0;
+      }
+      .blog-post {
+        flex: 1 1 250px;
+        max-width: 300px;
+        background: var(--color-card-bg);
+        border-radius: 10px;
+        box-shadow: 0 2px 8px var(--color-card-shadow);
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        color: var(--color-text);
+        transition: box-shadow 0.2s, transform 0.2s;
+      }
+      .blog-post:hover {
+        box-shadow: 0 4px 16px var(--color-card-shadow);
+        transform: translateY(-4px) scale(1.03);
+      }
+      .blog-post h3 {
+        margin-top: 0;
+        color: var(--color-primary);
+      }
+      .blog-post img {
+        border-radius: 8px;
+        margin-bottom: 10px;
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        background: var(--color-bg-alt);
+      }
+      .read-more {
+        color: var(--color-accent);
+        font-weight: 600;
+        text-decoration: none;
+        margin-top: 8px;
+        transition: color 0.2s;
+      }
+      .read-more:hover, .read-more:focus {
+        color: var(--color-primary);
+        text-decoration: underline;
+      }
+      .blog-featured h2, .blog-categories h2, .blog-latest h2, .blog-newsletter h2 {
+        color: var(--color-primary);
+      }
+      .blog-categories ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin: 0 0 1.5rem 0;
+      }
+      .blog-categories a {
+        color: var(--color-accent);
+        font-weight: 600;
+        text-decoration: none;
+        padding: 4px 12px;
+        border-radius: 6px;
+        transition: background 0.2s, color 0.2s;
+      }
+      .blog-categories a:hover, .blog-categories a:focus {
+        background: var(--color-accent);
+        color: #fff;
+      }
+      .blog-posts-list {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        margin-bottom: 1.5rem;
+      }
+      .blog-post-list-item {
+        background: var(--color-card-bg);
+        border-radius: 8px;
+        box-shadow: 0 1px 4px var(--color-card-shadow);
+        padding: 16px 18px;
+        text-align: left;
+        color: var(--color-text);
+        transition: box-shadow 0.2s, transform 0.2s;
+      }
+      .blog-post-list-item h3 a {
+        color: var(--color-primary);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .blog-post-list-item h3 a:hover, .blog-post-list-item h3 a:focus {
+        color: var(--color-accent);
+        text-decoration: underline;
+      }
+      .blog-date {
+        color: var(--color-accent);
+        font-size: 0.95em;
+        font-weight: 600;
+      }
+      .blog-pagination a {
+        display: inline-block;
+        background: var(--color-primary);
+        color: var(--color-form-btn-text);
+        padding: 7px 18px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        margin: 0 6px;
+        transition: background 0.2s;
+      }
+      .blog-pagination a:hover, .blog-pagination a:focus {
+        background: var(--color-button-hover);
+      }
+      .blog-newsletter form {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+      .blog-newsletter input[type="email"] {
+        border: 1px solid var(--color-form-input-border);
+        border-radius: 6px;
+        padding: 0.6rem 0.8rem;
+        font-size: 1rem;
+        background: var(--color-form-input-bg);
+        color: var(--color-text);
+        transition: border 0.2s, background 0.2s;
+      }
+      .blog-newsletter input[type="email"]:focus {
+        border: 1.5px solid var(--color-form-input-focus);
+        background: #fff;
+        outline: 2px solid var(--color-accent);
+        outline-offset: 1px;
+      }
+      .blog-newsletter button {
+        background: var(--color-form-btn-bg);
+        color: var(--color-form-btn-text);
+        font-weight: bold;
+        padding: 0.7rem 1.2rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .blog-newsletter button:hover, .blog-newsletter button:focus {
+        background: var(--color-accent);
+      }
+    </style>
 </head>
 <body>
     <div class="accent-bar"></div>
