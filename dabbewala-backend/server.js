@@ -14,6 +14,8 @@ app.use(cors({
 
 app.use(express.json());
 
+const API_BASE_URL = 'https://dabbewale.onrender.com';
+
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/providers", require("./routes/providerRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
