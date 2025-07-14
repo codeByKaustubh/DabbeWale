@@ -158,17 +158,41 @@
         object-fit: cover !important;
         object-position: center;
       }
+      .main-navbar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 0;
+          width: 100%;
+          max-width: 100vw;
+      }
+      .nav-links {
+          display: flex;
+          align-items: center;
+          flex: 1;
+          justify-content: space-evenly;
+      }
+      .profile-icon {
+          font-size: 1.5em;
+          text-decoration: none;
+          transition: transform 0.15s;
+      }
+      .profile-icon:hover, .profile-icon:focus {
+          transform: scale(1.15);
+      }
     </style>
 </head>
 <body>
     <div class="accent-bar"></div>
     <header>
-        <nav style="display: flex; align-items: center; justify-content: flex-start;">
-            <a href="index.html">Home</a>
-            <a href="login.html">Login</a>
-            <a href="providers.html">Browse Providers</a>
-            <a href="blog.html">Blog</a>
-            <a href="profile.html" style="margin-left:auto; font-size:1.5em; padding-left:18px; text-decoration:none;" title="Profile">👤</a>
+        <nav class="main-navbar">
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="login.html">Login</a>
+                <a href="providers.html">Browse Providers</a>
+                <a href="blog.html">Blog</a>
+            </div>
+            <a href="profile.html" class="profile-icon" title="Profile">👤</a>
         </nav>
     </header>
     <main class="blog-main">
