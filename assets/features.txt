@@ -22,6 +22,7 @@ USER INTERFACE & DESIGN:
 6. Modern UI Components ................................................ [Implemented]
 7. Navigation System ................................................... [Implemented]
 8. Form Design ......................................................... [Implemented]
+9. User Info in Profile Dropdown ....................................... [Implemented]
 
 ACCESSIBILITY & UX:
 -------------------
@@ -84,6 +85,8 @@ NOTES:
 - Frontend is live and fully functional for core UI/UX.
 - Backend API (Node.js/Express/MongoDB) is under active development.
 - User authentication, provider management, and order endpoints are being built and tested.
+- - User's name now appears in the profile dropdown after login (improved JWT payload).
+- - Authentication experience improved: user info is shown contextually in the UI.
 - Frontend-backend integration is ongoing; some forms and features are not yet connected to backend.
 - Advanced features and business logic are planned for future phases.
 - Focus remains on user experience, modern design, and robust backend foundation. 
