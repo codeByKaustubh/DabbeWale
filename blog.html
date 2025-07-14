@@ -180,6 +180,38 @@
       .profile-icon:hover, .profile-icon:focus {
           transform: scale(1.15);
       }
+      .profile-dropdown-container {
+          position: relative;
+          display: flex;
+          align-items: center;
+      }
+      .profile-dropdown {
+          display: none;
+          position: absolute;
+          top: 120%;
+          right: 0;
+          background: var(--color-card-bg, #fff);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+          border-radius: 8px;
+          min-width: 120px;
+          z-index: 100;
+          padding: 8px 0;
+      }
+      .profile-dropdown a {
+          display: block;
+          padding: 10px 18px;
+          color: var(--color-text, #222);
+          text-decoration: none;
+          font-size: 1em;
+          transition: background 0.15s;
+      }
+      .profile-dropdown a:hover {
+          background: var(--color-accent, #e0e0e0);
+          color: #fff;
+      }
+      .profile-dropdown.show {
+          display: block;
+      }
     </style>
 </head>
 <body>
@@ -192,7 +224,12 @@
                 <a href="providers.html">Browse Providers</a>
                 <a href="blog.html">Blog</a>
             </div>
-            <a href="profile.html" class="profile-icon" title="Profile">👤</a>
+            <div class="profile-dropdown-container">
+                <a href="profile.html" class="profile-icon" id="profileIcon" title="Profile">👤</a>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="#" id="signoutBtn">Sign out</a>
+                </div>
+            </div>
         </nav>
     </header>
     <main class="blog-main">
@@ -273,5 +310,18 @@
         <p>&copy; 2025 TiffinKart. All rights reserved.</p>
     </footer>
     <script src="frontend/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const icon = document.getElementById('profileIcon');
+            const dropdown = document.getElementById('profileDropdown');
+            document.addEventListener('click', function(e) {
+                if (icon.contains(e.target)) {
+                    dropdown.classList.toggle('show');
+                } else if (!dropdown.contains(e.target)) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        });
+    </script>
 </body>
 </html> 
