@@ -8,7 +8,7 @@ connectDB();
 
 const app = express();
 app.use(cors({
-  origin: "https://dabbewale.netlify.app/", 
+  origin: ["https://dabbewale.netlify.app"],
   credentials: true
 }));
 
