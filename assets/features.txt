@@ -11,7 +11,7 @@ PROJECT STATUS SUMMARY:
 
 CORE FUNCTIONALITY:
 ------------------
-1. Home Page (Landing Page) ............................................. [Implemented]
+1. Home Page (Landing Page) ............................................ [Implemented]
 2. User Authentication System (UI) ..................................... [Implemented]
 3. Provider Discovery (UI) ............................................. [Implemented]
 
