@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Panel - DabbeWale</title>
+    <link rel="stylesheet" href="frontend/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="accent-bar"></div>
+    <header>
+        <nav class="main-navbar improved-navbar">
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="login.html">Login</a>
+                <a href="providers.html">Browse Providers</a>
+                <a href="provider-panel.html" class="active">Provider Panel</a>
+                <a href="blog.html">Blog</a>
+                <a href="about.html">About</a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <h1>Provider Panel</h1>
+        <form id="providerForm" style="max-width: 420px; margin: 2.5rem auto 0 auto;">
+            <label for="actualName">Your Actual Name:</label>
+            <div class="input-icon">
+                <input type="text" id="actualName" name="actualName" required placeholder="e.g. Priya Sharma">
+            </div>
+            <label for="providerName">Name as a Provider:</label>
+            <div class="input-icon">
+                <input type="text" id="providerName" name="providerName" required placeholder="e.g. Priya's Tiffin Service">
+            </div>
+            <label for="menu">Menu:</label>
+            <div class="input-icon">
+                <textarea id="menu" name="menu" rows="3" required placeholder="e.g. Dal, Rice, Roti, Sabzi, Salad"></textarea>
+            </div>
+            <label for="prices">Prices:</label>
+            <div class="input-icon">
+                <input type="text" id="prices" name="prices" required placeholder="e.g. ₹120 per tiffin">
+            </div>
+            <label for="location">Location:</label>
+            <div class="input-icon">
+                <input type="text" id="location" name="location" required placeholder="e.g. Andheri East, Mumbai">
+            </div>
+            <label for="email">Email:</label>
+            <div class="input-icon">
+                <input type="email" id="email" name="email" required placeholder="e.g. priya@email.com">
+            </div>
+            <label for="phone">Phone Number:</label>
+            <div class="input-icon">
+                <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="e.g. 9876543210">
+            </div>
+            <button type="submit"><span class="icon-emoji">✅</span>Submit</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2025 TiffinKart. All rights reserved.</p>
+    </footer>
+</body>
+</html> 
