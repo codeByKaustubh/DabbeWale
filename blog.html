@@ -212,23 +212,69 @@
       .profile-dropdown.show {
           display: block;
       }
+      .improved-navbar {
+        background: linear-gradient(90deg, #f9fbe7 60%, #e0f2f1 100%);
+        box-shadow: 0 2px 16px rgba(56,142,60,0.10);
+        border-radius: 18px;
+        margin: 1.5rem auto 2.5rem auto;
+        max-width: 950px;
+        padding: 0.7em 2em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .improved-navbar .nav-links {
+        display: flex;
+        gap: 2.2em;
+        width: 100%;
+        justify-content: center;
+      }
+      .improved-navbar .nav-links a {
+        color: #388e3c;
+        font-size: 1.25rem;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 0.5em 1.1em;
+        border-radius: 8px;
+        transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+        position: relative;
+      }
+      .improved-navbar .nav-links a:hover,
+      .improved-navbar .nav-links a:focus {
+        background: #e0f2f1;
+        color: #1b5e20;
+        box-shadow: 0 2px 8px rgba(56,142,60,0.10);
+      }
+      .improved-navbar .nav-links a.active {
+        background: #388e3c;
+        color: #fff;
+        box-shadow: 0 2px 12px rgba(56,142,60,0.13);
+      }
+      @media (max-width: 700px) {
+        .improved-navbar {
+          padding: 0.7em 0.5em;
+          max-width: 99vw;
+        }
+        .improved-navbar .nav-links {
+          gap: 0.7em;
+        }
+        .improved-navbar .nav-links a {
+          font-size: 1.05rem;
+          padding: 0.5em 0.6em;
+        }
+      }
     </style>
 </head>
 <body>
     <div class="accent-bar"></div>
     <header>
-        <nav class="main-navbar">
+        <nav class="main-navbar improved-navbar">
             <div class="nav-links">
                 <a href="index.html">Home</a>
                 <a href="login.html">Login</a>
                 <a href="providers.html">Browse Providers</a>
-                <a href="blog.html">Blog</a>
-            </div>
-            <div class="profile-dropdown-container">
-                <a href="profile.html" class="profile-icon" id="profileIcon" title="Profile">👤</a>
-                <div class="profile-dropdown" id="profileDropdown">
-                    <a href="#" id="signoutBtn">Sign out</a>
-                </div>
+                <a href="blog.html" class="active">Blog</a>
+                <a href="about.html">About</a>
             </div>
         </nav>
     </header>
