@@ -78,7 +78,7 @@ INTEGRATION & THIRD-PARTY:
 --------------------------
 35. Payment Gateway Integration ....................................... [Planned]
 36. Maps & Location Services .......................................... [Planned]
-37. Communication Tools (Email, SMS, WhatsApp) ....................... [Planned]
+37. Communication Tools (Email, SMS, WhatsApp) ........................ [Planned]
 
 NOTES:
 ------
