@@ -460,15 +460,34 @@ nav a:focus {
 }
 @media (max-width: 700px) {
     .profile-icon-container {
-        right: 0.7em;
-        top: 0.7em;
+        position: relative;
+        right: auto;
+        top: auto;
+        margin-left: auto;
+        order: 3;
     }
     #profileIcon {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
+        padding: 0.15em 0.28em;
     }
     .profile-dropdown {
         min-width: 140px;
         right: 0;
+        top: 2.2em;
+    }
+    /* Ensure navbar has proper spacing for profile icon */
+    .improved-navbar {
+        padding: 0.7em 1em;
+        position: relative;
+    }
+    .improved-navbar .nav-links {
+        gap: 0.5em;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .improved-navbar .nav-links a {
+        font-size: 1rem;
+        padding: 0.4em 0.7em;
     }
 }
 
