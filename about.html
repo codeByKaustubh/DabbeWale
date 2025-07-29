@@ -500,6 +500,252 @@
         }
       }
     </style>
+    <!-- Mobile Responsive Styles for About Page -->
+    <style>
+      /* Mobile responsive styles for about page */
+      @media (max-width: 768px) {
+        .about-main-card {
+          margin: 1rem auto;
+          padding: 2rem 1.5rem;
+          border-radius: 20px;
+        }
+        
+        .about-main-card h1 {
+          font-size: 2.2rem;
+          margin-top: 1rem;
+          margin-bottom: 1rem;
+        }
+        
+        .about-main-card h1::after {
+          width: 60px;
+          height: 3px;
+        }
+        
+        body > h1 {
+          font-size: 2.2rem !important;
+          margin-top: 1rem !important;
+        }
+        
+        body > h2 {
+          font-size: 1.6rem !important;
+          margin: 2rem 0 1rem 0 !important;
+        }
+        
+        body > p, .about-list {
+          font-size: 1.1rem !important;
+          margin-bottom: 1.5rem !important;
+          padding: 0 0.5rem;
+        }
+        
+        .about-intro {
+          font-size: 1.2rem !important;
+          margin-bottom: 1.8rem !important;
+          padding: 0 0.5rem;
+        }
+        
+        .section-content {
+          font-size: 1.1rem !important;
+          padding: 0 0.5rem;
+          text-align: left !important;
+        }
+        
+        /* How it works section */
+        .how-it-works-steps {
+          gap: 1rem !important;
+        }
+        
+        .how-it-works-step {
+          padding: 1.2rem 1rem !important;
+          font-size: 1rem !important;
+          border-left: 4px solid #388e3c !important;
+        }
+        
+        .how-it-works-step:before {
+          font-size: 1.5rem !important;
+          margin-right: 0.8rem !important;
+        }
+        
+        /* Why choose section */
+        .why-choose-list {
+          grid-template-columns: 1fr !important;
+          gap: 1rem !important;
+        }
+        
+        .why-choose-card {
+          padding: 1.2rem 1rem !important;
+          font-size: 1rem !important;
+          border-left: 4px solid #43a047 !important;
+        }
+        
+        /* Testimonials and provider stories */
+        .testimonials-grid, .provider-stories-grid {
+          grid-template-columns: 1fr !important;
+          gap: 1rem !important;
+        }
+        
+        .testimonial-card, .provider-story-card {
+          padding: 1.5rem 1.2rem 1.2rem 1.8rem !important;
+          font-size: 1rem !important;
+          border-left: 5px solid #e65100 !important;
+          min-height: auto !important;
+        }
+        
+        .testimonial-card:before, .provider-story-card:before {
+          font-size: 2rem !important;
+          left: 0.5rem !important;
+          top: 0.5rem !important;
+        }
+        
+        .testimonial-author, .provider-story-author {
+          font-size: 0.9rem !important;
+          margin-top: 0.8rem !important;
+        }
+        
+        /* Features grid */
+        .features-grid {
+          grid-template-columns: 1fr !important;
+          gap: 1rem !important;
+          margin-bottom: 1.5rem !important;
+        }
+        
+        .feature-card {
+          padding: 1.2rem 1rem !important;
+          font-size: 1rem !important;
+          min-height: auto !important;
+        }
+        
+        /* About list */
+        .about-list li {
+          font-size: 1rem !important;
+          margin-bottom: 0.8rem !important;
+          padding: 0 0.5rem;
+        }
+        
+        /* Foodie quotes */
+        .foodie-quotes-grid {
+          gap: 1rem !important;
+        }
+        
+        .foodie-quote {
+          padding: 1.2rem 1rem !important;
+          font-size: 1rem !important;
+        }
+        
+        /* Section dividers */
+        .about-section-divider {
+          margin: 2rem 0 1.5rem 0 !important;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .about-main-card {
+          margin: 0.5rem;
+          padding: 1.5rem 1rem;
+          border-radius: 16px;
+        }
+        
+        .about-main-card h1 {
+          font-size: 1.8rem;
+        }
+        
+        body > h1 {
+          font-size: 1.8rem !important;
+        }
+        
+        body > h2 {
+          font-size: 1.4rem !important;
+          margin: 1.5rem 0 0.8rem 0 !important;
+        }
+        
+        body > p, .about-list {
+          font-size: 1rem !important;
+          margin-bottom: 1.2rem !important;
+        }
+        
+        .about-intro {
+          font-size: 1.1rem !important;
+          margin-bottom: 1.5rem !important;
+        }
+        
+        .how-it-works-step {
+          padding: 1rem 0.8rem !important;
+          font-size: 0.9rem !important;
+        }
+        
+        .how-it-works-step:before {
+          font-size: 1.3rem !important;
+          margin-right: 0.6rem !important;
+        }
+        
+        .why-choose-card {
+          padding: 1rem 0.8rem !important;
+          font-size: 0.9rem !important;
+        }
+        
+        .testimonial-card, .provider-story-card {
+          padding: 1.2rem 1rem 1rem 1.5rem !important;
+          font-size: 0.9rem !important;
+          border-left: 4px solid #e65100 !important;
+        }
+        
+        .testimonial-card:before, .provider-story-card:before {
+          font-size: 1.8rem !important;
+          left: 0.3rem !important;
+          top: 0.3rem !important;
+        }
+        
+        .testimonial-author, .provider-story-author {
+          font-size: 0.8rem !important;
+        }
+        
+        .feature-card {
+          padding: 1rem 0.8rem !important;
+          font-size: 0.9rem !important;
+        }
+        
+        .about-list li {
+          font-size: 0.9rem !important;
+        }
+        
+        .section-content {
+          font-size: 1rem !important;
+        }
+      }
+      
+      /* Improved navbar mobile styles for about page */
+      @media (max-width: 700px) {
+        .improved-navbar {
+          margin: 1rem auto 1.5rem auto;
+          padding: 0.7rem 0.5rem;
+          max-width: 98vw;
+        }
+        
+        .improved-navbar .nav-links {
+          gap: 0.4rem;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        
+        .improved-navbar .nav-links a {
+          font-size: 0.9rem;
+          padding: 0.4rem 0.6rem;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .improved-navbar {
+          margin: 0.5rem auto 1rem auto;
+          border-radius: 12px;
+        }
+        
+        .improved-navbar .nav-links a {
+          font-size: 0.8rem;
+          padding: 0.35rem 0.5rem;
+        }
+      }
+    </style>
+    <!-- End Mobile Responsive Styles -->
+    
     <script src="frontend/js/main.js"></script>
 </body>
-</html> 
+</html>
