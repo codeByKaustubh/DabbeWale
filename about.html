@@ -158,8 +158,9 @@
     <div class="provider-stories-section">
       <h2>Provider Stories</h2>
       <div class="provider-stories-grid">
-        <div class="provider-story-card">Mrs. Sharma: “DabbeWale helped me turn my passion for cooking into a steady income. I love sharing my Punjabi recipes with new customers.”<span class="provider-story-author">— Mrs. Sharma</span></div>
-        <div class="provider-story-card">Patel Family: “We started as a small tiffin service and now have regular customers across the city. The platform makes everything easy!”<span class="provider-story-author">— Patel Family</span></div>
+        <div class="provider-story-card">“DabbeWale helped me turn my passion for cooking into a steady income. I love sharing my Punjabi recipes with new customers.”<span class="provider-story-author">— Mrs. Sharma</span></div>
+        <div class="provider-story-card">“We started as a small tiffin service and now have regular customers across the city. The platform makes everything easy!”<span class="provider-story-author">— Patel Family</span></div>
+        <div class="provider-story-card">“My Gujarati meals now reach dozens every day.”<span class="provider-story-author">— Mrs. Joshi</span></div>
       </div>
     </div>
     <h2>Health & Safety</h2>
@@ -192,12 +193,6 @@
     <p class="section-content">Have questions, feedback, or need help? Our support team is here for you! Reach out via our contact form, email, or in-app chat. We value your input and are always eager to help you have the best tiffin experience possible.</p>
     <h2>Join Us</h2>
     <p class="section-content">Whether you’re looking for a taste of home or want to share your culinary skills, DabbeWale is the place for you. Order your next meal or become a provider today!</p>
-    <h2>Foodie Quotes</h2>
-    <div class="foodie-quotes-grid">
-        <div class="foodie-quote-card">“DabbeWale is my daily dose of nostalgia. Every bite takes me home!”<span class="foodie-quote-author">— Aman, Pune</span></div>
-        <div class="foodie-quote-card">“I never thought healthy food could be this tasty and affordable.”<span class="foodie-quote-author">— Sneha, Mumbai</span></div>
-        <div class="foodie-quote-card">“The variety is mind-blowing. I’ve tried 12 different tiffins in 2 months!”<span class="foodie-quote-author">— Karan, Bangalore</span></div>
-    </div>
     <h2 style="color: #e65100;">Ready for a taste adventure?</h2>
     <p style="font-size:1.2rem; color:#e65100; font-weight:600; text-align:center;">Join the DabbaWale family today and let your taste buds travel across India—one dabba at a time! <br> <span style="font-size:2rem;">🍛🍲🥘</span></p>
     </div>
@@ -481,25 +476,30 @@
         color: #1b5e20;
         box-shadow: 0 2px 8px rgba(56,142,60,0.10);
       }
-      .improved-navbar .nav-links a.active {
-        background: #388e3c;
-        color: #fff;
-        box-shadow: 0 2px 12px rgba(56,142,60,0.13);
-      }
-      @media (max-width: 700px) {
-        .improved-navbar {
-          padding: 0.7em 0.5em;
-          max-width: 99vw;
+    </style>
+     
+    <!-- Mobile Responsive Styles for About Page -->
+    <style>
+      /* Mobile responsive styles for about page */
+      @media (max-width: 768px) {
+        .about-main-card {
+          margin: 1rem auto;
+          padding: 2rem 1.5rem;
+          border-radius: 20px;
         }
-        .improved-navbar .nav-links {
-          gap: 0.7em;
+        
+        .about-main-card h1 {
+          font-size: 2.2rem;
+          margin-top: 1rem;
+          margin-bottom: 1rem;
         }
-        .improved-navbar .nav-links a {
-          font-size: 1.05rem;
-          padding: 0.5em 0.6em;
+        
+        .about-main-card h1::after {
+          width: 60px;
         }
       }
     </style>
+    
     <script src="frontend/js/main.js"></script>
 </body>
-</html> 
+</html>  
