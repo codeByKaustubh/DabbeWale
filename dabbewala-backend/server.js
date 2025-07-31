@@ -8,13 +8,16 @@ connectDB();
 
 const app = express();
 app.use(cors({
-  origin: ["https://dabbewale.netlify.app"],
+  origin: ["http://localhost:5000", "http://127.0.0.1:5000", "http://localhost:3000", "http://127.0.0.1:3000", "https://dabbewale.netlify.app"],
   credentials: true
 }));
 
 app.use(express.json());
 
-const API_BASE_URL = 'https://dabbewale.onrender.com';
+// Test route to verify server is working
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Server is running!", timestamp: new Date().toISOString() });
+});
 
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/providers", require("./routes/providerRoutes"));

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Connection - DabbeWale</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        #results { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>DabbeWale Backend Connection Test</h1>
+    
+    <div class="test-section">
+        <h3>1. Test Server Connection</h3>
+        <button onclick="testServerConnection()">Test Server</button>
+        <div id="serverResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>2. Test User Registration</h3>
+        <input type="text" id="testName" placeholder="Name" value="Test User">
+        <input type="email" id="testEmail" placeholder="Email" value="test@example.com">
+        <input type="password" id="testPassword" placeholder="Password" value="test123">
+        <button onclick="testRegistration()">Test Registration</button>
+        <div id="registrationResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>3. Test User Login</h3>
+        <input type="email" id="loginEmail" placeholder="Email" value="test@example.com">
+        <input type="password" id="loginPassword" placeholder="Password" value="test123">
+        <button onclick="testLogin()">Test Login</button>
+        <div id="loginResult"></div>
+    </div>
+    
+    <div id="results"></div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5000';
+        
+        function showResult(elementId, message, isSuccess = true) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<p class="${isSuccess ? 'success' : 'error'}">${message}</p>`;
+        }
+        
+        async function testServerConnection() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/test`);
+                const data = await response.json();
+                showResult('serverResult', `✅ Server is running! Response: ${JSON.stringify(data)}`);
+            } catch (error) {
+                showResult('serverResult', `❌ Server connection failed: ${error.message}`, false);
+            }
+        }
+        
+        async function testRegistration() {
+            const name = document.getElementById('testName').value;
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password, role: 'consumer' })
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showResult('registrationResult', `✅ Registration successful! Response: ${JSON.stringify(data)}`);
+                } else {
+                    showResult('registrationResult', `❌ Registration failed: ${data.msg}`, false);
+                }
+            } catch (error) {
+                showResult('registrationResult', `❌ Registration error: ${error.message}`, false);
+            }
+        }
+        
+        async function testLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showResult('loginResult', `✅ Login successful! Token: ${data.token ? 'Received' : 'Missing'}`, true);
+                } else {
+                    showResult('loginResult', `❌ Login failed: ${data.msg}`, false);
+                }
+            } catch (error) {
+                showResult('loginResult', `❌ Login error: ${error.message}`, false);
+            }
+        }
+        
+        // Auto-test server connection on page load
+        window.onload = function() {
+            testServerConnection();
+        };
+    </script>
+</body>
+</html> 
