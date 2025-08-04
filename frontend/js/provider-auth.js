@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
       };
 
       try {
-        const response = await fetch('http://localhost:5000/api/auth/login', {
+        const response = await fetch('https://dabbewale.onrender.com/api/auth/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
       console.log("Sending registration data:", { ...data, password: '[HIDDEN]' });
 
       try {
-        const response = await fetch('http://localhost:5000/api/auth/register', {
+        const response = await fetch('https://dabbewale.onrender.com/api/auth/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       } catch (err) {
         console.error("Error during registration:", err);
-        alert("Connection error. Please check if the server is running at http://localhost:5000");
+        alert("Connection error. Please check if the server is running at https://dabbewale.onrender.com");
       }
     });
   }
