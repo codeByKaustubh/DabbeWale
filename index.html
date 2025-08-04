@@ -469,7 +469,66 @@
         margin-top: auto;
       }
       
+      /* Mobile Responsive Styles */
+      @media (max-width: 1024px) {
+        .improved-navbar {
+          max-width: 95%;
+          padding: 0.7em 1.5em;
+        }
+        
+        .food-grid {
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 1.5rem;
+        }
+      }
+      
       @media (max-width: 768px) {
+        .improved-navbar {
+          margin: 1rem auto 1.5rem auto;
+          padding: 0.7rem 1rem;
+          max-width: 95%;
+        }
+        
+        .improved-navbar .nav-links {
+          gap: 1.5em;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        
+        .improved-navbar .nav-links a {
+          font-size: 1.1rem;
+          padding: 0.4em 0.8em;
+        }
+        
+        .hero-section {
+          padding: 2rem 1rem;
+        }
+        
+        .hero-section h1 {
+          font-size: 2.5rem;
+          line-height: 1.2;
+        }
+        
+        .hero-section p {
+          font-size: 1.1rem;
+          margin: 1rem 0 1.5rem;
+        }
+        
+        .food-grid {
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1.2rem;
+          padding: 0 1rem;
+        }
+        
+        .food-card {
+          padding: 1.2rem;
+        }
+        
+        .featured-foods h2 {
+          font-size: 1.8rem;
+          margin: 2rem 0 1.2rem;
+        }
+        
         .footer-content {
           grid-template-columns: 1fr;
           gap: 2rem;
@@ -509,6 +568,46 @@
       }
       
       @media (max-width: 480px) {
+        .improved-navbar {
+          padding: 0.5rem 0.7rem;
+          margin: 0.8rem auto 1.2rem auto;
+        }
+        
+        .improved-navbar .nav-links {
+          gap: 1em;
+        }
+        
+        .improved-navbar .nav-links a {
+          font-size: 1rem;
+          padding: 0.3em 0.6em;
+        }
+        
+        .hero-section {
+          padding: 1.5rem 0.8rem;
+        }
+        
+        .hero-section h1 {
+          font-size: 2rem;
+        }
+        
+        .hero-section p {
+          font-size: 1rem;
+        }
+        
+        .food-grid {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+          padding: 0 0.8rem;
+        }
+        
+        .food-card {
+          padding: 1rem;
+        }
+        
+        .featured-foods h2 {
+          font-size: 1.6rem;
+        }
+        
         .footer-content {
           gap: 1.5rem;
         }
