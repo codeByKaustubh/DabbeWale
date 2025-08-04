@@ -72,6 +72,83 @@
               padding: 0.5em 0.6em;
             }
           }
+          /* Mobile Responsive Styles */
+          @media (max-width: 1024px) {
+            .improved-navbar {
+                max-width: 95%;
+                padding: 0.7em 1.5em;
+            }
+          }
+          @media (max-width: 768px) {
+            .improved-navbar {
+                margin: 1rem auto 1.5rem auto;
+                padding: 0.7rem 1rem;
+                max-width: 95%;
+            }
+            .improved-navbar .nav-links {
+                gap: 1.2em;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .improved-navbar .nav-links a {
+                font-size: 1.1rem;
+                padding: 0.4em 0.8em;
+            }
+            main {
+                padding: 1rem;
+                max-width: 95%;
+                margin: 0 auto;
+            }
+            main h1 {
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
+            }
+            form {
+                max-width: 100%;
+                padding: 1.5rem;
+            }
+            .input-icon input,
+            .input-icon textarea {
+                font-size: 1rem;
+                padding: 0.8rem;
+            }
+            button {
+                font-size: 1rem;
+                padding: 0.8rem 1.5rem;
+                width: 100%;
+            }
+          }
+          @media (max-width: 480px) {
+            .improved-navbar {
+                padding: 0.5rem 0.7rem;
+                margin: 0.8rem auto 1.2rem auto;
+            }
+            .improved-navbar .nav-links {
+                gap: 0.5em;
+            }
+            .improved-navbar .nav-links a {
+                font-size: 0.95rem;
+                padding: 0.3em 0.5em;
+            }
+            main {
+                padding: 0.8rem;
+            }
+            main h1 {
+                font-size: 1.8rem;
+            }
+            form {
+                padding: 1rem;
+            }
+            .input-icon input,
+            .input-icon textarea {
+                font-size: 0.95rem;
+                padding: 0.7rem;
+            }
+            button {
+                font-size: 0.95rem;
+                padding: 0.7rem 1.2rem;
+            }
+          }
         </style>
     </header>
     <main>
