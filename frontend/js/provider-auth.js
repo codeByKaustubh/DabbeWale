@@ -1,13 +1,13 @@
 console.log("Provider auth JS file connected");
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const loginForm = document.getElementById('providerLoginForm');
   const registerForm = document.getElementById("providerRegisterForm");
 
   if (loginForm) {
-    loginForm.addEventListener('submit', async function(e) {
+    loginForm.addEventListener('submit', async function (e) {
       e.preventDefault();
       console.log("Provider login form submitted");
-      
+
       const formData = new FormData(loginForm);
       const data = {
         email: formData.get('email'),
@@ -22,10 +22,10 @@ document.addEventListener('DOMContentLoaded', function() {
           },
           body: JSON.stringify(data)
         });
-        
+
         const result = await response.json();
         console.log("Login response:", result);
-        
+
         if (response.ok) {
           alert("Login successful!");
           // Store token and redirect
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   if (registerForm) {
-    registerForm.addEventListener('submit', async function(e) {
+    registerForm.addEventListener('submit', async function (e) {
       e.preventDefault();
       console.log("Provider register form submitted!");
 
@@ -51,7 +51,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
       const data = {
         name: formData.get('name'),
+        providerName: formData.get('providerName'),
+        menu: formData.get('menu'),
+        prices: formData.get('prices'),
+        location: formData.get('location'),
         email: formData.get('email'),
+        phone: formData.get('phone'),
         password: formData.get('password'),
         role: 'provider'
       };
@@ -66,10 +71,10 @@ document.addEventListener('DOMContentLoaded', function() {
           },
           body: JSON.stringify(data)
         });
-        
+
         const result = await response.json();
         console.log("Registration response:", result);
-        
+
         if (response.ok) {
           alert("Registration successful! You can now log in.");
           window.location.href = 'provider-login.html';
