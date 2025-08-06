@@ -359,17 +359,7 @@
     </footer>
     <script src="frontend/js/main.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const icon = document.getElementById('profileIcon');
-            const dropdown = document.getElementById('profileDropdown');
-            document.addEventListener('click', function(e) {
-                if (icon.contains(e.target)) {
-                    dropdown.classList.toggle('show');
-                } else if (!dropdown.contains(e.target)) {
-                    dropdown.classList.remove('show');
-                }
-            });
-        });
+        // Removed profile icon and dropdown logic
     </script>
     
     <!-- Mobile Responsive Styles for Blog Page -->
