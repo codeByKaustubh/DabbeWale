@@ -28,7 +28,7 @@
 ## Tech Stack
 - **Frontend:** HTML5, CSS3 (custom properties, responsive), JavaScript
 - **Backend:** Node.js, Express.js, MongoDB (Mongoose), JWT authentication
-- **Deployment:** Netlify (frontend), local/cloud for backend
+- **Deployment:** Netlify (frontend), render for backend
 - **Version Control:** Git (branches: main, ishwari)
 
 ## How to Run
