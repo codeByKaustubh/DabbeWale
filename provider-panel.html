@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Panel - DabbeWale</title>
+    <link rel="stylesheet" href="frontend/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/new-removebg-preview.png">
+</head>
+<body>
+    <div class="accent-bar"></div>
+    <header>
+        <nav class="main-navbar improved-navbar">
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="login.html">Login</a>
+                <a href="providers.html">Browse Providers</a>
+                <a href="provider-panel.html" class="active">Provider Panel</a>
+                <a href="blog.html">Blog</a>
+                <a href="about.html">About</a>
+            </div>
+        </nav>
+        <style>
+          .improved-navbar {
+            background: linear-gradient(90deg, #f9fbe7 60%, #e0f2f1 100%);
+            box-shadow: 0 2px 16px rgba(56,142,60,0.10);
+            border-radius: 18px;
+            margin: 1.5rem auto 2.5rem auto;
+            max-width: 950px;
+            padding: 0.7em 2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .improved-navbar .nav-links {
+            display: flex;
+            gap: 2.2em;
+            width: 100%;
+            justify-content: center;
+          }
+          .improved-navbar .nav-links a {
+            color: #388e3c;
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 0.5em 1.1em;
+            border-radius: 8px;
+            transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            position: relative;
+          }
+          .improved-navbar .nav-links a:hover,
+          .improved-navbar .nav-links a:focus {
+            background: #e0f2f1;
+            color: #1b5e20;
+            box-shadow: 0 2px 8px rgba(56,142,60,0.10);
+          }
+          .improved-navbar .nav-links a.active {
+            background: #388e3c;
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(56,142,60,0.13);
+          }
+          @media (max-width: 700px) {
+            .improved-navbar {
+              padding: 0.7em 0.5em;
+              max-width: 99vw;
+            }
+            .improved-navbar .nav-links {
+              gap: 0.7em;
+            }
+            .improved-navbar .nav-links a {
+              font-size: 1.05rem;
+              padding: 0.5em 0.6em;
+            }
+          }
+          /* Mobile Responsive Styles */
+          @media (max-width: 1024px) {
+            .improved-navbar {
+                max-width: 95%;
+                padding: 0.7em 1.5em;
+            }
+          }
+          @media (max-width: 768px) {
+            .improved-navbar {
+                margin: 1rem auto 1.5rem auto;
+                padding: 0.7rem 1rem;
+                max-width: 95%;
+            }
+            .improved-navbar .nav-links {
+                gap: 1.2em;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .improved-navbar .nav-links a {
+                font-size: 1.1rem;
+                padding: 0.4em 0.8em;
+            }
+            main {
+                padding: 1rem;
+                max-width: 95%;
+                margin: 0 auto;
+            }
+            main h1 {
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
+            }
+            form {
+                max-width: 100%;
+                padding: 1.5rem;
+            }
+            .input-icon input,
+            .input-icon textarea {
+                font-size: 1rem;
+                padding: 0.8rem;
+            }
+            button {
+                font-size: 1rem;
+                padding: 0.8rem 1.5rem;
+                width: 100%;
+            }
+          }
+          @media (max-width: 480px) {
+            .improved-navbar {
+                padding: 0.5rem 0.7rem;
+                margin: 0.8rem auto 1.2rem auto;
+            }
+            .improved-navbar .nav-links {
+                gap: 0.5em;
+            }
+            .improved-navbar .nav-links a {
+                font-size: 0.95rem;
+                padding: 0.3em 0.5em;
+            }
+            main {
+                padding: 0.8rem;
+            }
+            main h1 {
+                font-size: 1.8rem;
+            }
+            form {
+                padding: 1rem;
+            }
+            .input-icon input,
+            .input-icon textarea {
+                font-size: 0.95rem;
+                padding: 0.7rem;
+            }
+            button {
+                font-size: 0.95rem;
+                padding: 0.7rem 1.2rem;
+            }
+          }
+        </style>
+    </header>
+    <main>
+        <h1 class="provider-panel-title">Provider Panel</h1>
+        <form id="providerRegisterForm" class="provider-panel-form">
+
+            <label for="actualName">Your Actual Name:</label>
+            <div class="input-icon">
+                <input type="text" id="name" name="name" required placeholder="e.g. Priya Sharma">
+            </div>
+            <label for="providerName">Name as a Provider:</label>
+            <div class="input-icon">
+                <input type="text" id="providerName" name="providerName" required placeholder="e.g. Priya's Tiffin Service">
+            </div>
+            <label for="menu">Menu:</label>
+            <div class="input-icon">
+                <textarea id="menu" name="menu" rows="3" required placeholder="e.g. Dal, Rice, Roti, Sabzi, Salad"></textarea>
+            </div>
+            <label for="prices">Prices:</label>
+            <div class="input-icon">
+                <input type="text" id="prices" name="prices" required placeholder="e.g. ₹120 per tiffin">
+            </div>
+            <label for="location">Location:</label>
+            <div class="input-icon">
+                <input type="text" id="location" name="location" required placeholder="e.g. Andheri East, Mumbai">
+            </div>
+            <label for="email">Email:</label>
+            <div class="input-icon">
+                <input type="email" id="email" name="email" required placeholder="e.g. priya@email.com">
+            </div>
+            <label for="password">Password:</label>
+            <div class="input-icon">
+              <input type="password" id="password" name="password" required placeholder="Create a strong password">
+            </div>
+ 
+            <label for="phone">Phone Number:</label>
+            <div class="input-icon">
+                <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="e.g. 9876543210">
+            </div>
+            <button type="submit"><span class="icon-emoji">✅</span>Submit</button>
+        </form>
+    </main>
+    <script src="frontend/js/provider-auth.js"></script>
+    <script src="frontend/js/main.js"></script>
+</body>
+</html> 
