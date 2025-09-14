@@ -1,9 +1,5 @@
 # DabbeWale
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/6e2e7e7e-xxxx-xxxx-xxxx-xxxxxxxxxxxx/deploy-status)](https://dabbewale.netlify.app/)
-![Node.js](https://img.shields.io/badge/node-%3E=14.0.0-green)
-![License](https://img.shields.io/badge/license-MIT-blue)
-
 [Live Site: dabbewale.netlify.app](https://dabbewale.netlify.app/)
 
 ## Project Status
