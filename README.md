@@ -1,9 +1,5 @@
 # DabbeWale
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/6e2e7e7e-xxxx-xxxx-xxxx-xxxxxxxxxxxx/deploy-status)](https://dabbewale.netlify.app/)
-![Node.js](https://img.shields.io/badge/node-%3E=14.0.0-green)
-![License](https://img.shields.io/badge/license-MIT-blue)
-
 [Live Site: dabbewale.netlify.app](https://dabbewale.netlify.app/)
 
 ## Project Status
@@ -132,9 +128,3 @@ DabbeWale/
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-For support, email support@dabbewale.com or join our Slack channel.

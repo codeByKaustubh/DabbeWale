@@ -4,28 +4,28 @@ const User = require("../models/User");
 // Register a new provider
 exports.registerProvider = async (req, res) => {
   try {
-    const { name, email, phone, address, description, cuisine, ownerId } = req.body;
-    
-    // Check if provider already exists
-    const existingProvider = await Provider.findOne({ email });
+    const user = req.user; // comes from protect middleware (JWT)
+
+    // Ensure user has provider role
+    if (!user || user.role !== "provider") {
+      return res.status(403).json({ msg: "Only users with provider role can register as provider" });
+    }
+
+    // Check if provider profile already exists for this user
+    const existingProvider = await Provider.findOne({ owner: user._id });
     if (existingProvider) {
-      return res.status(400).json({ msg: "Provider already exists with this email" });
+      return res.status(400).json({ msg: "Provider profile already exists" });
     }
 
-    // Verify owner exists and is a provider role
-    const owner = await User.findById(ownerId);
-    if (!owner || owner.role !== "provider") {
-      return res.status(400).json({ msg: "Invalid owner or owner must be a provider" });
-    }
-
+    // Create provider profile
     const provider = await Provider.create({
-      name,
-      email,
-      phone,
-      address,
-      description,
-      cuisine,
-      owner: ownerId
+      name: req.body.name,
+      email: user.email,       // always from User
+      phone: req.body.phone,
+      address: req.body.address,
+      description: req.body.description,
+      cuisine: req.body.cuisine,
+      owner: user._id          // link to User
     });
 
     res.status(201).json({
@@ -34,13 +34,15 @@ exports.registerProvider = async (req, res) => {
         id: provider._id,
         name: provider.name,
         email: provider.email,
-        city: provider.address.city
+        city: provider.address?.city
       }
     });
   } catch (err) {
+    console.error("RegisterProvider error:", err);
     res.status(500).json({ msg: "Provider registration error", error: err.message });
   }
 };
+
 
 // Get all providers with optional filters
 exports.getProviders = async (req, res) => {
