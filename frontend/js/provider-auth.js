@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
           // Store token and redirect
           localStorage.setItem('token', result.token);
           localStorage.setItem('userName', result.user.name);
-          window.location.href = 'provider-panel.html';
+          window.location.href = 'provider-dashboard.html';
         } else {
           alert("Login failed: " + (result.msg || "Unknown error"));
         }

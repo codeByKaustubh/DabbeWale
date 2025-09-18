@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Dashboard (Static)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/new-removebg-preview.png">
+    <style>
+        :root {
+            --bg: #f7faf7;
+            --surface: #ffffff;
+            --brand: #2e7d32;
+            --brand-2: #43a047;
+            --accent: #e8f5e9;
+            --text: #1b1f24;
+            --muted: #6b7280;
+            --ring: #a5d6a7;
+            --danger: #c62828;
+            --warning: #ef6c00;
+            --info: #0277bd;
+        }
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            margin: 0;
+            font-family: 'Nunito', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            color: var(--text);
+            background: linear-gradient(180deg, var(--bg), #eef7ee);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+        header.nav {
+            background: linear-gradient(90deg, #f9fbe7 60%, #e0f2f1 100%);
+            border-radius: 16px;
+            padding: 12px 20px;
+            box-shadow: 0 4px 18px rgba(46,125,50,0.10);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        header.nav .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; color: var(--brand); }
+        header.nav .brand img { height: 32px; width: 32px; object-fit: contain; }
+        .dashboard {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 18px;
+            margin-top: 18px;
+        }
+        .sidebar {
+            background: var(--surface);
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 16px;
+            height: fit-content;
+        }
+        .sidebar h2 { font-size: 1.1rem; margin: 4px 0 10px; color: var(--muted); }
+        .tabs { display: grid; gap: 8px; }
+        .tab-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 10px 12px;
+            border: 1px solid #eef3ef;
+            border-radius: 10px;
+            background: #fafdfb;
+            color: #2c3e2c;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s, border-color .2s, transform .06s;
+        }
+        .tab-btn:hover { background: var(--accent); border-color: var(--ring); }
+        .tab-btn:active { transform: translateY(1px); }
+
+        /* CSS-only Tabs */
+        .tab-input { position: absolute; left: -9999px; }
+        .content { background: transparent; }
+        .panel { display: none; }
+        #tab-orders:checked ~ .content #panel-orders,
+        #tab-menu:checked ~ .content #panel-menu,
+        #tab-earnings:checked ~ .content #panel-earnings,
+        #tab-profile:checked ~ .content #panel-profile,
+        #tab-availability:checked ~ .content #panel-availability { display: block; }
+
+        .content {
+            background: var(--surface);
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px; }
+        .card {
+            background: #ffffff;
+            border: 1px solid #eff4ef;
+            border-radius: 14px;
+            padding: 14px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
+        }
+        .metric .label { color: var(--muted); font-size: 0.9rem; }
+        .metric .value { font-size: 1.6rem; font-weight: 800; color: var(--brand); }
+        .metric .sub { color: var(--muted); font-size: 0.85rem; }
+
+        .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+        .btn {
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid #e7eee7;
+            background: #f9fcf9;
+            cursor: pointer;
+            font-weight: 600;
+            color: #254125;
+            transition: background .2s, border-color .2s, transform .06s;
+        }
+        .btn:hover { background: var(--accent); border-color: var(--ring); }
+        .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+        .btn.warning { background: var(--warning); border-color: var(--warning); color: #fff; }
+        .btn.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+        .btn.ghost { background: #fff; }
+
+        .list { display: grid; gap: 10px; }
+        .list-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #eef4ee;
+            border-radius: 12px;
+            background: #fff;
+        }
+        .list-item .title { font-weight: 700; }
+        .list-item .sub { color: var(--muted); font-size: 0.9rem; }
+        .list-item .actions { display: flex; gap: 8px; }
+
+        form.stacked { display: grid; gap: 10px; }
+        .two-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        label { font-weight: 700; font-size: 0.95rem; color: #253a25; }
+        input[type="text"], input[type="number"], input[type="email"], input[type="tel"], select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #e4ebe4;
+            background: #fbfefb;
+            font-family: inherit;
+        }
+        textarea { resize: vertical; }
+
+        .switch {
+            --h: 28px;
+            display: inline-grid; grid-auto-flow: column; gap: 8px; align-items: center;
+        }
+        .switch input { position: absolute; left: -9999px; }
+        .toggle {
+            width: 52px; height: var(--h);
+            background: #e8ece8; border-radius: var(--h);
+            position: relative; transition: background .2s;
+        }
+        .knob {
+            position: absolute; top: 3px; left: 3px; width: calc(var(--h) - 6px); height: calc(var(--h) - 6px);
+            border-radius: 999px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.15);
+            transition: left .2s;
+        }
+        #avail-toggle:checked + .toggle { background: var(--brand); }
+        #avail-toggle:checked + .toggle .knob { left: calc(52px - (var(--h) - 6px) - 3px); }
+
+        .hint { color: var(--muted); font-size: 0.9rem; }
+
+        @media (max-width: 1024px) {
+            .dashboard { grid-template-columns: 1fr; }
+            .cards { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 640px) {
+            .cards { grid-template-columns: 1fr; }
+            .two-col { grid-template-columns: 1fr; }
+        }
+    </style>
+    <!-- CSS-only tabs wiring -->
+    <style>
+        /* Highlight active tab button using sibling selectors */
+        #tab-orders:checked ~ .sidebar label[for="tab-orders"],
+        #tab-menu:checked ~ .sidebar label[for="tab-menu"],
+        #tab-earnings:checked ~ .sidebar label[for="tab-earnings"],
+        #tab-profile:checked ~ .sidebar label[for="tab-profile"],
+        #tab-availability:checked ~ .sidebar label[for="tab-availability"] {
+            background: var(--accent);
+            border-color: var(--ring);
+        }
+    </style>
+    <!-- Preselect Orders tab by default -->
+    <style>
+        #tab-orders { checked: initial; }
+    </style>
+    <noscript>
+        <style>.hint.noscript { display: block; }</style>
+    </noscript>
+    <style>.hint.noscript { display: none; }</style>
+    <meta name="robots" content="noindex">
+    <meta name="description" content="Static Provider Dashboard UI (HTML/CSS only).">
+</head>
+<body>
+    <div class="container">
+        <header class="nav">
+            <div class="brand">
+                <img src="assets/new-removebg-preview.png" alt="logo">
+                <span>DabbeWale — Provider</span>
+            </div>
+            <div class="hint">Static demo UI (no JavaScript)</div>
+        </header>
+
+        <!-- Tabs radios -->
+        <input id="tab-orders" class="tab-input" type="radio" name="tabs" checked>
+        <input id="tab-menu" class="tab-input" type="radio" name="tabs">
+        <input id="tab-earnings" class="tab-input" type="radio" name="tabs">
+        <input id="tab-profile" class="tab-input" type="radio" name="tabs">
+        <input id="tab-availability" class="tab-input" type="radio" name="tabs">
+
+        <div class="dashboard">
+            <aside class="sidebar">
+                <h2>Dashboard</h2>
+                <div class="tabs">
+                    <label class="tab-btn" for="tab-orders">Orders</label>
+                    <label class="tab-btn" for="tab-menu">Menu</label>
+                    <label class="tab-btn" for="tab-earnings">Earnings</label>
+                    <label class="tab-btn" for="tab-profile">Profile</label>
+                    <label class="tab-btn" for="tab-availability">Availability</label>
+                </div>
+            </aside>
+
+            <section class="content">
+                <!-- Top metrics -->
+                <div class="cards">
+                    <div class="card metric">
+                        <div class="label">Total Orders</div>
+                        <div class="value">0</div>
+                        <div class="sub">All time</div>
+                    </div>
+                    <div class="card metric">
+                        <div class="label">Pending Orders</div>
+                        <div class="value">0</div>
+                        <div class="sub">Awaiting action</div>
+                    </div>
+                    <div class="card metric">
+                        <div class="label">Today’s Revenue</div>
+                        <div class="value">₹0</div>
+                        <div class="sub">Delivered today</div>
+                    </div>
+                    <div class="card metric">
+                        <div class="label">Rating</div>
+                        <div class="value">0.0</div>
+                        <div class="sub">Based on 0 reviews</div>
+                    </div>
+                </div>
+
+                <!-- Orders Panel -->
+                <div id="panel-orders" class="panel">
+                    <div class="card">
+                        <div class="toolbar">
+                            <button class="btn">All</button>
+                            <button class="btn">Pending</button>
+                            <button class="btn">Preparing</button>
+                            <button class="btn">Delivered</button>
+                        </div>
+                        <div class="list">
+                            <div class="list-item">
+                                <div>
+                                    <div class="title">Order #A1C93D · ₹240 · pending</div>
+                                    <div class="sub">Anita Sharma · 10:24 AM</div>
+                                </div>
+                                <div class="actions">
+                                    <button class="btn primary">Accept</button>
+                                    <button class="btn danger">Reject</button>
+                                    <button class="btn">Preparing</button>
+                                    <button class="btn">Ready</button>
+                                </div>
+                            </div>
+                            <div class="list-item">
+                                <div>
+                                    <div class="title">Order #F92B10 · ₹360 · preparing</div>
+                                    <div class="sub">Rohan Desai · 10:10 AM</div>
+                                </div>
+                                <div class="actions">
+                                    <button class="btn">Ready</button>
+                                    <button class="btn">Delivered</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Menu Panel -->
+                <div id="panel-menu" class="panel">
+                    <div class="card" style="margin-bottom: 12px;">
+                        <h3 style="margin: 0 0 8px 0;">Add Menu Item</h3>
+                        <form class="stacked">
+                            <div class="two-col">
+                                <div>
+                                    <label>Name</label>
+                                    <input type="text" placeholder="Veg Thali" required>
+                                </div>
+                                <div>
+                                    <label>Price (₹)</label>
+                                    <input type="number" min="1" placeholder="120" required>
+                                </div>
+                            </div>
+                            <div class="two-col">
+                                <div>
+                                    <label>Type</label>
+                                    <select>
+                                        <option>Vegetarian</option>
+                                        <option>Non-Vegetarian</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Category</label>
+                                    <select>
+                                        <option>Breakfast</option>
+                                        <option selected>Lunch</option>
+                                        <option>Dinner</option>
+                                        <option>Snack</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label>Image</label>
+                                <input type="text" placeholder="Image URL (optional)">
+                            </div>
+                            <div>
+                                <label>Description</label>
+                                <textarea rows="2" placeholder="Dal, Rice, 2 Roti, Sabzi, Salad"></textarea>
+                            </div>
+                            <div>
+                                <button class="btn primary" type="button">Add Item</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <h3 style="margin:0 0 8px 0;">Your Menu</h3>
+                        <div class="list">
+                            <div class="list-item">
+                                <div>
+                                    <div class="title">Veg Thali · ₹120</div>
+                                    <div class="sub">Vegetarian · Lunch</div>
+                                </div>
+                                <div class="actions">
+                                    <button class="btn">Edit</button>
+                                    <button class="btn danger">Delete</button>
+                                    <button class="btn ghost">Set Unavailable</button>
+                                </div>
+                            </div>
+                            <div class="list-item">
+                                <div>
+                                    <div class="title">Chicken Curry Meal · ₹180</div>
+                                    <div class="sub">Non-Veg · Dinner</div>
+                                </div>
+                                <div class="actions">
+                                    <button class="btn">Edit</button>
+                                    <button class="btn danger">Delete</button>
+                                    <button class="btn ghost">Set Available</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings Panel -->
+                <div id="panel-earnings" class="panel">
+                    <div class="card">
+                        <h3 style="margin:0 0 8px 0;">Earnings Summary</h3>
+                        <div class="list">
+                            <div class="list-item">
+                                <div>
+                                    <div class="title">This Week</div>
+                                    <div class="sub">Mon - Sun</div>
+                                </div>
+                                <div class="actions"><strong>₹7,650</strong></div>
+                            </div>
+                            <div class="list-item">
+                                <div>
+                                    <div class="title">This Month</div>
+                                    <div class="sub">1st - 30th</div>
+                                </div>
+                                <div class="actions"><strong>₹28,440</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Panel -->
+                <div id="panel-profile" class="panel">
+                    <div class="card" style="margin-bottom: 12px;">
+                        <h3 style="margin:0 0 8px 0;">Edit Provider Info</h3>
+                        <form class="stacked">
+                            <div class="two-col">
+                                <div>
+                                    <label>Kitchen Name</label>
+                                    <input type="text" placeholder="Priya's Tiffin Service">
+                                </div>
+                                <div>
+                                    <label>Phone</label>
+                                    <input type="tel" placeholder="9876543210" pattern="[0-9]{10}">
+                                </div>
+                            </div>
+                            <div class="two-col">
+                                <div>
+                                    <label>City</label>
+                                    <input type="text" placeholder="Mumbai">
+                                </div>
+                                <div>
+                                    <label>Street</label>
+                                    <input type="text" placeholder="Andheri East">
+                                </div>
+                            </div>
+                            <div>
+                                <label>Description</label>
+                                <textarea rows="2" placeholder="Home-cooked meals daily"></textarea>
+                            </div>
+                            <div>
+                                <button class="btn primary" type="button">Save</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <h3 style="margin:0 0 8px 0;">Ratings & Feedback</h3>
+                        <div class="list">
+                            <div class="list-item">
+                                <div>
+                                    <div class="title">4.5/5</div>
+                                    <div class="sub">“Great taste and on-time delivery!” — Rahul</div>
+                                </div>
+                            </div>
+                            <div class="list-item">
+                                <div>
+                                    <div class="title">5/5</div>
+                                    <div class="sub">“Feels like home-cooked.” — Neha</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Availability Panel -->
+                <div id="panel-availability" class="panel">
+                    <div class="card">
+                        <h3 style="margin:0 0 8px 0;">Availability</h3>
+                        <p class="hint" style="margin-top:0;">Toggle Online/Offline to control order intake.</p>
+                        <div class="switch">
+                            <input id="avail-toggle" type="checkbox">
+                            <div class="toggle"><span class="knob"></span></div>
+                            <span><strong>Online</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+        <p class="hint noscript">Note: Enable JavaScript to make this UI interactive against your API.</p>
+    </div>
+</body>
+</html>
+
+
