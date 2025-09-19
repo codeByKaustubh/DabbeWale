@@ -1,6 +1,12 @@
 const User = require("../models/User");
+const Provider = require("../models/Provider")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
+const JWT_SECRET = process.env.JWT_SECRET || "change_this";
+const JWT_EXPIRES = process.env.JWT_EXPIRES || "7d";
+
+
 
 exports.registerUser = async (req, res) => {
   const { name, email, password, role } = req.body;
@@ -25,9 +31,12 @@ exports.loginUser = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ msg: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id, role: user.role, name: user.name, email: user.email }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+  { id: user._id, role: user.role, name: user.name, email: user.email },
+  JWT_SECRET,
+  { expiresIn: JWT_EXPIRES }
+);
+
 
     res.json({
       token,

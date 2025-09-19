@@ -11,8 +11,13 @@ const menuItemSchema = new mongoose.Schema({
 });
 
 const providerSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  actualName: { type: String, required: true },
+  providerName: { type: String, required: true },
+  menu: { type: String, required: true },
+  prices: { type:String, required: true },
+  location: {type: String, required: true},
   email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
   phone: { type: String, required: true },
   address: {
     street: String,
@@ -44,7 +49,7 @@ const providerSchema = new mongoose.Schema({
     saturday: { open: String, close: String },
     sunday: { open: String, close: String }
   },
-  owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
 }, {
   timestamps: true
 });

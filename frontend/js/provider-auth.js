@@ -1,4 +1,6 @@
 console.log("Provider auth JS file connected");
+const API_BASE_URL = localStorage.getItem('API_BASE_URL') || 'http://localhost:5000';
+console.log('API_BASE_URL:', API_BASE_URL);
 document.addEventListener('DOMContentLoaded', function () {
   const loginForm = document.getElementById('providerLoginForm');
   const registerForm = document.getElementById("providerRegisterForm");
@@ -15,7 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
       };
 
       try {
-        const response = await fetch('https://dabbewale.onrender.com/api/auth/login', {
+        console.log('POST login to:', `${API_BASE_URL}/api/auth/login`);
+        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -24,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         const result = await response.json();
-        console.log("Login response:", result);
+        console.log("Login response:", { status: response.status, url: response.url, body: result });
 
         if (response.ok) {
           alert("Login successful!");
@@ -33,7 +36,8 @@ document.addEventListener('DOMContentLoaded', function () {
           localStorage.setItem('userName', result.user.name);
           window.location.href = 'provider-panel.html';
         } else {
-          alert("Login failed: " + (result.msg || "Unknown error"));
+          const errMsg = result && (result.msg || result.message || result.error);
+          alert("Login failed: " + (errMsg || "Unknown error"));
         }
       } catch (err) {
         console.error("Error during login:", err);
@@ -64,7 +68,10 @@ document.addEventListener('DOMContentLoaded', function () {
       console.log("Sending registration data:", { ...data, password: '[HIDDEN]' });
 
       try {
-        const response = await fetch('https://dabbewale.onrender.com/api/auth/register', {
+        // Register directly via providers route to enforce Provider collection storage
+        const url = `${API_BASE_URL}/api/providers/register`;
+        console.log('POST register to:', url, 'with payload:', data);
+        const response = await fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -73,13 +80,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         const result = await response.json();
-        console.log("Registration response:", result);
+        console.log("Registration response:", { status: response.status, url: response.url, body: result });
 
         if (response.ok) {
           alert("Registration successful! You can now log in.");
           window.location.href = 'provider-login.html';
         } else {
-          alert("Registration failed: " + (result.msg || "Unknown error"));
+          const errMsg = result && (result.msg || result.message || result.error);
+          alert("Registration failed: " + (errMsg || "Unknown error"));
         }
       } catch (err) {
         console.error("Error during registration:", err);
