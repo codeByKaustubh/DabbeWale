@@ -1,6 +1,7 @@
 console.log("Provider auth JS file connected");
-const API_BASE_URL = localStorage.getItem('API_BASE_URL') || 'http://localhost:5000';
-console.log('API_BASE_URL:', API_BASE_URL);
+// Use a namespaced constant to avoid collision with main.js
+const PROVIDER_API_BASE_URL = localStorage.getItem('API_BASE_URL') || 'http://localhost:5000';
+console.log('API_BASE_URL:', PROVIDER_API_BASE_URL);
 document.addEventListener('DOMContentLoaded', function () {
   const loginForm = document.getElementById('providerLoginForm');
   const registerForm = document.getElementById("providerRegisterForm");
@@ -17,8 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
       };
 
       try {
-        console.log('POST login to:', `${API_BASE_URL}/api/auth/login`);
-        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        console.log('POST login to:', `${PROVIDER_API_BASE_URL}/api/auth/login`);
+        const response = await fetch(`${PROVIDER_API_BASE_URL}/api/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -69,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       try {
         // Register directly via providers route to enforce Provider collection storage
-        const url = `${API_BASE_URL}/api/providers/register`;
+        const url = `${PROVIDER_API_BASE_URL}/api/providers/register`;
         console.log('POST register to:', url, 'with payload:', data);
         const response = await fetch(url, {
           method: 'POST',

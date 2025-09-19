@@ -1,14 +1,6 @@
 const mongoose = require("mongoose");
 
-const menuItemSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  description: String,
-  price: { type: Number, required: true },
-  category: { type: String, enum: ["breakfast", "lunch", "dinner", "snack"], default: "lunch" },
-  isVegetarian: { type: Boolean, default: true },
-  allergens: [String],
-  available: { type: Boolean, default: true }
-});
+// Simplified Provider schema to align with the current registration form
 
 const providerSchema = new mongoose.Schema({
   actualName: { type: String, required: true },
@@ -33,7 +25,7 @@ const providerSchema = new mongoose.Schema({
   cuisine: [String],
   rating: { type: Number, default: 0, min: 0, max: 5 },
   totalRatings: { type: Number, default: 0 },
-  menu: [menuItemSchema],
+  // Note: we are not using embedded menu items currently
   deliveryRadius: { type: Number, default: 5 }, // in km
   deliveryFee: { type: Number, default: 0 },
   minOrderAmount: { type: Number, default: 0 },
