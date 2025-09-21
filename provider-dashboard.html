@@ -299,41 +299,41 @@
                             <div class="two-col">
                                 <div>
                                     <label>Name</label>
-                                    <input type="text" placeholder="Veg Thali" required>
+                                    <input type="text" name="name" placeholder="Veg Thali" required>
                                 </div>
                                 <div>
                                     <label>Price (₹)</label>
-                                    <input type="number" min="1" placeholder="120" required>
+                                    <input type="number" name="price" min="1" placeholder="120" required>
                                 </div>
                             </div>
                             <div class="two-col">
                                 <div>
                                     <label>Type</label>
-                                    <select>
-                                        <option>Vegetarian</option>
-                                        <option>Non-Vegetarian</option>
+                                    <select name="type">
+                                        <option value="Vegetarian">Vegetarian</option>
+                                        <option value="Non-Vegetarian">Non-Vegetarian</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label>Category</label>
-                                    <select>
-                                        <option>Breakfast</option>
-                                        <option selected>Lunch</option>
-                                        <option>Dinner</option>
-                                        <option>Snack</option>
+                                    <select name="category">
+                                        <option value="Breakfast">Breakfast</option>
+                                        <option value="Lunch" selected>Lunch</option>
+                                        <option value="Dinner">Dinner</option>
+                                        <option value="Snack">Snack</option>
                                     </select>
                                 </div>
                             </div>
                             <div>
                                 <label>Image</label>
-                                <input type="text" placeholder="Image URL (optional)">
+                                <input type="text" name="image" placeholder="Image URL (optional)">
                             </div>
                             <div>
                                 <label>Description</label>
-                                <textarea rows="2" placeholder="Dal, Rice, 2 Roti, Sabzi, Salad"></textarea>
+                                <textarea name="description" rows="2" placeholder="Dal, Rice, 2 Roti, Sabzi, Salad"></textarea>
                             </div>
                             <div>
-                                <button class="btn primary" type="button">Add Item</button>
+                                <button class="btn primary" type="button" onclick="addMenuItem()">Add Item</button>
                             </div>
                         </form>
                     </div>
@@ -465,6 +465,7 @@
     <!-- Notification area -->
     <div id="notification" style="display: none; position: fixed; top: 20px; right: 20px; background: #4caf50; color: white; padding: 12px 20px; border-radius: 8px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"></div>
     
+    <script src="frontend/js/notifications.js"></script>
     <script src="frontend/js/provider-dashboard.js"></script>
 </body>
 </html>
