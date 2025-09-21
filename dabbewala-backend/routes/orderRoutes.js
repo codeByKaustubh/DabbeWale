@@ -11,13 +11,13 @@ const {
 } = require("../controllers/orderController");
 
 // Customer routes
-router.post("/", protect, authorize("consumer"), createOrder);
-router.get("/my-orders", protect, authorize("consumer"), getUserOrders);
+router.post("/", protect, createOrder);
+router.get("/my-orders", protect, getUserOrders);
 router.get("/:id", protect, getOrderById);
-router.post("/:id/rate", protect, authorize("consumer"), rateOrder);
+router.post("/:id/rate", protect, rateOrder);
 
 // Provider routes
-router.put("/:id/status", protect, authorize("provider"), updateOrderStatus);
-router.get("/provider/:providerId", protect, authorize("provider"), getProviderOrders);
+router.put("/:id/status", protect, updateOrderStatus);
+router.get("/provider/:providerId", protect, getProviderOrders);
 
 module.exports = router; 

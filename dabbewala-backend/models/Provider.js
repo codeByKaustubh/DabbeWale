@@ -2,10 +2,20 @@ const mongoose = require("mongoose");
 
 // Simplified Provider schema to align with the current registration form
 
+const menuItemSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  price: { type: Number, required: true },
+  type: { type: String, enum: ['Vegetarian', 'Non-Vegetarian'], default: 'Vegetarian' },
+  category: { type: String, enum: ['Breakfast', 'Lunch', 'Dinner', 'Snack'], default: 'Lunch' },
+  description: String,
+  image: String,
+  available: { type: Boolean, default: true }
+});
+
 const providerSchema = new mongoose.Schema({
   actualName: { type: String, required: true },
   providerName: { type: String, required: true },
-  menu: { type: String, required: true },
+  menu: [menuItemSchema], // Changed to array of menu items
   prices: { type:String, required: true },
   location: {type: String, required: true},
   email: { type: String, required: true, unique: true },

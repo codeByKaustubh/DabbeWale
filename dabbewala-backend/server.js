@@ -19,6 +19,17 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "Server is running!", timestamp: new Date().toISOString() });
 });
 
+// Test database connection
+app.get("/api/test-db", async (req, res) => {
+  try {
+    const Order = require("./models/Order");
+    const count = await Order.countDocuments();
+    res.json({ message: "Database connected!", orderCount: count });
+  } catch (err) {
+    res.status(500).json({ message: "Database error", error: err.message });
+  }
+});
+
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/providers", require("./routes/providerRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
