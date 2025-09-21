@@ -84,8 +84,40 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Registration response:", { status: response.status, url: response.url, body: result });
 
         if (response.ok) {
-          alert("Registration successful! You can now log in.");
-          window.location.href = 'provider-login.html';
+          // Auto-login after successful registration
+          try {
+            const loginResponse = await fetch(`${PROVIDER_API_BASE_URL}/api/auth/login`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                email: data.email,
+                password: data.password
+              })
+            });
+
+            const loginResult = await loginResponse.json();
+            
+            if (loginResponse.ok) {
+              // Store token and user info
+              localStorage.setItem('token', loginResult.token);
+              localStorage.setItem('userName', loginResult.user.name);
+              localStorage.setItem('userRole', loginResult.user.role);
+              localStorage.setItem('userId', loginResult.user.id);
+              localStorage.setItem('providerId', loginResult.user.providerId || loginResult.user.id);
+              
+              alert("Registration successful! Redirecting to your dashboard...");
+              window.location.href = 'provider-dashboard.html';
+            } else {
+              alert("Registration successful! Please log in manually.");
+              window.location.href = 'login.html';
+            }
+          } catch (loginErr) {
+            console.error("Auto-login failed:", loginErr);
+            alert("Registration successful! Please log in manually.");
+            window.location.href = 'login.html';
+          }
         } else {
           const errMsg = result && (result.msg || result.message || result.error);
           alert("Registration failed: " + (errMsg || "Unknown error"));

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Provider Dashboard (Static)</title>
+    <title>Provider Dashboard - DabbeWale</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="assets/new-removebg-preview.png">
     <style>
@@ -207,7 +207,8 @@
                 <img src="assets/new-removebg-preview.png" alt="logo">
                 <span>DabbeWale — Provider</span>
             </div>
-            <div class="hint">Static demo UI (no JavaScript)</div>
+            <div class="hint">Welcome, <span id="providerName">Provider</span>!</div>
+            <button onclick="logout()" class="btn" style="background: #c62828; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer;">Logout</button>
         </header>
 
         <!-- Tabs radios -->
@@ -460,6 +461,11 @@
         </div>
         <p class="hint noscript">Note: Enable JavaScript to make this UI interactive against your API.</p>
     </div>
+    
+    <!-- Notification area -->
+    <div id="notification" style="display: none; position: fixed; top: 20px; right: 20px; background: #4caf50; color: white; padding: 12px 20px; border-radius: 8px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"></div>
+    
+    <script src="frontend/js/provider-dashboard.js"></script>
 </body>
 </html>
 

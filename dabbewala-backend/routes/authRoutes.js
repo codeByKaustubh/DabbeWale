@@ -98,7 +98,8 @@ router.post("/login", async (req, res) => {
         id: user._id, 
         name: user.actualName || user.name, 
         email: user.email, 
-        role: userType === 'provider' ? 'provider' : (user.role || 'consumer')
+        role: userType === 'provider' ? 'provider' : (user.role || 'consumer'),
+        providerId: userType === 'provider' ? user._id : null
       },
     });
   } catch (err) {

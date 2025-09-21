@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const Provider = require("../models/Provider");
 
 const protect = async (req, res, next) => {
   try {
@@ -14,13 +15,21 @@ const protect = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id).select("-password");
+    
+    // Check if it's a provider or user
+    let user;
+    if (decoded.role === 'provider') {
+      user = await Provider.findById(decoded.id).select("-password");
+    } else {
+      user = await User.findById(decoded.id).select("-password");
+    }
 
     if (!user) {
       return res.status(401).json({ msg: "Not authorized, user not found" });
     }
 
     req.user = user;
+    req.userType = decoded.role === 'provider' ? 'provider' : 'user';
     next();
   } catch (err) {
     res.status(401).json({ msg: "Not authorized, token failed" });
