@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
+const bcrypt = require("bcryptjs");
+const User = require("./models/User");
 
 dotenv.config();
 connectDB();
@@ -13,6 +15,21 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+// Seed a default admin user if missing
+async function seedDefaultAdmin() {
+  try {
+    const email = "admin@gmail.com";
+    const existing = await User.findOne({ email });
+    if (!existing) {
+      const passwordHash = await bcrypt.hash("admin", 10);
+      await User.create({ name: "Admin", email, password: passwordHash, role: "admin" });
+      console.log("✅ Seeded default admin: admin@gmail.com / admin");
+    }
+  } catch (err) {
+    console.warn("⚠️ Failed to seed default admin:", err.message);
+  }
+}
 
 // Test route to verify server is working
 app.get("/api/test", (req, res) => {
@@ -36,6 +53,9 @@ app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, async () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  await seedDefaultAdmin();
+});
 
 
