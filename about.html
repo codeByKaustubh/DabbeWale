@@ -3,79 +3,232 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About Us | Tiffin Service</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>About Us | DabbeWale</title>
+  <link rel="stylesheet" href="frontend/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="assets/new-removebg-preview.png">
 </head>
-<body class="bg-gray-50 text-gray-800">
-
-  <!-- Navbar -->
-  <header class="bg-white shadow-md sticky top-0 z-50">
-    <div class="container mx-auto flex justify-between items-center py-4 px-6">
-      <h1 class="text-2xl font-bold text-green-600">Tiffin Service</h1>
-      <nav>
-        <ul class="flex gap-6 text-gray-700 font-medium">
-          <li><a href="index.html" class="hover:text-green-600">Home</a></li>
-          <li><a href="about.html" class="text-green-600 font-semibold">About</a></li>
-          <li><a href="menu.html" class="hover:text-green-600">Menu</a></li>
-          <li><a href="contact.html" class="hover:text-green-600">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
+<body>
+  <div id="notification" style="display:none; position:fixed; top:18px; left:50%; transform:translateX(-50%); background:var(--color-accent,#43a047); color:#fff; padding:0.9em 2em; border-radius:8px; font-size:1.1em; font-weight:600; z-index:9999; box-shadow:0 2px 12px rgba(67,160,71,0.15); transition:opacity 0.3s; opacity:0;"></div>
+  
+  <header>
+    <nav class="main-navbar improved-navbar">
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="order-placement.html">Order Now</a>
+        <a href="login.html">Login</a>
+        <a href="providers.html">Browse Providers</a>
+        <a href="provider-panel.html">Provider Panel</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html" class="active">About</a>
+      </div>
+    </nav>
   </header>
 
-  <!-- Hero Section -->
-  <section class="bg-green-100 py-16">
-    <div class="container mx-auto text-center px-6">
-      <h2 class="text-4xl font-bold text-green-700 mb-4">About Us</h2>
-      <p class="text-lg text-gray-700 max-w-2xl mx-auto">
-        Fresh, homemade, and hygienic meals delivered to your doorstep every day.  
-        We make sure you feel the taste of home wherever you are.
-      </p>
+  <main>
+    <div style="text-align:center; margin-bottom: 20px;">
+      <img src="assets/new.png" alt="Dabbewale Logo" style="max-width: 250px; width: 100%; height: auto;" />
     </div>
-  </section>
+    <h1>About DabbeWale</h1>
+    <p>Your platform to find and order nutritious, affordable home-cooked meals from local tiffin providers.</p>
+    
+    <!-- About Content -->
+    <div style="margin: 3rem 0; padding: 2rem; background: var(--color-form-bg); border-radius: 12px; box-shadow: var(--shadow-sm);">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-bottom: 2rem;">
+        <div>
+          <img src="/assets/ChatGPT Image Sep 23, 2025, 11_41_11 AM.png" alt="Tiffin Service" style="width: 100%; border-radius: 12px; box-shadow: var(--shadow-md);" />
+        </div>
+        <div>
+          <h2 style="color: var(--color-primary); font-size: 1.8rem; margin-bottom: 1rem;">Who We Are</h2>
+          <p style="margin-bottom: 1rem; line-height: 1.6;">
+            Our Tiffin Service was started with one goal – to bring nutritious, home-style meals 
+            to students, working professionals, and families who miss the comfort of homemade food.
+          </p>
+          <p style="margin-bottom: 1.5rem; line-height: 1.6;">
+            We prepare fresh meals daily with high-quality ingredients, ensuring both taste and hygiene. 
+            With flexible meal plans and timely delivery, we make sure you never miss a healthy meal.
+          </p>
+          <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text);">
+            <li style="margin-bottom: 0.5rem;">Freshly cooked meals everyday</li>
+            <li style="margin-bottom: 0.5rem;">Affordable & customizable meal plans</li>
+            <li style="margin-bottom: 0.5rem;">Hygienic preparation & eco-friendly packaging</li>
+            <li style="margin-bottom: 0.5rem;">On-time doorstep delivery</li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
-  <!-- About Content -->
-  <section class="container mx-auto py-16 px-6 grid md:grid-cols-2 gap-12 items-center">
-    <div>
-      <img src="https://source.unsplash.com/600x400/?indian-food,tiffin" alt="Tiffin Service" class="rounded-2xl shadow-lg" />
-    </div>
-    <div>
-      <h3 class="text-2xl font-bold text-green-700 mb-4">Who We Are</h3>
-      <p class="mb-4">
-        Our Tiffin Service was started with one goal – to bring nutritious, home-style meals 
-        to students, working professionals, and families who miss the comfort of homemade food.
-      </p>
-      <p class="mb-4">
-        We prepare fresh meals daily with high-quality ingredients, ensuring both taste and hygiene. 
-        With flexible meal plans and timely delivery, we make sure you never miss a healthy meal.
-      </p>
-      <ul class="list-disc pl-6 space-y-2 text-gray-700">
-        <li>Freshly cooked meals everyday</li>
-        <li>Affordable & customizable meal plans</li>
-        <li>Hygienic preparation & eco-friendly packaging</li>
-        <li>On-time doorstep delivery</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Mission Section -->
-  <section class="bg-green-50 py-16 px-6">
-    <div class="container mx-auto text-center">
-      <h3 class="text-2xl font-bold text-green-700 mb-6">Our Mission</h3>
-      <p class="max-w-3xl mx-auto text-gray-700 text-lg">
+    <!-- Mission Section -->
+    <div style="background: var(--color-primary); color: white; padding: 2rem; border-radius: 12px; text-align: center; margin: 2rem 0;">
+      <h2 style="color: white; font-size: 1.8rem; margin-bottom: 1rem;">Our Mission</h2>
+      <p style="max-width: 800px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">
         We aim to make healthy, home-cooked meals accessible to everyone.  
         Our mission is not just about food delivery but creating a connection to the warmth of home.  
         With every tiffin, we deliver happiness, nutrition, and care.
       </p>
     </div>
-  </section>
 
-  <!-- Footer -->
-  <footer class="bg-gray-800 text-gray-300 py-8 mt-16">
-    <div class="container mx-auto text-center">
-      <p>&copy; 2025 Tiffin Service. All rights reserved.</p>
+    <!-- Features Section -->
+    <div class="features" style="margin: 3rem 0;">
+      <h2 style="text-align: center; color: var(--color-primary); font-size: 1.8rem; margin-bottom: 2rem;">Why Choose DabbeWale?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <i class="fas fa-utensils" style="font-size: 2rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
+          <h3>Fresh Daily Meals</h3>
+          <p>Every meal is prepared fresh daily with high-quality ingredients and traditional cooking methods.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-heart" style="font-size: 2rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
+          <h3>Made with Love</h3>
+          <p>Our providers cook with the same love and care they would for their own families.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
+          <h3>Trusted Providers</h3>
+          <p>All our tiffin providers are verified and trusted local cooks with excellent hygiene standards.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-clock" style="font-size: 2rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
+          <h3>On-Time Delivery</h3>
+          <p>Reliable delivery service ensuring your meals arrive fresh and on time, every time.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Enhanced Footer -->
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-section about-section">
+        <h3><i class="fas fa-utensils"></i> About DabbeWale</h3>
+        <p><i class="fas fa-home"></i> DabbeWale connects you with authentic home-cooked meals from trusted local providers. We bring the warmth of homemade food to your doorstep, supporting local cooks and communities.</p>
+        <div class="platform-features">
+          <div class="feature-item">
+            <i class="fas fa-shield-alt"></i>
+            <span>Trusted Providers</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-clock"></i>
+            <span>Fresh Daily</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-heart"></i>
+            <span>Made with Love</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-section navigation-section">
+        <h3><i class="fas fa-compass"></i> Quick Links</h3>
+        <ul class="footer-nav">
+          <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+          <li><a href="blog.html"><i class="fas fa-blog"></i> Blog</a></li>
+          <li><a href="about.html"><i class="fas fa-info-circle"></i> About Us</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section contact-section">
+        <h3><i class="fas fa-phone-alt"></i> Get in Touch</h3>
+        <div class="contact-info">
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <span>hello@dabbewale.com</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <span>+91 98765 43210</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Mumbai, Maharashtra, India</span>
+          </div>
+        </div>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 DabbeWale. All rights reserved.</p>
+      <p>Made with ❤️ for connecting communities</p>
     </div>
   </footer>
+
+  <script src="frontend/js/main.js"></script>
+
+  <style>
+    /* Responsive styles for about page */
+    @media (max-width: 768px) {
+      main div[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+      }
+      
+      main div[style*="grid-template-columns: 1fr 1fr"] img {
+        max-height: 300px;
+        object-fit: cover;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+      }
+      
+      .footer-content {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+        text-align: center !important;
+      }
+      
+      .platform-features {
+        flex-direction: column !important;
+        gap: 0.8rem !important;
+      }
+      
+      .footer-nav {
+        align-items: center !important;
+      }
+      
+      .contact-info {
+        align-items: center !important;
+      }
+      
+      .social-links {
+        justify-content: center !important;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      main {
+        padding: 1rem 0.5rem !important;
+      }
+      
+      main div[style*="padding: 2rem"] {
+        padding: 1rem !important;
+      }
+      
+      main div[style*="padding: 2rem"] h2 {
+        font-size: 1.5rem !important;
+      }
+      
+      .feature-card {
+        padding: 1rem !important;
+      }
+      
+      .feature-card h3 {
+        font-size: 1.1rem !important;
+      }
+      
+      .feature-card p {
+        font-size: 0.9rem !important;
+      }
+    }
+  </style>
 
 </body>
 </html>
