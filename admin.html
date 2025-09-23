@@ -64,7 +64,11 @@
     </div>
   </div>
   <script>
-    const API_BASE_URL = localStorage.getItem('API_BASE_URL') || 'http://localhost:5000';
+    // Ensure API base is set once; default to localhost backend
+    if (!localStorage.getItem('API_BASE_URL')) {
+      localStorage.setItem('API_BASE_URL', 'http://localhost:5000');
+    }
+    const API_BASE_URL = localStorage.getItem('API_BASE_URL');
     const tabs = document.querySelectorAll('.tab');
     const thead = document.querySelector('#dataTable thead');
     const tbody = document.querySelector('#dataTable tbody');
@@ -113,8 +117,20 @@
 
     function formatDate(d){ return d ? new Date(d).toLocaleString() : ''; }
 
-    document.addEventListener('DOMContentLoaded', ()=>{
+    async function checkApi() {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/test`);
+        if (!res.ok) throw new Error('API not reachable');
+        const js = await res.json();
+        showToast(js.message || 'Connected to API');
+      } catch (_) {
+        showToast('Cannot reach API at ' + API_BASE_URL, false);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async ()=>{
       if (!ensureAdmin()) return;
+      await checkApi();
       tabs.forEach(t=>t.addEventListener('click', ()=>{
         tabs.forEach(x=>x.classList.remove('active'));
         t.classList.add('active');
