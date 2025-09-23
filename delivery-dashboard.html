@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DabbeWale • Delivery Dashboard</title>
+  <link rel="stylesheet" href="frontend/css/style.css">
+  <style>
+    /* Page-scoped styles to complement existing stylesheet */
+    :root {
+      --green: #2e7d32;
+      --green-600: #1b5e20;
+      --amber: #ff8f00;
+      --red: #e53935;
+      --gray-100: #f5f5f7;
+      --gray-300: #e0e0e0;
+      --gray-600: #616161;
+      --card: #ffffff;
+    }
+
+    body {
+      background: var(--gray-100);
+      color: #1b1b1f;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      margin: 0;
+    }
+
+    .app-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: var(--green);
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    }
+    .app-title { font-weight: 700; letter-spacing: 0.2px; }
+    .app-actions { display: flex; gap: 10px; align-items: center; }
+    .btn { border: none; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+    .btn.primary { background: #fff; color: var(--green-600); }
+    .btn.danger { background: var(--red); color: #fff; }
+    .btn.warning { background: var(--amber); color: #1b1b1f; }
+    .btn.success { background: #2e7d32; color: #fff; }
+    .btn.ghost { background: #fff; color: #1b1b1f; border: 1px solid var(--gray-300); }
+    .btn[disabled] { opacity: 0.6; cursor: not-allowed; }
+
+    .container {
+      max-width: 1100px;
+      margin: 20px auto;
+      padding: 0 16px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .controls .field { display: flex; gap: 8px; align-items: center; }
+    .controls select, .controls input {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: 10px; background: #fff;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--gray-300);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .card .header { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .badge { padding: 6px 10px; border-radius: 100px; font-size: 12px; font-weight: 700; }
+    .badge.pending { background: #fff3e0; color: #ef6c00; }
+    .badge.confirmed { background: #e3f2fd; color: #1976d2; }
+    .badge.preparing { background: #f3e5f5; color: #7b1fa2; }
+    .badge.out_for_delivery { background: #fff8e1; color: #ff8f00; }
+    .badge.delivered { background: #e8f5e9; color: #2e7d32; }
+    .badge.cancelled { background: #ffebee; color: #c62828; }
+
+    .row { display: grid; grid-template-columns: 18px 1fr; gap: 10px; color: var(--gray-600); font-size: 14px; }
+    .row .icon { text-align: center; }
+    .card .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .footer-note { text-align: center; color: var(--gray-600); margin: 20px 0; font-size: 13px; }
+
+    #notification { position: fixed; top: 72px; right: 16px; display: none; color: #fff; padding: 12px 16px; border-radius: 10px; z-index: 1100; }
+  </style>
+</head>
+<body>
+  <div class="app-bar">
+    <div class="app-title">🚚 Delivery Dashboard</div>
+    <div class="app-actions">
+      <button id="refreshBtn" class="btn primary">Refresh</button>
+      <button id="logoutBtn" class="btn danger">Logout</button>
+    </div>
+  </div>
+
+  <div id="notification"></div>
+
+  <div class="container">
+    <div class="controls">
+      <div class="field">
+        <label for="statusFilter" style="font-weight:600;">Status</label>
+        <select id="statusFilter">
+          <option value="out_for_delivery">Out for Delivery</option>
+          <option value="preparing">Preparing</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="pending">Pending</option>
+          <option value="delivered">Delivered</option>
+          <option value="">All</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="searchInput" style="font-weight:600;">Search</label>
+        <input id="searchInput" type="search" placeholder="Search by ID, customer, item, city">
+      </div>
+      <button id="startAutoRefresh" class="btn ghost">Auto Refresh: Off</button>
+      <button id="clearFilters" class="btn ghost">Clear</button>
+    </div>
+
+    <div id="ordersContainer" class="cards"></div>
+
+    <div class="footer-note">Tip: Tap an order to copy its ID. Use Map links for quick navigation.</div>
+  </div>
+
+  <script src="frontend/js/notifications.js"></script>
+  <script>
+    // Config and auth helpers
+    const API_BASE_URL = localStorage.getItem('API_BASE_URL') || 'http://localhost:5000';
+
+    function getToken() { return localStorage.getItem('token'); }
+
+    function getProviderId() {
+      const fromStorage = localStorage.getItem('providerId');
+      if (fromStorage) return fromStorage;
+      const token = getToken();
+      if (!token) return null;
+      try { return JSON.parse(atob(token.split('.')[1])).id; } catch { return null; }
+    }
+
+    function requireAuth() {
+      const token = getToken();
+      if (!token) {
+        alert('Please login as a provider to access the delivery dashboard.');
+        window.location.href = 'login.html';
+        return false;
+      }
+      return true;
+    }
+
+    // UI helpers
+    function statusBadge(status) {
+      const cls = `badge ${status}`;
+      const labels = { pending:'Pending', confirmed:'Confirmed', preparing:'Preparing', out_for_delivery:'Out for Delivery', delivered:'Delivered', cancelled:'Cancelled' };
+      return `<span class="${cls}">${labels[status] || status}</span>`;
+    }
+
+    function buildMapsLink(address) {
+      if (!address) return null;
+      const parts = [address.street, address.city, address.state, address.pincode].filter(Boolean).join(', ');
+      if (!parts) return null;
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parts)}`;
+    }
+
+    function copyToClipboard(text) {
+      try { navigator.clipboard.writeText(text); showSuccess('Order ID copied'); } catch {}
+    }
+
+    // Fetch and render
+    let allOrders = [];
+    let autoRefresh = false;
+    let autoRefreshTimer = null;
+
+    async function fetchOrders() {
+      const providerId = getProviderId();
+      if (!providerId) { showError('Missing provider ID'); return []; }
+
+      const status = document.getElementById('statusFilter').value;
+      const token = getToken();
+      const url = new URL(`${API_BASE_URL}/api/orders/provider/${providerId}`);
+      url.searchParams.set('limit', '100');
+      if (status) url.searchParams.set('status', status);
+
+      const res = await fetch(url.toString(), { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
+      if (!res.ok) throw new Error(`Failed to load orders (${res.status})`);
+      const data = await res.json();
+      return data.orders || [];
+    }
+
+    function filterOrdersLocal(orders) {
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      if (!q) return orders;
+      return orders.filter(o => {
+        const hay = [
+          o._id,
+          o.customer?.name,
+          ...(o.items || []).map(it => it.name),
+          o.deliveryAddress?.city,
+          o.provider?.address?.city
+        ].filter(Boolean).join(' ').toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    function orderActions(order) {
+      const s = order.status;
+      const actions = [];
+      if (s === 'preparing' || s === 'confirmed') actions.push(`<button class="btn warning" data-act="ofd" data-id="${order._id}">Start Delivery</button>`);
+      if (s === 'out_for_delivery') actions.push(`<button class="btn success" data-act="delivered" data-id="${order._id}">Mark Delivered</button>`);
+      if (s === 'pending') actions.push(`<button class="btn primary" data-act="confirmed" data-id="${order._id}">Accept</button>`);
+      actions.push(`<a class="btn ghost" target="_blank" href="${buildMapsLink(order.deliveryAddress) || '#'}" ${buildMapsLink(order.deliveryAddress) ? '' : 'aria-disabled="true"'}>Map (Drop)</a>`);
+      return actions.join('');
+    }
+
+    function renderOrders(orders) {
+      const container = document.getElementById('ordersContainer');
+      if (!orders.length) {
+        container.innerHTML = `<div class="card" style="grid-column: 1/-1; text-align:center; color:#666;">No orders found.</div>`;
+        return;
+      }
+      container.innerHTML = orders.map(o => {
+        const createdAt = o.createdAt ? new Date(o.createdAt).toLocaleString() : '';
+        const pickup = o.provider?.address ? `${o.provider.address.street || ''}, ${o.provider.address.city || ''}` : 'Provider location not available';
+        const drop = o.deliveryAddress ? `${o.deliveryAddress.street || ''}, ${o.deliveryAddress.city || ''}` : 'Delivery address not available';
+        const mapPickup = buildMapsLink(o.provider?.address);
+        const mapDrop = buildMapsLink(o.deliveryAddress);
+        return `
+          <div class="card" data-order-id="${o._id}">
+            <div class="header">
+              <div style="font-weight:700;">#${o._id.slice(-6).toUpperCase()}</div>
+              ${statusBadge(o.status)}
+            </div>
+            <div class="row"><div class="icon">👤</div><div>${o.customer?.name || 'Customer'} • ₹${o.finalAmount || o.totalAmount || 0} • ${createdAt}</div></div>
+            <div class="row"><div class="icon">📦</div><div>${(o.items||[]).map(i => `${i.name} (${i.quantity})`).join(', ')}</div></div>
+            <div class="row"><div class="icon">🏠</div><div><strong>Pickup:</strong> ${pickup} ${mapPickup ? `• <a target="_blank" href="${mapPickup}">Map</a>` : ''}</div></div>
+            <div class="row"><div class="icon">📍</div><div><strong>Drop:</strong> ${drop} ${mapDrop ? `• <a target=\"_blank\" href=\"${mapDrop}\">Map</a>` : ''}</div></div>
+            <div class="actions">${orderActions(o)}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function updateOrderStatus(orderId, newStatus) {
+      const token = getToken();
+      const res = await fetch(`${API_BASE_URL}/api/orders/${orderId}/status`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.msg || 'Failed to update order');
+      }
+      return res.json();
+    }
+
+    async function loadAndRender() {
+      try {
+        document.getElementById('refreshBtn').disabled = true;
+        const orders = await fetchOrders();
+        allOrders = orders;
+        renderOrders(filterOrdersLocal(allOrders));
+      } catch (e) {
+        console.error(e);
+        showError(e.message || 'Failed to load orders');
+      } finally {
+        document.getElementById('refreshBtn').disabled = false;
+      }
+    }
+
+    function toggleAutoRefresh() {
+      autoRefresh = !autoRefresh;
+      const btn = document.getElementById('startAutoRefresh');
+      btn.textContent = `Auto Refresh: ${autoRefresh ? 'On' : 'Off'}`;
+      if (autoRefresh) {
+        autoRefreshTimer = setInterval(loadAndRender, 15000);
+      } else if (autoRefreshTimer) {
+        clearInterval(autoRefreshTimer);
+        autoRefreshTimer = null;
+      }
+    }
+
+    // Event bindings
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!requireAuth()) return;
+      loadAndRender();
+
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('providerId');
+        window.location.href = 'login.html';
+      });
+
+      document.getElementById('refreshBtn').addEventListener('click', loadAndRender);
+      document.getElementById('statusFilter').addEventListener('change', () => renderOrders(filterOrdersLocal(allOrders)) || loadAndRender());
+      document.getElementById('searchInput').addEventListener('input', () => renderOrders(filterOrdersLocal(allOrders)));
+      document.getElementById('clearFilters').addEventListener('click', () => {
+        document.getElementById('statusFilter').value = 'out_for_delivery';
+        document.getElementById('searchInput').value = '';
+        renderOrders(filterOrdersLocal(allOrders));
+      });
+      document.getElementById('startAutoRefresh').addEventListener('click', toggleAutoRefresh);
+
+      // Delegate action buttons
+      document.getElementById('ordersContainer').addEventListener('click', async (e) => {
+        const btn = e.target.closest('button[data-act]');
+        const card = e.target.closest('.card');
+        if (card && !btn) {
+          const id = card.getAttribute('data-order-id');
+          copyToClipboard(id);
+          return;
+        }
+        if (!btn) return;
+        const id = btn.getAttribute('data-id');
+        const act = btn.getAttribute('data-act');
+        const map = { ofd: 'out_for_delivery', delivered: 'delivered', confirmed: 'confirmed' };
+        const newStatus = map[act];
+        btn.disabled = true;
+        try {
+          await updateOrderStatus(id, newStatus);
+          showSuccess('Status updated');
+          await loadAndRender();
+        } catch (err) {
+          console.error(err);
+          showError(err.message || 'Update failed');
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
