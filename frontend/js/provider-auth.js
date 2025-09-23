@@ -54,11 +54,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const formData = new FormData(registerForm);
 
+      // Normalize menu into array of objects expected by backend schema
+      const rawMenu = (formData.get('menu') || '').toString();
+      const rawPrices = (formData.get('prices') || '').toString();
+      const parsedUnitPrice = parseFloat(rawPrices.replace(/[^0-9.]/g, '')) || 0;
+      const menuItems = rawMenu
+        .split(',')
+        .map(item => item.trim())
+        .filter(Boolean)
+        .map(name => ({ name, price: parsedUnitPrice }));
+
       const data = {
         name: formData.get('name'),
         providerName: formData.get('providerName'),
-        menu: formData.get('menu'),
-        prices: formData.get('prices'),
+        menu: menuItems,
+        prices: rawPrices,
         location: formData.get('location'),
         email: formData.get('email'),
         phone: formData.get('phone'),

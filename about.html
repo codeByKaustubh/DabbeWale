@@ -1,448 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - DabbeWale</title>
-    <link rel="stylesheet" href="frontend/css/style.css">
-    <link rel="icon" type="image/png" href="assets/new-removebg-preview.png">
-    <style>
-      body {
-        background: linear-gradient(135deg, #f9fbe7 0%, #e0f2f1 100%);
-        min-height: 100vh;
-        font-family: 'Nunito', Arial, sans-serif;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us | DabbeWale</title>
+  <link rel="stylesheet" href="frontend/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="assets/new-removebg-preview.png">
+  <style>
+      .view-all-posts-btn {
+        display:inline-block;
+        background:var(--color-primary);
+        color:var(--color-form-btn-text);
+        padding:10px 28px;
+        border-radius:6px;
+        text-decoration:none;
+        font-weight:600;
+        transition:background 0.2s;
       }
-      .about-main-card {
-        background: #fff;
-        border-radius: 32px;
-        box-shadow: 0 8px 40px rgba(56,142,60,0.10), 0 1.5px 8px rgba(56,142,60,0.07);
-        max-width: 1100px;
-        margin: 2.5rem auto 2.5rem auto;
-        padding: 3.5rem 2.5rem 2.5rem 2.5rem;
-        position: relative;
-      }
-      .about-main-card:before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 12px;
-        border-radius: 32px 32px 0 0;
-        background: linear-gradient(90deg, #c8e6c9 0%, #b2dfdb 100%);
-        opacity: 0.5;
-      }
-      .about-section-divider {
-        height: 2px;
-        background: linear-gradient(90deg, #e0f2f1 0%, #f9fbe7 100%);
-        border: none;
-        margin: 3.5rem 0 2.5rem 0;
-        opacity: 0.7;
-      }
-      .about-main-card h1 {
-        font-size: 3.2rem;
-        color: var(--color-primary);
-        margin-bottom: 0.8em;
-        text-align: center;
-        margin-top: 2.2rem;
-        position: relative;
-      }
-      .about-main-card h1::after {
-        content: '';
-        display: block;
-        width: 80px;
-        height: 5px;
-        background: linear-gradient(90deg, #388e3c 60%, #e0f2f1 100%);
-        border-radius: 3px;
-        margin: 0.7em auto 0 auto;
-        opacity: 0.7;
-      }
-      .about-main-card h2 {
-        font-size: 2.1rem;
-        color: var(--color-primary);
-        margin: 2.7em 0 1.2em 0;
-        text-align: center;
-        position: relative;
-      }
-      .about-main-card h2::after {
-        content: '';
-        display: block;
-        width: 48px;
-        height: 4px;
-        background: linear-gradient(90deg, #43a047 60%, #b2dfdb 100%);
-        border-radius: 2px;
-        margin: 0.5em auto 0 auto;
-        opacity: 0.5;
-      }
-      .about-intro {
-        font-size: 1.45rem;
-        margin-bottom: 2.2em;
-        color: #33691e;
-        text-shadow: 0 1px 0 #e0f2f1;
-      }
-      .about-list li, .why-choose-card, .how-it-works-step, .feature-card, .testimonial-card, .provider-story-card, .foodie-quote-card {
-        transition: box-shadow 0.18s, transform 0.18s, border 0.18s, background 0.18s;
-      }
-      .about-list li:hover, .why-choose-card:hover, .how-it-works-step:hover, .feature-card:hover, .testimonial-card:hover, .provider-story-card:hover, .foodie-quote-card:hover {
-        box-shadow: 0 4px 24px rgba(56,142,60,0.13);
-        transform: translateY(-2px) scale(1.03);
-        background: linear-gradient(90deg, #e0f2f1 0%, #fff 100%);
-      }
-      /* Keep previous custom section and card styles here */
-      .about-main-card h2.our-mission-heading {
-        font-size: 2.7rem;
-      }
-      .about-main-card .our-mission-content {
-        font-size: 1.85rem;
-        color: #245a1c;
-        font-weight: 500;
-        margin-bottom: 2.5em;
-      }
-      .about-main-card .section-content {
-        font-size: 1.85rem;
-        color: #245a1c;
-        font-weight: 500;
-        margin-bottom: 2.5em;
-      }
-    </style>
-</head>
-<body>
-    <header>
-        <nav class="main-navbar improved-navbar">
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="login.html">Login</a>
-                <a href="providers.html">Browse Providers</a>
-                <a href="blog.html">Blog</a>
-                <a href="about.html" class="active">About</a>
-            </div>
-        </nav>
-    </header>
-    <div class="about-main-card">
-    <h1>About DabbeWale</h1>
-    <p class="about-intro">
-        <strong>DabbeWale</strong> is your trusted platform for discovering and ordering fresh, home-cooked tiffin meals from local kitchens. We connect busy professionals, students, and families with passionate home chefs and small tiffin providers, making healthy, affordable, and delicious food accessible every day.
-    </p>
-    <h2 class="our-mission-heading">Our Mission</h2>
-    <p class="our-mission-content">
-        Our mission is to bring the warmth and nutrition of home-cooked meals to your doorstep, while empowering local cooks and small food businesses to thrive. We believe everyone deserves access to wholesome, hygienic, and tasty food—just like you’d get at home.
-    </p>
-    <!-- How It Works Section -->
-    <div class="how-it-works-section">
-      <h2>How It Works</h2>
-      <div class="how-it-works-steps">
-        <div class="how-it-works-step" data-icon="🍱"><b>Browse Local Tiffins:</b> Discover a variety of home-cooked meal options from trusted providers in your area.</div>
-        <div class="how-it-works-step" data-icon="🛒"><b>Order Easily:</b> Select your favorite tiffin, customize your meal, and place an order in just a few clicks.</div>
-        <div class="how-it-works-step" data-icon="🥗"><b>Fresh & Hygienic:</b> All meals are prepared with care, using quality ingredients and maintaining high hygiene standards.</div>
-        <div class="how-it-works-step" data-icon="🚚"><b>Timely Delivery:</b> Enjoy prompt delivery to your home, office, or campus—hot and ready to eat.</div>
-        <div class="how-it-works-step" data-icon="👩‍🍳"><b>Support Local Chefs:</b> Every order helps independent cooks and small businesses grow.</div>
-      </div>
-    </div>
-    <!-- Why Choose Section -->
-    <div class="why-choose-section">
-      <h2>Why Choose DabbeWale?</h2>
-      <ul class="why-choose-list">
-        <li class="why-choose-card">✨ <b>Authentic Taste:</b> Experience the flavors of real home kitchens, not commercial kitchens.</li>
-        <li class="why-choose-card">💸 <b>Affordable Meals:</b> Enjoy nutritious food at pocket-friendly prices.</li>
-        <li class="why-choose-card">📅 <b>Flexible Plans:</b> Order one-time or subscribe for daily/weekly tiffins as per your needs.</li>
-        <li class="why-choose-card">🤝 <b>Community Driven:</b> We foster a community of food lovers and passionate home chefs.</li>
-      </ul>
-    </div>
-    <!-- Customer Testimonials Section -->
-    <div class="testimonials-section">
-      <h2>Customer Testimonials</h2>
-      <div class="testimonials-grid">
-        <div class="testimonial-card">DabbeWale is my daily dose of nostalgia. Every bite takes me home!<span class="testimonial-author">— Aman, Pune</span></div>
-        <div class="testimonial-card">I never thought healthy food could be this tasty and affordable.<span class="testimonial-author">— Sneha, Mumbai</span></div>
-        <div class="testimonial-card">The variety is mind-blowing. I’ve tried 12 different tiffins in 2 months!<span class="testimonial-author">— Karan, Bangalore</span></div>
-      </div>
-    </div>
-    <!-- Provider Stories Section -->
-    <div class="provider-stories-section">
-      <h2>Provider Stories</h2>
-      <div class="provider-stories-grid">
-        <div class="provider-story-card">“DabbeWale helped me turn my passion for cooking into a steady income. I love sharing my Punjabi recipes with new customers.”<span class="provider-story-author">— Mrs. Sharma</span></div>
-        <div class="provider-story-card">“We started as a small tiffin service and now have regular customers across the city. The platform makes everything easy!”<span class="provider-story-author">— Patel Family</span></div>
-        <div class="provider-story-card">“My Gujarati meals now reach dozens every day.”<span class="provider-story-author">— Mrs. Joshi</span></div>
-      </div>
-    </div>
-    <h2>Health & Safety</h2>
-    <p class="section-content">We prioritize your health and safety. All our partner kitchens follow strict hygiene protocols, use fresh ingredients, and maintain cleanliness at every step. Our delivery partners are trained to handle food with care, ensuring your meal reaches you safely and hygienically.</p>
-    <h2>Sustainability</h2>
-    <p class="section-content">DabbeWale encourages eco-friendly practices by promoting reusable containers and minimizing food waste. We work with providers who care about the environment and strive to make every meal a step towards a greener future.</p>
-    <h2>Community Impact</h2>
-    <p class="section-content">By choosing DabbeWale, you support local entrepreneurs, empower home chefs (especially women), and help build a stronger, healthier community. Every meal you order is a vote for local talent and small business growth.</p>
-    <h2>Frequently Asked Questions</h2>
-    <ul class="about-list">
-        <li><b>How do I place an order?</b> Browse available tiffins, select your meal, and follow the simple checkout process.</li>
-        <li><b>Can I subscribe for daily meals?</b> Yes! Choose a subscription plan for daily or weekly deliveries as per your needs.</li>
-        <li><b>How are providers verified?</b> We verify all providers for quality, hygiene, and reliability before listing them on our platform.</li>
-        <li><b>How do I become a provider?</b> Sign up on our platform and complete the onboarding process to start sharing your meals with the community.</li>
-    </ul>
-    <h2>How to Become a Provider</h2>
-    <p class="section-content">Are you passionate about cooking and want to earn from home? Join DabbeWale as a provider! We welcome home chefs, small kitchens, and tiffin services. Simply sign up, complete our quality and hygiene onboarding, and start sharing your meals with a wider audience. We offer support, marketing, and a seamless order management system to help you grow your business.</p>
-    <h2>Our Values</h2>
-    <ul class="about-list">
-        <li><b>Quality:</b> We are committed to delivering only the best, freshest, and most hygienic meals.</li>
-        <li><b>Trust:</b> Every provider is verified and every meal is prepared with care.</li>
-        <li><b>Inclusivity:</b> We celebrate diverse cuisines and welcome chefs from all backgrounds.</li>
-        <li><b>Empowerment:</b> We help local cooks and small businesses thrive in the digital age.</li>
-    </ul>
-    <h2>Delivery Coverage</h2>
-    <p class="section-content">DabbeWale is rapidly expanding! We currently serve major urban areas and are working to bring home-cooked meals to more neighborhoods. Check our app or website to see if we deliver in your area, or request coverage for your location.</p>
-    <h2>Special Diets & Customization</h2>
-    <p class="section-content">We understand that everyone has unique dietary needs. Many of our providers offer vegetarian, vegan, gluten-free, and other special diet options. You can also request customizations or specify allergies and preferences when placing your order.</p>
-    <h2>Contact & Support</h2>
-    <p class="section-content">Have questions, feedback, or need help? Our support team is here for you! Reach out via our contact form, email, or in-app chat. We value your input and are always eager to help you have the best tiffin experience possible.</p>
-    <h2>Join Us</h2>
-    <p class="section-content">Whether you’re looking for a taste of home or want to share your culinary skills, DabbeWale is the place for you. Order your next meal or become a provider today!</p>
-    <h2 style="color: #e65100;">Ready for a taste adventure?</h2>
-    <p style="font-size:1.2rem; color:#e65100; font-weight:600; text-align:center;">Join the DabbaWale family today and let your taste buds travel across India—one dabba at a time! <br> <span style="font-size:2rem;">🍛🍲🥘</span></p>
-    </div>
-    <style>
-      body > h1 {
-        font-size: 3.2rem;
-        color: var(--color-primary);
-        margin-bottom: 0.8em;
-        text-align: center;
-        margin-top: 2.2rem;
-      }
-      body > h2 {
-        font-size: 2.1rem;
-        color: var(--color-primary);
-        margin: 2.7em 0 1.2em 0;
-        text-align: center;
-      }
-      body > p, .about-list {
-        font-size: 1.35rem;
-        color: var(--color-text);
-        margin-bottom: 2em;
-        text-align: center;
-        max-width: 900px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      .about-intro {
-        font-size: 1.45rem;
-        margin-bottom: 2.2em;
-      }
-      .about-list li {
-        margin-bottom: 1.1em;
-        text-align: left;
-        max-width: 700px;
-        margin-left: auto;
-        margin-right: auto;
-        font-size: 1.25rem;
-      }
-      .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2.2em;
-        width: 100%;
-        max-width: 900px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      .feature-card {
-        background: var(--color-card-bg, #fff);
-        border-radius: 14px;
-        box-shadow: 0 2px 10px rgba(67,160,71,0.07);
-        padding: 1.7em 1.3em;
-        font-size: 1.32rem;
-        color: var(--color-text, #222);
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        min-height: 80px;
-        transition: box-shadow 0.18s, transform 0.18s, border 0.18s, background 0.18s;
-        border: 2px solid transparent;
-        text-align: left;
-      }
-      .feature-card:hover {
-        box-shadow: 0 4px 18px rgba(67,160,71,0.13);
-        transform: translateY(-2px) scale(1.03);
-        border: 2px solid var(--color-primary, #388e3c);
-        background: linear-gradient(90deg, #e8f5e9 0%, #fff 100%);
-      }
-      .planned {
-        color: var(--color-accent, #43a047);
-        font-size: 0.98em;
-        font-weight: 600;
-        margin-left: 0.4em;
-      }
-      .foodie-quotes-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        max-width: 700px;
-        margin: 0 auto 2em auto;
-      }
-      .foodie-quote-card {
-        background: linear-gradient(90deg, #fffbe7 60%, #ffe0b2 100%);
-        border-radius: 18px;
-        box-shadow: 0 2px 12px rgba(230,81,0,0.08);
-        padding: 2em 1.5em 1.5em 3.5em;
-        font-size: 1.45rem;
-        color: #4e2600;
-        font-style: italic;
-        position: relative;
-        border-left: 7px solid #e65100;
-      }
-      .foodie-quote-card:before {
-        content: "\201C";
-        position: absolute;
-        left: 1.1em;
-        top: 0.7em;
-        font-size: 2.5em;
-        color: #e65100;
-        font-family: serif;
-        opacity: 0.25;
-      }
-      .foodie-quote-author {
-        display: block;
-        margin-top: 1.1em;
-        font-size: 1.22em;
-        color: #a65b00;
-        font-style: normal;
-        font-weight: 700;
-        text-align: right;
-      }
-      /* Section backgrounds and separation */
-      .how-it-works-section, .why-choose-section, .testimonials-section, .provider-stories-section {
-        background: linear-gradient(90deg, #f9fbe7 70%, #e0f2f1 100%);
-        border-radius: 22px;
-        box-shadow: 0 2px 18px rgba(67,160,71,0.07);
-        padding: 2.2em 1.5em 2.5em 1.5em;
-        margin: 3.2em auto 2.5em auto;
-        max-width: 950px;
-        width: 100%;
-      }
-      .how-it-works-section h2,
-      .why-choose-section h2,
-      .testimonials-section h2,
-      .provider-stories-section h2 {
-        color: #388e3c;
-        margin-top: 0;
-        margin-bottom: 1.2em;
-        font-size: 2.2rem;
-        letter-spacing: 0.5px;
-      }
-      /* How It Works steps */
-      .how-it-works-steps {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 0;
-      }
-      .how-it-works-step {
-        background: #fff;
-        border-radius: 16px;
-        box-shadow: 0 2px 10px rgba(56,142,60,0.08);
-        padding: 1.6em 1.2em;
-        font-size: 1.22rem;
-        color: #2e7d32;
-        font-weight: 500;
-        display: flex;
-        align-items: flex-start;
-        gap: 1em;
-        min-height: 80px;
-        border-left: 6px solid #388e3c;
-        position: relative;
-      }
-      .how-it-works-step:before {
-        content: attr(data-icon);
-        font-size: 2em;
-        margin-right: 0.5em;
-        color: #43a047;
-        flex-shrink: 0;
-      }
-      /* Why Choose cards */
-      .why-choose-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 1.3rem;
-        margin: 0 auto 0 0;
-        padding: 0;
-        list-style: none;
-        max-width: 900px;
-      }
-      .why-choose-card {
-        background: #fff;
-        border-radius: 16px;
-        box-shadow: 0 2px 10px rgba(56,142,60,0.08);
-        padding: 1.5em 1.1em;
-        font-size: 1.18rem;
-        color: #33691e;
-        font-weight: 500;
-        min-height: 70px;
-        border-left: 5px solid #43a047;
-        margin-bottom: 0;
-      }
-      /* Testimonials & Provider Stories */
-      .testimonials-grid, .provider-stories-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 1.5rem;
-        max-width: 900px;
-        margin: 0 auto 0 auto;
-      }
-      .testimonial-card, .provider-story-card {
-        background: linear-gradient(90deg, #fffde7 60%, #ffe0b2 100%);
-        border-radius: 18px;
-        box-shadow: 0 2px 12px rgba(230,81,0,0.08);
-        padding: 2em 1.5em 1.5em 2.5em;
-        font-size: 1.25rem;
-        color: #4e2600;
-        font-style: italic;
-        position: relative;
-        border-left: 7px solid #e65100;
-        min-height: 110px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-      .testimonial-card:before, .provider-story-card:before {
-        content: "\201C";
-        position: absolute;
-        left: 0.7em;
-        top: 0.7em;
-        font-size: 2.5em;
-        color: #e65100;
-        font-family: serif;
-        opacity: 0.18;
-      }
-      .testimonial-author, .provider-story-author {
-        display: block;
-        margin-top: 1.1em;
-        font-size: 1.1em;
-        color: #a65b00;
-        font-style: normal;
-        font-weight: 700;
-        text-align: right;
-      }
-      @media (max-width: 900px) {
-        .testimonials-grid, .provider-stories-grid {
-          grid-template-columns: 1fr;
-        }
-        .how-it-works-steps, .why-choose-list {
-          grid-template-columns: 1fr;
-        }
-      }
-      @media (max-width: 600px) {
-        body > h1 {
-          font-size: 2rem !important;
-        }
-        body > h2 {
-          font-size: 1.15rem !important;
-        }
-        .features-grid {
-          grid-template-columns: 1fr;
-          gap: 0.8rem;
-        }
-        .feature-card {
-          font-size: 1rem;
-          padding: 1em 0.7em;
-          min-height: 48px;
-        }
+      .view-all-posts-btn:hover, .view-all-posts-btn:focus {
+        background:var(--color-button-hover);
       }
       .improved-navbar {
         background: linear-gradient(90deg, #f9fbe7 60%, #e0f2f1 100%);
@@ -454,12 +31,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        position: relative;
+        z-index: 10;
       }
       .improved-navbar .nav-links {
         display: flex;
         gap: 2.2em;
         width: 100%;
         justify-content: center;
+        align-items: center;
+        flex-wrap: nowrap;
       }
       .improved-navbar .nav-links a {
         color: #388e3c;
@@ -470,6 +51,8 @@
         border-radius: 8px;
         transition: background 0.18s, color 0.18s, box-shadow 0.18s;
         position: relative;
+        white-space: nowrap;
+        z-index: 11;
       }
       .improved-navbar .nav-links a:hover,
       .improved-navbar .nav-links a:focus {
@@ -477,30 +60,157 @@
         color: #1b5e20;
         box-shadow: 0 2px 8px rgba(56,142,60,0.10);
       }
-    </style>
-     
-    <!-- Mobile Responsive Styles for About Page -->
-    <style>
-      /* Mobile responsive styles for about page */
-      @media (max-width: 768px) {
-        .about-main-card {
-          margin: 1rem auto;
-          padding: 2rem 1.5rem;
-          border-radius: 20px;
+      .improved-navbar .nav-links a.active {
+        background: #388e3c;
+        color: #fff;
+        box-shadow: 0 2px 12px rgba(56,142,60,0.13);
+      }
+      @media (max-width: 700px) {
+        .improved-navbar {
+          padding: 0.7em 0.5em;
+          max-width: 99vw;
         }
-        
-        .about-main-card h1 {
-          font-size: 2.2rem;
-          margin-top: 1rem;
-          margin-bottom: 1rem;
+        .improved-navbar .nav-links {
+          gap: 0.7em;
         }
-        
-        .about-main-card h1::after {
-          width: 60px;
+        .improved-navbar .nav-links a {
+          font-size: 1.05rem;
+          padding: 0.5em 0.6em;
         }
       }
-    </style>
+  </style>
+</head>
+<body>
+  <div id="notification" style="display:none; position:fixed; top:18px; left:50%; transform:translateX(-50%); background:var(--color-accent,#43a047); color:#fff; padding:0.9em 2em; border-radius:8px; font-size:1.1em; font-weight:600; z-index:9999; box-shadow:0 2px 12px rgba(67,160,71,0.15); transition:opacity 0.3s; opacity:0;"></div>
+  
+  <header>
+    <nav class="main-navbar improved-navbar">
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html" class="active">About</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div style="text-align:center; margin-bottom: 20px;">
+      <img src="assets/new.png" alt="Dabbewale Logo" style="max-width: 250px; width: 100%; height: auto;" />
+    </div>
+    <h1>About DabbeWale</h1>
+    <p>Your platform to find and order nutritious, affordable home-cooked meals from local tiffin providers.</p>
     
-    <script src="frontend/js/main.js"></script>
+    <!-- About Content -->
+    <div style="margin: 3rem 0; padding: 2rem; background: var(--color-form-bg); border-radius: 12px; box-shadow: var(--shadow-sm);">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-bottom: 2rem;">
+        <div>
+          <img src="/assets/ChatGPT Image Sep 23, 2025, 11_41_11 AM.png" alt="Tiffin Service" style="width: 100%; border-radius: 12px; box-shadow: var(--shadow-md);" />
+        </div>
+        <div>
+          <h2 style="color: var(--color-primary); font-size: 1.8rem; margin-bottom: 1rem;">Who We Are</h2>
+          <p style="margin-bottom: 1rem; line-height: 1.6;">
+            Our Tiffin Service was started with one goal – to bring nutritious, home-style meals 
+            to students, working professionals, and families who miss the comfort of homemade food.
+          </p>
+          <p style="margin-bottom: 1.5rem; line-height: 1.6;">
+            We prepare fresh meals daily with high-quality ingredients, ensuring both taste and hygiene. 
+            With flexible meal plans and timely delivery, we make sure you never miss a healthy meal.
+          </p>
+          <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text);">
+            <li style="margin-bottom: 0.5rem;">Freshly cooked meals everyday</li>
+            <li style="margin-bottom: 0.5rem;">Affordable & customizable meal plans</li>
+            <li style="margin-bottom: 0.5rem;">Hygienic preparation & eco-friendly packaging</li>
+            <li style="margin-bottom: 0.5rem;">On-time doorstep delivery</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mission Section -->
+    <div style="background: var(--color-primary); color: white; padding: 2rem; border-radius: 12px; text-align: center; margin: 2rem 0;">
+      <h2 style="color: white; font-size: 1.8rem; margin-bottom: 1rem;">Our Mission</h2>
+      <p style="max-width: 800px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">
+        We aim to make healthy, home-cooked meals accessible to everyone.  
+        Our mission is not just about food delivery but creating a connection to the warmth of home.  
+        With every tiffin, we deliver happiness, nutrition, and care.
+      </p>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features" style="margin: 3rem 0;">
+      <h2 style="text-align: center; color: var(--color-primary); font-size: 1.8rem; margin-bottom: 2rem;">Why Choose DabbeWale?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <i class="fas fa-utensils" style="font-size: 2rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
+          <h3>Fresh Daily Meals</h3>
+          <p>Every meal is prepared fresh daily with high-quality ingredients and traditional cooking methods.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-heart" style="font-size: 2rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
+          <h3>Made with Love</h3>
+          <p>Our providers cook with the same love and care they would for their own families.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
+          <h3>Trusted Providers</h3>
+          <p>All our tiffin providers are verified and trusted local cooks with excellent hygiene standards.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-clock" style="font-size: 2rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
+          <h3>On-Time Delivery</h3>
+          <p>Reliable delivery service ensuring your meals arrive fresh and on time, every time.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="frontend/js/main.js"></script>
+
+  <style>
+    /* Responsive styles for about page */
+    @media (max-width: 768px) {
+      main div[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+      }
+      
+      main div[style*="grid-template-columns: 1fr 1fr"] img {
+        max-height: 300px;
+        object-fit: cover;
+      }
+      .features-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      main {
+        padding: 1rem 0.5rem !important;
+      }
+      
+      main div[style*="padding: 2rem"] {
+        padding: 1rem !important;
+      }
+      
+      main div[style*="padding: 2rem"] h2 {
+        font-size: 1.5rem !important;
+      }
+      
+      .feature-card {
+        padding: 1rem !important;
+      }
+      
+      .feature-card h3 {
+        font-size: 1.1rem !important;
+      }
+      
+      .feature-card p {
+        font-size: 0.9rem !important;
+      }
+    }
+  </style>
+
 </body>
-</html>  
+</html>
