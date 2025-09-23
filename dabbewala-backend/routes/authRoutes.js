@@ -2,17 +2,19 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const Provider = require("../models/Provider");
+const DeliveryAgent = require("../models/DeliveryAgent");
 const bcrypt = require("bcryptjs");
 
-// Register User (Consumer or Provider)
+// Register User (Consumer, Provider, or Delivery Agent)
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password, role, providerName, menu, prices, location, phone } = req.body;
+    const { name, email, password, role, providerName, menu, prices, location, phone, vehicleType, serviceArea } = req.body;
     
     // Check if user already exists in either collection
     const existingUser = await User.findOne({ email });
     const existingProvider = await Provider.findOne({ email });
-    if (existingUser || existingProvider) {
+    const existingAgent = await DeliveryAgent.findOne({ email });
+    if (existingUser || existingProvider || existingAgent) {
       return res.status(400).json({ msg: "User already exists with this email" });
     }
 
@@ -36,6 +38,19 @@ router.post("/register", async (req, res) => {
       
       await newProvider.save();
       res.status(201).json({ message: "Provider registered successfully" });
+    } else if (role === 'delivery_agent') {
+      // Register as delivery agent - save to DeliveryAgent collection
+      const newAgent = new DeliveryAgent({
+        name,
+        email,
+        password: hashedPass,
+        phone,
+        vehicleType: vehicleType || 'bike',
+        serviceArea: serviceArea || { city: location, pincode: '' },
+        role: 'delivery_agent'
+      });
+      await newAgent.save();
+      res.status(201).json({ message: "Delivery agent registered successfully" });
     } else {
       // Register as regular user - save to User collection
       const newUser = new User({ 
@@ -52,7 +67,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Login User (Consumer or Provider)
+// Login User (Consumer, Provider, or Delivery Agent)
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -65,6 +80,11 @@ router.post("/login", async (req, res) => {
     if (!user) {
       user = await Provider.findOne({ email });
       userType = 'provider';
+    }
+    // If still not found, check DeliveryAgent collection
+    if (!user) {
+      user = await DeliveryAgent.findOne({ email });
+      userType = 'delivery_agent';
     }
     
     if (!user) {
@@ -84,7 +104,7 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign(
       { 
         id: user._id, 
-        role: userType === 'provider' ? 'provider' : (user.role || 'consumer'), 
+        role: userType === 'provider' ? 'provider' : (userType === 'delivery_agent' ? 'delivery_agent' : (user.role || 'consumer')), 
         name: user.actualName || user.name, 
         email: user.email 
       },
@@ -98,7 +118,7 @@ router.post("/login", async (req, res) => {
         id: user._id, 
         name: user.actualName || user.name, 
         email: user.email, 
-        role: userType === 'provider' ? 'provider' : (user.role || 'consumer'),
+        role: userType === 'provider' ? 'provider' : (userType === 'delivery_agent' ? 'delivery_agent' : (user.role || 'consumer')),
         providerId: userType === 'provider' ? user._id : null
       },
     });

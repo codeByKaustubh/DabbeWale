@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Provider = require("../models/Provider");
+const DeliveryAgent = require("../models/DeliveryAgent");
 
 const protect = async (req, res, next) => {
   try {
@@ -16,10 +17,12 @@ const protect = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-    // Check if it's a provider or user
+    // Check if it's a provider, delivery agent, or user
     let user;
     if (decoded.role === 'provider') {
       user = await Provider.findById(decoded.id).select("-password");
+    } else if (decoded.role === 'delivery_agent') {
+      user = await DeliveryAgent.findById(decoded.id).select("-password");
     } else {
       user = await User.findById(decoded.id).select("-password");
     }
@@ -29,7 +32,7 @@ const protect = async (req, res, next) => {
     }
 
     req.user = user;
-    req.userType = decoded.role === 'provider' ? 'provider' : 'user';
+    req.userType = decoded.role === 'provider' ? 'provider' : (decoded.role === 'delivery_agent' ? 'delivery_agent' : 'user');
     next();
   } catch (err) {
     res.status(401).json({ msg: "Not authorized, token failed" });
