@@ -3,6 +3,7 @@ const router = express.Router();
 const Provider = require("../models/Provider");
 const { protect } = require("../middleware/auth");
 const bcrypt = require("bcryptjs");
+const { getProviderOrders } = require("../controllers/providerController");
 
 // Get all providers
 router.get("/", async (req, res) => {
@@ -55,24 +56,7 @@ router.get("/:id/stats", protect, async (req, res) => {
 });
 
 // Get provider's recent orders (protected route)
-router.get("/:id/orders", protect, async (req, res) => {
-  try {
-    const providerId = req.params.id;
-    const limit = parseInt(req.query.limit) || 5;
-    
-    // Ensure provider can only access their own orders
-    if (req.userType === 'provider' && req.user._id.toString() !== providerId) {
-      return res.status(403).json({ msg: "Not authorized to access this provider's data" });
-    }
-    
-    // For now, return empty array. Later we'll connect to Order model
-    const orders = [];
-    
-    res.json(orders);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+router.get("/:id/orders", protect, getProviderOrders);
 
 // Register provider directly into Provider collection
 router.post("/register", async (req, res) => {

@@ -156,12 +156,17 @@ function updateOrdersPanel(orders) {
     const statusColor = statusColors[order.status] || '#666';
     const statusLabel = statusLabels[order.status] || order.status;
 
+    const pickupAddress = order.provider?.address ? `${order.provider.address.street || ''}, ${order.provider.address.city || ''}` : 'Provider location not available';
+    const dropAddress = order.deliveryAddress ? `${order.deliveryAddress.street || ''}, ${order.deliveryAddress.city || ''}` : 'Delivery address not available';
+
     return `
       <div class="list-item">
         <div>
           <div class="title">Order #${order._id.slice(-6).toUpperCase()} · ₹${order.finalAmount} · <span style="color: ${statusColor}">${statusLabel}</span></div>
           <div class="sub">${order.customer?.name || 'Customer'} · ${orderDate}</div>
           <div class="sub">Items: ${order.items.map(item => `${item.name} (${item.quantity})`).join(', ')}</div>
+          <div class="sub"><strong>Pickup:</strong> ${pickupAddress}</div>
+          <div class="sub"><strong>Drop:</strong> ${dropAddress}</div>
         </div>
         <div class="actions">
           ${getOrderActionButtons(order)}

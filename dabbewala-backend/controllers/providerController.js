@@ -1,5 +1,6 @@
 const Provider = require("../models/Provider");
 const User = require("../models/User");
+const Order = require("../models/Order");
 
 // Register a new provider
 exports.registerProvider = async (req, res) => {
@@ -164,4 +165,28 @@ exports.searchProviders = async (req, res) => {
   } catch (err) {
     res.status(500).json({ msg: "Error searching providers", error: err.message });
   }
-}; 
+};
+
+// Get orders for a specific provider
+exports.getProviderOrders = async (req, res) => {
+  try {
+    const providerId = req.params.id;
+    const limit = parseInt(req.query.limit) || 50;
+
+    // Ensure provider can only access their own orders
+    if (req.userType === 'provider' && req.user._id.toString() !== providerId) {
+      return res.status(403).json({ msg: "Not authorized to access this provider's data" });
+    }
+
+    // Fetch orders for the provider, populate customer and provider details
+    const orders = await Order.find({ provider: providerId })
+      .populate('customer', 'name email phone')
+      .populate('provider', 'name address')
+      .sort({ createdAt: -1 })
+      .limit(limit);
+
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ msg: "Error fetching provider orders", error: err.message });
+  }
+};
