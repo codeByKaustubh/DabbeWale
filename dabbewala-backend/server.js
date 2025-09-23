@@ -9,10 +9,24 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+// CORS: allow local dev, Netlify, and file:// (null origin)
+const allowedOrigins = new Set([
+  "http://localhost:5000",
+  "http://127.0.0.1:5000",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "https://dabbewale.netlify.app"
+]);
 app.use(cors({
-  origin: ["http://localhost:5000", "http://127.0.0.1:5000", "http://localhost:3000", "http://127.0.0.1:3000", "https://dabbewale.netlify.app"],
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // allow file:// and curl/postman
+    if (allowedOrigins.has(origin)) return callback(null, true);
+    return callback(null, false);
+  },
   credentials: true
 }));
+app.options("*", cors());
 
 app.use(express.json());
 
