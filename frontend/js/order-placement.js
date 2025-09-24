@@ -18,6 +18,7 @@ let selectedProvider = null;
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
     console.log("Order placement page loaded");
+    bindSearch();
     loadProviders();
 });
 
@@ -25,8 +26,10 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadProviders() {
     try {
         showLoading(true);
-        
-        const response = await fetch(`${API_BASE_URL}/api/providers`);
+        const city = (document.getElementById('locationSearch')?.value || '').trim();
+        const url = new URL(`${API_BASE_URL}/api/providers`);
+        if (city) url.searchParams.set('city', city);
+        const response = await fetch(url.toString());
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -50,6 +53,22 @@ async function loadProviders() {
         providers = getSampleProviders();
         displayProviders(providers);
         showLoading(false);
+    }
+}
+
+// Bind search interactions
+function bindSearch() {
+    const input = document.getElementById('locationSearch');
+    const btn = document.getElementById('searchBtn');
+    if (input) {
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                loadProviders();
+            }
+        });
+    }
+    if (btn) {
+        btn.addEventListener('click', () => loadProviders());
     }
 }
 

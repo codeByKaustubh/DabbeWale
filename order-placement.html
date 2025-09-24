@@ -218,6 +218,11 @@
 
     <main style="max-width: 1200px; margin: 0 auto; padding: 0 20px 120px 20px;">
         <h1 style="text-align: center; margin-bottom: 30px; color: #2e7d32;">Order Your Tiffin</h1>
+        <div style="max-width:700px;margin:0 auto 20px auto;display:flex;gap:10px;align-items:center;">
+            <input id="locationSearch" type="search" placeholder="Search providers by city (e.g., Mumbai)" 
+                   style="flex:1;padding:12px 14px;border:1px solid #ddd;border-radius:10px;font-size:1rem;" />
+            <button id="searchBtn" class="place-order-btn" style="width:auto;padding:12px 16px;">Search</button>
+        </div>
         
         <div class="loading" id="loading">
             <div class="spinner"></div>

@@ -64,11 +64,15 @@
     </div>
   </div>
   <script>
-    // Ensure API base is set once; default to localhost backend
-    if (!localStorage.getItem('API_BASE_URL')) {
-      localStorage.setItem('API_BASE_URL', 'http://localhost:5000');
-    }
-    const API_BASE_URL = localStorage.getItem('API_BASE_URL');
+    // Determine API base URL with environment detection (overridable via localStorage)
+    const API_BASE_URL = (() => {
+      const stored = localStorage.getItem('API_BASE_URL');
+      if (stored) return stored;
+      const host = (typeof window !== 'undefined' && window.location && window.location.host) ? window.location.host : '';
+      const isLocal = host.startsWith('localhost') || host.startsWith('127.0.0.1') || host === '';
+      const prod = 'https://dabbewale.onrender.com';
+      return isLocal ? 'http://localhost:5000' : prod;
+    })();
     const tabs = document.querySelectorAll('.tab');
     const thead = document.querySelector('#dataTable thead');
     const tbody = document.querySelector('#dataTable tbody');
