@@ -68,8 +68,8 @@ app.use("/api/admin", require("./routes/adminRoutes"));
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, async () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  // Uncomment to seed default admin on first boot
-  // await seedDefaultAdmin();
+  // Seed a default admin user for quick access if none exists
+  await seedDefaultAdmin();
 });
 
 
