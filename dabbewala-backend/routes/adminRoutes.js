@@ -7,7 +7,8 @@ const DeliveryAgent = require("../models/DeliveryAgent");
 const Order = require("../models/Order");
 
 // All admin routes require admin role
-router.use(protect, authorize("admin"));
+router.use(protect);
+router.use(authorize("admin"));
 
 // Users (consumers and any user entries)
 router.get("/users", async (req, res) => {
