@@ -134,12 +134,30 @@
     <div id="ordersContainer" class="cards"></div>
 
     <div class="footer-note">Tip: Tap an order to copy its ID. Use Map links for quick navigation.</div>
+
+    <hr style="margin:20px 0; border:none; border-top:1px solid var(--gray-300);" />
+
+    <div style="display:flex; gap:8px; align-items:center; margin-bottom:10px;">
+      <h3 style="margin:0;">Directory</h3>
+      <button id="btnUsers" class="btn ghost">Users</button>
+      <button id="btnProviders" class="btn ghost">Providers</button>
+      <button id="btnAgents" class="btn ghost">Delivery Agents</button>
+      <input id="dirSearch" type="search" placeholder="Search directory" style="margin-left:auto; padding:10px 12px; border:1px solid var(--gray-300); border-radius:10px;">
+    </div>
+    <div id="directoryContainer" class="cards"></div>
   </div>
 
   <script src="frontend/js/notifications.js"></script>
   <script>
     // Config and auth helpers
-    const API_BASE_URL = localStorage.getItem('API_BASE_URL') || 'http://localhost:5000';
+    const API_BASE_URL = (() => {
+      const stored = localStorage.getItem('API_BASE_URL');
+      if (stored) return stored;
+      const host = (typeof window !== 'undefined' && window.location && window.location.host) ? window.location.host : '';
+      const isLocal = host.startsWith('localhost') || host.startsWith('127.0.0.1') || host === '';
+      const prod = 'https://dabbewale.onrender.com';
+      return isLocal ? 'http://localhost:5000' : prod;
+    })();
 
     function getToken() { return localStorage.getItem('token'); }
 
@@ -183,6 +201,8 @@
     let allOrders = [];
     let autoRefresh = false;
     let autoRefreshTimer = null;
+    let directoryType = 'users';
+    let directoryData = { users: [], providers: [], agents: [] };
 
     async function fetchOrders() {
       const providerId = getProviderId();
@@ -253,6 +273,60 @@
       }).join('');
     }
 
+    // Directory (users/providers/agents)
+    function renderDirectory() {
+      const container = document.getElementById('directoryContainer');
+      const q = document.getElementById('dirSearch').value.trim().toLowerCase();
+      const items = (directoryData[directoryType] || []).filter(it => {
+        const hay = JSON.stringify(it).toLowerCase();
+        return !q || hay.includes(q);
+      });
+      if (!items.length) {
+        container.innerHTML = `<div class="card" style="grid-column: 1/-1; text-align:center; color:#666;">No records found.</div>`;
+        return;
+      }
+      if (directoryType === 'users') {
+        container.innerHTML = items.map(u => `
+          <div class="card">
+            <div class="header"><div style="font-weight:700;">${u.name || 'User'}</div><span class="badge confirmed">${u.role || 'consumer'}</span></div>
+            <div class="row"><div class="icon">✉️</div><div>${u.email || ''}</div></div>
+            <div class="row"><div class="icon">🆔</div><div>${u._id || ''}</div></div>
+          </div>
+        `).join('');
+      } else if (directoryType === 'providers') {
+        container.innerHTML = items.map(p => `
+          <div class="card">
+            <div class="header"><div style="font-weight:700;">${p.providerName || p.name || 'Provider'}</div><span class="badge delivered">${(p.rating||0).toFixed(1)}★</span></div>
+            <div class="row"><div class="icon">📍</div><div>${p.address?.city || ''}</div></div>
+            <div class="row"><div class="icon">✉️</div><div>${p.email || ''}</div></div>
+            <div class="row"><div class="icon">🆔</div><div>${p._id || ''}</div></div>
+          </div>
+        `).join('');
+      } else {
+        container.innerHTML = items.map(a => `
+          <div class="card">
+            <div class="header"><div style="font-weight:700;">${a.name || 'Agent'}</div><span class="badge pending">${a.vehicleType || 'bike'}</span></div>
+            <div class="row"><div class="icon">✉️</div><div>${a.email || ''}</div></div>
+            <div class="row"><div class="icon">📞</div><div>${a.phone || ''}</div></div>
+            <div class="row"><div class="icon">📍</div><div>${a.serviceArea?.city || ''}</div></div>
+            <div class="row"><div class="icon">🆔</div><div>${a._id || ''}</div></div>
+          </div>
+        `).join('');
+      }
+    }
+
+    async function fetchDirectory(type) {
+      const token = getToken();
+      const res = await fetch(`${API_BASE_URL}/api/agent/${type}`, { headers: { 'Authorization': `Bearer ${token}` } });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.msg || `Failed to load ${type}`);
+      }
+      const data = await res.json();
+      directoryData[type] = data.items || [];
+      renderDirectory();
+    }
+
     async function updateOrderStatus(orderId, newStatus) {
       const token = getToken();
       const res = await fetch(`${API_BASE_URL}/api/orders/${orderId}/status`, {
@@ -316,6 +390,23 @@
         renderOrders(filterOrdersLocal(allOrders));
       });
       document.getElementById('startAutoRefresh').addEventListener('click', toggleAutoRefresh);
+
+      // Directory bindings
+      document.getElementById('btnUsers').addEventListener('click', async () => {
+        directoryType = 'users';
+        try { await fetchDirectory('users'); } catch (e) { showError(e.message); }
+      });
+      document.getElementById('btnProviders').addEventListener('click', async () => {
+        directoryType = 'providers';
+        try { await fetchDirectory('providers'); } catch (e) { showError(e.message); }
+      });
+      document.getElementById('btnAgents').addEventListener('click', async () => {
+        directoryType = 'agents';
+        try { await fetchDirectory('agents'); } catch (e) { showError(e.message); }
+      });
+      document.getElementById('dirSearch').addEventListener('input', renderDirectory);
+      // Load default directory tab
+      fetchDirectory('users').catch(e => showError(e.message));
 
       // Delegate action buttons
       document.getElementById('ordersContainer').addEventListener('click', async (e) => {
