@@ -1,7 +1,14 @@
 console.log("Order Placement JS loaded");
 
 // Configuration
-const API_BASE_URL = localStorage.getItem('API_BASE_URL') || 'http://localhost:5000';
+const API_BASE_URL = (() => {
+    const stored = localStorage.getItem('API_BASE_URL');
+    if (stored) return stored;
+    const host = (typeof window !== 'undefined' && window.location && window.location.host) ? window.location.host : '';
+    const isLocal = host.startsWith('localhost') || host.startsWith('127.0.0.1') || host === '';
+    const prod = 'https://dabbewale.onrender.com';
+    return isLocal ? 'http://localhost:5000' : prod;
+})();
 
 // Global variables
 let providers = [];
@@ -391,6 +398,9 @@ async function placeOrder() {
         return;
     }
     
+    // If providerId is a demo/sample (not a valid Mongo ObjectId), stay in demo mode even if logged in
+    const isValidObjectId = /^[a-fA-F0-9]{24}$/.test(providerId);
+    
     try {
         const placeOrderBtn = document.getElementById('place-order-btn');
         placeOrderBtn.disabled = true;
@@ -438,8 +448,8 @@ async function placeOrder() {
         
         console.log('Sending order data:', orderData);
         
-        // If no token, create a mock order for demo
-        if (!token) {
+        // If no token OR providerId is not a valid ObjectId (sample providers), create a mock order for demo
+        if (!token || !isValidObjectId) {
             console.log('Creating mock order for demo');
             showSuccess('Order placed successfully! (Demo Mode)');
             
@@ -489,8 +499,12 @@ async function placeOrder() {
             }, 2000);
             
         } else {
-            const error = await response.json();
-            showError('Failed to place order: ' + (error.msg || 'Unknown error'));
+            let errorMsg = 'Unknown error';
+            try {
+                const error = await response.json();
+                errorMsg = error && (error.msg || error.message || JSON.stringify(error));
+            } catch (_) {}
+            showError('Failed to place order: ' + errorMsg);
         }
         
     } catch (error) {

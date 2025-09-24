@@ -3,6 +3,8 @@ const User = require("../models/User");
 const Provider = require("../models/Provider");
 const DeliveryAgent = require("../models/DeliveryAgent");
 
+const JWT_SECRET = process.env.JWT_SECRET || "change_this";
+
 const protect = async (req, res, next) => {
   try {
     let token;
@@ -15,7 +17,7 @@ const protect = async (req, res, next) => {
       return res.status(401).json({ msg: "Not authorized, no token" });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET);
     
     // Check if it's a provider, delivery agent, or user
     let user;
