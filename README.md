@@ -85,7 +85,7 @@ DabbeWale/
 ├── index.html (Home page)
 ├── login.html (User login)
 ├── register.html (User registration)
-├── providers.html (Provider discovery)
+├── (removed) providers.html
 ├── provider-panel.html (Provider dashboard)
 ├── blog.html (Blog page)
 ├── about.html (About page)
