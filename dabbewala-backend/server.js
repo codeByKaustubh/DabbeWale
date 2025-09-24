@@ -39,10 +39,20 @@ async function seedDefaultAdmin() {
   try {
     const email = "admin@gmail.com";
     const existing = await User.findOne({ email });
+    const passwordHash = await bcrypt.hash("admin", 10);
     if (!existing) {
-      const passwordHash = await bcrypt.hash("admin", 10);
       await User.create({ name: "Admin", email, password: passwordHash, role: "admin" });
       console.log("✅ Seeded default admin: admin@gmail.com / admin");
+    } else {
+      const needsRole = existing.role !== "admin";
+      const bcryptjs = require("bcryptjs");
+      const valid = await bcryptjs.compare("admin", existing.password).catch(() => false);
+      if (needsRole || !valid) {
+        existing.role = "admin";
+        existing.password = passwordHash;
+        await existing.save();
+        console.log("🔁 Ensured admin credentials for admin@gmail.com (password reset to 'admin')");
+      }
     }
   } catch (err) {
     console.warn("⚠️ Failed to seed default admin:", err.message);
