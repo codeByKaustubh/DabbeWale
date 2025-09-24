@@ -79,6 +79,7 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/providers", require("./routes/providerRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
+app.use("/api/agent", require("./routes/agentRoutes"));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, async () => {
