@@ -61,9 +61,9 @@ app.get("/api/test-db", async (req, res) => {
   }
 });
 
-app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/providers", require("./routes/providerRoutes"));
-app.use("/api/orders", require("./routes/orderRoutes"));
+// app.use("/api/auth", require("./routes/authRoutes"));
+// app.use("/api/providers", require("./routes/providerRoutes"));
+// app.use("/api/orders", require("./routes/orderRoutes"));
 // app.use("/api/admin", require("./routes/adminRoutes"));
 
 const PORT = process.env.PORT || 5000;
