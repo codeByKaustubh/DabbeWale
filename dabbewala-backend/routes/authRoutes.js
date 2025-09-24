@@ -71,6 +71,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log("🔐 Login attempt:", email);
     
     // First check in User collection
     let user = await User.findOne({ email });
@@ -88,11 +89,13 @@ router.post("/login", async (req, res) => {
     }
     
     if (!user) {
+      console.log("❌ Login failed: user not found for", email);
       return res.status(404).json({ msg: "User not found" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      console.log("❌ Login failed: invalid password for", email);
       return res.status(401).json({ msg: "Invalid credentials" });
     }
 
@@ -112,6 +115,7 @@ router.post("/login", async (req, res) => {
       { expiresIn: JWT_EXPIRES }
     );
 
+    console.log("✅ Login success for", email, "as", userType);
     res.json({
       token,
       user: { 
@@ -123,6 +127,7 @@ router.post("/login", async (req, res) => {
       },
     });
   } catch (err) {
+    console.error("💥 Login error for", req.body && req.body.email, ":", err.message);
     res.status(500).json({ msg: "Login error", error: err.message });
   }
 });

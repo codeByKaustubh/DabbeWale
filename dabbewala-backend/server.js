@@ -10,18 +10,23 @@ connectDB();
 
 const app = express();
 
-// CORS: allow local dev, Netlify, and file:// (null origin)
+// CORS: allow local dev, Netlify, and file:// (Origin: 'null')
 const allowedOrigins = new Set([
   "http://localhost:5000",
   "http://127.0.0.1:5000",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
+  "http://localhost:5500",
+  "http://127.0.0.1:5500",
   "https://dabbewale.netlify.app"
 ]);
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin) return callback(null, true); // allow file:// and curl/postman
+    // Allow same-origin requests (no Origin header), file:// (Origin: 'null'), and localhost/netlify
+    if (!origin || origin === 'null') return callback(null, true);
     if (allowedOrigins.has(origin)) return callback(null, true);
+    // Allow any localhost/127.0.0.1 port during development
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\\d+)?$/.test(origin)) return callback(null, true);
     return callback(null, false);
   },
   credentials: true
