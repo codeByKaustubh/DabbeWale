@@ -1,14 +1,7 @@
 console.log("Order Placement JS loaded");
 
 // Configuration
-const API_BASE_URL = (() => {
-    const stored = localStorage.getItem('API_BASE_URL');
-    if (stored) return stored;
-    const host = (typeof window !== 'undefined' && window.location && window.location.host) ? window.location.host : '';
-    const isLocal = host.startsWith('localhost') || host.startsWith('127.0.0.1') || host === '';
-    const prod = 'https://dabbewale.onrender.com';
-    return isLocal ? 'http://localhost:5000' : prod;
-})();
+const API_BASE_URL = localStorage.getItem('API_BASE_URL') || 'http://localhost:5000'; // Rely on main.js to set this
 
 // Global variables
 let providers = [];

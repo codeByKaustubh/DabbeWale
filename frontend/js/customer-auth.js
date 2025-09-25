@@ -1,6 +1,6 @@
 console.log("Customer auth JS file connected");
 
-const CUSTOMER_API_BASE_URL = localStorage.getItem('API_BASE_URL') || 'http://localhost:5000';
+const CUSTOMER_API_BASE_URL = localStorage.getItem('API_BASE_URL') || 'http://localhost:5000'; // Rely on main.js to set this
 
 document.addEventListener('DOMContentLoaded', function () {
   const registerForm = document.getElementById('customerRegisterForm');

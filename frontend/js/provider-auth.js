@@ -1,6 +1,6 @@
 console.log("Provider auth JS file connected");
 // Use a namespaced constant to avoid collision with main.js
-const PROVIDER_API_BASE_URL = localStorage.getItem('API_BASE_URL') || 'http://localhost:5000';
+const PROVIDER_API_BASE_URL = localStorage.getItem('API_BASE_URL') || 'http://localhost:5000'; // Rely on main.js to set this
 console.log('API_BASE_URL:', PROVIDER_API_BASE_URL);
 document.addEventListener('DOMContentLoaded', function () {
   const loginForm = document.getElementById('providerLoginForm');
