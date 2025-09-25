@@ -583,7 +583,7 @@ async function placeOrder() {
         // If no token OR providerId is not a valid ObjectId (sample providers), create a mock order for demo
         if (!token || !isValidObjectId) {
             console.log('Creating mock order for demo');
-            showSuccess('Order placed successfully! (Demo Mode)');
+            // showSuccess('Order placed successfully! (Demo Mode)'); // Replaced by popup
             
             // Clear cart
             cart = {};
@@ -595,11 +595,7 @@ async function placeOrder() {
             });
             resetFormFields();
             saveCartToStorage();
-            
-            // Redirect to order confirmation or dashboard
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000);
+            showOrderPlacedPopup(); // Show custom success popup
             return;
         }
         
@@ -616,7 +612,7 @@ async function placeOrder() {
         
         if (response.ok) {
             const result = await response.json();
-            showSuccess('Order placed successfully!');
+            // showSuccess('Order placed successfully!'); // Replaced by popup
             
             // Clear cart
             cart = {};
@@ -628,11 +624,7 @@ async function placeOrder() {
             });
             resetFormFields();
             saveCartToStorage();
-            
-            // Redirect to order confirmation or dashboard
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000);
+            showOrderPlacedPopup(); // Show custom success popup
             
         } else {
             let errorMsg = 'Unknown error';
@@ -885,4 +877,52 @@ async function handleOnlinePayment(amount) {
             }, 2000);
         };
     });
+}
+
+// New function to show a prominent order placed popup
+function showOrderPlacedPopup() {
+    const popup = document.createElement('div');
+    popup.id = 'order-placed-popup';
+    popup.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 40px 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        text-align: center;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        max-width: 350px;
+        width: 90%;
+        animation: fadeIn 0.3s ease-out;
+    `;
+
+    popup.innerHTML = `
+        <div style="font-size: 4rem; color: #4CAF50; margin-bottom: 15px;">✓</div>
+        <h3 style="margin: 0 0 10px 0; color: #333; font-size: 1.8rem;">Order Placed!</h3>
+        <p style="color: #666; font-size: 1.1rem;">Your order has been successfully placed.</p>
+        <p style="color: #666; font-size: 0.9rem;">Redirecting to home page...</p>
+    `;
+
+    // Add a simple fade-in animation (if not already present)
+    if (!document.getElementById('popup-animations')) {
+        const style = document.createElement('style');
+        style.id = 'popup-animations';
+        style.innerHTML = `@keyframes fadeIn { from { opacity: 0; transform: translate(-50%, -60%); } to { opacity: 1; transform: translate(-50%, -50%); } } @keyframes fadeOut { from { opacity: 1; transform: translate(-50%, -50%); } to { opacity: 0; transform: translate(-50%, -60%); } }`;
+        document.head.appendChild(style);
+    }
+
+    document.body.appendChild(popup);
+
+    // Remove popup and redirect after a delay
+    setTimeout(() => {
+        popup.style.animation = 'fadeOut 0.3s ease-in forwards';
+        setTimeout(() => { document.body.removeChild(popup); window.location.href = 'index.html'; }, 300); // Match fadeOut animation duration
+    }, 2000); // Show popup for 2 seconds
 }
