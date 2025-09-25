@@ -6,7 +6,6 @@ const bcrypt = require("bcryptjs");
 const User = require("./models/User");
 
 dotenv.config();
-connectDB();
 
 const app = express();
 
@@ -82,10 +81,20 @@ app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/agent", require("./routes/agentRoutes"));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, async () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  // Seed a default admin user for quick access if none exists
-  await seedDefaultAdmin();
-});
+
+async function start() {
+  try {
+    await connectDB();
+    app.listen(PORT, async () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+      await seedDefaultAdmin();
+    });
+  } catch (err) {
+    console.error('❌ Failed to start server:', err.message);
+    process.exit(1);
+  }
+}
+
+start();
 
 

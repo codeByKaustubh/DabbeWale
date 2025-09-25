@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("Order placement page loaded");
     bindSearch();
     loadProviders();
+    bindPaymentSelector();
 });
 
 // Load providers from API
@@ -365,6 +366,7 @@ function updateOrderSummary() {
     const emptyCart = document.getElementById('empty-cart');
     const totalAmount = document.getElementById('total-amount');
     const itemCount = document.getElementById('item-count');
+    const qrAmount = document.querySelector('#qr-details #qr-amount span');
     
     let total = 0;
     let itemCountNum = 0;
@@ -385,6 +387,7 @@ function updateOrderSummary() {
         emptyCart.style.display = 'none';
         totalAmount.textContent = `₹${total}`;
         itemCount.textContent = `${itemCountNum} item${itemCountNum !== 1 ? 's' : ''}`;
+        if (qrAmount) qrAmount.textContent = `₹${total}`;
     }
 }
 
@@ -425,7 +428,7 @@ async function placeOrder() {
         placeOrderBtn.disabled = true;
         placeOrderBtn.textContent = 'Placing Order...';
         
-        // Prepare order items
+    // Prepare order items
         const items = Object.values(cart[providerId]).map(item => ({
             menuItemId: 'sample-id', // In real app, this would be the actual menu item ID
             name: item.name,
@@ -435,6 +438,8 @@ async function placeOrder() {
         }));
         
         const paymentMethod = document.getElementById('payment-method').value;
+        const address = collectAddress();
+        const allergyNotes = (document.getElementById('allergy-notes')?.value || '').trim();
         
         // Calculate total for payment
         let total = 0;
@@ -442,26 +447,35 @@ async function placeOrder() {
             total += item.price * item.quantity;
         });
         
-        // Handle online payment
-        if (paymentMethod === 'online') {
-            const paymentSuccess = await handleOnlinePayment(total);
-            if (!paymentSuccess) {
-                placeOrderBtn.disabled = false;
-                placeOrderBtn.textContent = 'Place Order';
-                return;
+        // Handle payment flows (demo)
+        let paymentSuccess = false;
+        if (paymentMethod === 'card') {
+            paymentSuccess = await handleOnlinePayment(total);
+            if (!paymentSuccess) return resetPlaceButton();
+        } else if (paymentMethod === 'upi') {
+            const upiId = (document.getElementById('upi-id')?.value || '').trim();
+            if (!upiId) {
+                showError('Please enter a valid UPI ID');
+                return resetPlaceButton();
             }
+            // Simulate UPI collect request
+            await new Promise(r => setTimeout(r, 1200));
+            showSuccess('UPI request sent. Assuming success in demo.');
+            paymentSuccess = true;
+        } else if (paymentMethod === 'qr') {
+            // Assume user scanned and paid after showing QR
+            await new Promise(r => setTimeout(r, 1000));
+            showSuccess('QR payment confirmed (demo).');
+            paymentSuccess = true;
+        } else if (paymentMethod === 'cod') {
+            paymentSuccess = true;
         }
         
         const orderData = {
             providerId: providerId,
             items: items,
-            deliveryAddress: {
-                street: 'Sample Street',
-                city: 'Mumbai',
-                state: 'Maharashtra',
-                pincode: '400001'
-            },
-            deliveryInstructions: 'Please call when you arrive',
+            deliveryAddress: address,
+            deliveryInstructions: allergyNotes,
             paymentMethod: paymentMethod
         };
         
@@ -480,6 +494,7 @@ async function placeOrder() {
             document.querySelectorAll('[id^="qty-"]').forEach(el => {
                 el.textContent = '0';
             });
+            resetFormFields();
             
             // Redirect to order confirmation or dashboard
             setTimeout(() => {
@@ -511,6 +526,7 @@ async function placeOrder() {
             document.querySelectorAll('[id^="qty-"]').forEach(el => {
                 el.textContent = '0';
             });
+            resetFormFields();
             
             // Redirect to order confirmation or dashboard
             setTimeout(() => {
@@ -533,6 +549,67 @@ async function placeOrder() {
         const placeOrderBtn = document.getElementById('place-order-btn');
         placeOrderBtn.disabled = false;
         placeOrderBtn.textContent = 'Place Order';
+    }
+}
+
+// Reset place button state helper
+function resetPlaceButton() {
+    const placeOrderBtn = document.getElementById('place-order-btn');
+    placeOrderBtn.disabled = false;
+    placeOrderBtn.textContent = 'Place Order';
+}
+
+// Collect and validate address
+function collectAddress() {
+    const street = (document.getElementById('addr-street')?.value || '').trim();
+    const city = (document.getElementById('addr-city')?.value || '').trim();
+    const state = (document.getElementById('addr-state')?.value || '').trim();
+    const pincode = (document.getElementById('addr-pincode')?.value || '').trim();
+    if (!street || !city || !state || !pincode) {
+        showError('Please fill complete delivery address');
+        throw new Error('Invalid address');
+    }
+    return { street, city, state, pincode };
+}
+
+// Reset form fields after order
+function resetFormFields() {
+    ['addr-street','addr-city','addr-state','addr-pincode','allergy-notes','upi-id'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+    const paymentMethod = document.getElementById('payment-method');
+    if (paymentMethod) paymentMethod.value = 'cod';
+    togglePaymentDetails('cod');
+}
+
+// Payment method UI binding
+function bindPaymentSelector() {
+    const select = document.getElementById('payment-method');
+    if (!select) return;
+    select.addEventListener('change', (e) => {
+        const method = e.target.value;
+        togglePaymentDetails(method);
+    });
+}
+
+function togglePaymentDetails(method) {
+    const wrapper = document.getElementById('payment-details');
+    const upi = document.getElementById('upi-details');
+    const qr = document.getElementById('qr-details');
+    if (!wrapper || !upi || !qr) return;
+    if (method === 'upi') {
+        wrapper.style.display = 'block';
+        upi.style.display = 'block';
+        qr.style.display = 'none';
+    } else if (method === 'qr') {
+        wrapper.style.display = 'block';
+        upi.style.display = 'none';
+        qr.style.display = 'block';
+    } else {
+        wrapper.style.display = 'none';
+        upi.style.display = 'none';
+        qr.style.display = 'none';
     }
 }
 

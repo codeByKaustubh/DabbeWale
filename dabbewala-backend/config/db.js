@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 
+// Fail fast rather than buffering model operations when disconnected
+mongoose.set('bufferCommands', false);
+
 const connectDB = async () => {
   try {
     console.log("🔌 Attempting to connect to MongoDB...");
@@ -7,7 +10,10 @@ const connectDB = async () => {
     
     const mongoURI = process.env.MONGO_URI || "mongodb://localhost:27017/dabbewala";
     
-    await mongoose.connect(mongoURI);
+    await mongoose.connect(mongoURI, {
+      serverSelectionTimeoutMS: 20000, // wait up to 20s to find a server
+      socketTimeoutMS: 45000,
+    });
     console.log("✅ MongoDB Connected Successfully!");
     console.log("📦 Connected to database:", mongoose.connection.name);
     console.log("🌐 MongoDB URL:", mongoose.connection.host + ":" + mongoose.connection.port);
