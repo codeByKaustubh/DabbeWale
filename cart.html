@@ -55,8 +55,10 @@
                         <div id="d-qr-details" style="display:none;">
                             <div style="padding:12px; border:1px dashed #bbb; border-radius:10px; text-align:center; color:#555;">
                                 <div style="font-weight:700; margin-bottom:6px;">Scan QR to Pay (Demo)</div>
-                                <div id="d-qr-amount" style="margin-bottom:10px;">Amount: <strong><span>₹0</span></strong></div>
-                                <div style="height:160px; width:160px; margin:0 auto 10px auto; background: repeating-linear-gradient(45deg,#e0e0e0, #e0e0e0 8px, #fafafa 8px, #fafafa 16px); border-radius:8px; display:flex; align-items:center; justify-content:center; color:#999; font-weight:700;">QR DEMO</div>
+                                <div id="d-qr-amount" style="margin-bottom:10px;">Amount: <strong><span>₹0</span></strong></div> 
+                                <div style="height:160px; width:160px; margin:0 auto 10px auto; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#999; font-weight:700;">
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=DabbeWaleDemoPayment" alt="Demo QR Code" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
+                                </div>
                                 <small>This is a demo placeholder.</small>
                             </div>
                         </div>
@@ -85,5 +87,3 @@
     <script src="frontend/js/order-placement.js"></script>
 </body>
 </html>
-
-
