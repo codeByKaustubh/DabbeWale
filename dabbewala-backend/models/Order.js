@@ -37,9 +37,9 @@ const orderSchema = new mongoose.Schema({
     default: "pending"
   },
   paymentMethod: {
-    type: String,
-    enum: ["cod", "online", "card"],
-    default: "cod"
+  type: String,
+  enum: ["cod", "online", "card", "upi", "qr"],
+  default: "cod"
   },
   deliveryInstructions: String,
   estimatedDeliveryTime: Date,
