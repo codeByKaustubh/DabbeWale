@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     bindSearch();
     loadProviders();
     bindPaymentSelector();
+    renderCartBadge();
 });
 
 // Load providers from API
@@ -329,6 +330,8 @@ function increaseQuantity(itemId, providerId, itemName, price) {
     cart[providerId][itemId].quantity++;
     updateQuantityDisplay(itemId);
     updateOrderSummary();
+    renderCartBadge();
+    renderCartDrawer();
 }
 
 // Decrease item quantity
@@ -348,6 +351,8 @@ function decreaseQuantity(itemId, providerId) {
     
     updateQuantityDisplay(itemId);
     updateOrderSummary();
+    renderCartBadge();
+    renderCartDrawer();
 }
 
 // Update quantity display
@@ -389,6 +394,96 @@ function updateOrderSummary() {
         itemCount.textContent = `${itemCountNum} item${itemCountNum !== 1 ? 's' : ''}`;
         if (qrAmount) qrAmount.textContent = `₹${total}`;
     }
+}
+
+// Compute total items and amount
+function getCartTotals() {
+    let items = 0; let amount = 0;
+    Object.values(cart).forEach(providerCart => {
+        Object.values(providerCart).forEach(i => {
+            items += i.quantity;
+            amount += i.quantity * i.price;
+        });
+    });
+    return { items, amount };
+}
+
+// Badge
+function renderCartBadge() {
+    const badge = document.getElementById('cart-count');
+    if (!badge) return;
+    const { items } = getCartTotals();
+    if (items > 0) {
+        badge.style.display = 'flex';
+        badge.textContent = String(items);
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+// Drawer open/close
+function openCart() {
+    renderCartDrawer();
+    const overlay = document.getElementById('cart-drawer-overlay');
+    if (!overlay) return;
+    overlay.classList.add('active');
+    overlay.style.opacity = '1';
+    overlay.style.visibility = 'visible';
+}
+
+function closeCart() {
+    const overlay = document.getElementById('cart-drawer-overlay');
+    if (!overlay) return;
+    overlay.classList.remove('active');
+    overlay.style.opacity = '0';
+    overlay.style.visibility = 'hidden';
+}
+
+// Render drawer content
+function renderCartDrawer() {
+    const container = document.getElementById('cart-items');
+    const subtotalEl = document.getElementById('cart-subtotal');
+    if (!container || !subtotalEl) return;
+    const lines = [];
+    Object.entries(cart).forEach(([providerId, items]) => {
+        Object.entries(items).forEach(([itemId, it]) => {
+            lines.push(`
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 0; border-bottom:1px solid #f0f0f0;">
+                    <div style="min-width:0;">
+                        <div style="font-weight:700; color:#333;">${it.name}</div>
+                        <div style="color:#2e7d32; font-weight:700;">₹${it.price}</div>
+                    </div>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="decreaseQuantity('${itemId}', '${providerId}')">-</button>
+                        <span class="qty-display">${it.quantity}</span>
+                        <button class="qty-btn" onclick="increaseQuantity('${itemId}', '${providerId}', '${it.name}', ${it.price})">+</button>
+                    </div>
+                    <button onclick="removeItem('${itemId}', '${providerId}')" style="border:none; background:transparent; color:#f44336; cursor:pointer; font-weight:800;">✕</button>
+                </div>
+            `);
+        });
+    });
+    container.innerHTML = lines.length ? lines.join('') : '<div style="color:#666; padding:20px; text-align:center;">Your cart is empty</div>';
+    const { amount } = getCartTotals();
+    subtotalEl.textContent = `₹${amount}`;
+}
+
+// Remove or clear
+function removeItem(itemId, providerId) {
+    if (cart[providerId] && cart[providerId][itemId]) {
+        delete cart[providerId][itemId];
+        if (Object.keys(cart[providerId]).length === 0) delete cart[providerId];
+        updateOrderSummary();
+        renderCartBadge();
+        renderCartDrawer();
+    }
+}
+
+function clearCart() {
+    cart = {};
+    updateOrderSummary();
+    renderCartBadge();
+    renderCartDrawer();
 }
 
 // Place order
