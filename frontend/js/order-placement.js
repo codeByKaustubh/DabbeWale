@@ -368,11 +368,7 @@ function updateQuantityDisplay(itemId) {
 
 // Update order summary
 function updateOrderSummary() {
-    const orderSummary = document.getElementById('order-summary');
     const emptyCart = document.getElementById('empty-cart');
-    const totalAmount = document.getElementById('total-amount');
-    const itemCount = document.getElementById('item-count');
-    const qrAmount = document.querySelector('#qr-details #qr-amount span');
     const dQrAmount = document.querySelector('#d-qr-details #d-qr-amount span');
     
     let total = 0;
@@ -387,14 +383,9 @@ function updateOrderSummary() {
     });
     
     if (itemCountNum === 0) {
-        orderSummary.style.display = 'none';
         emptyCart.style.display = 'block';
     } else {
-        orderSummary.style.display = 'block';
         emptyCart.style.display = 'none';
-        totalAmount.textContent = `₹${total}`;
-        itemCount.textContent = `${itemCountNum} item${itemCountNum !== 1 ? 's' : ''}`;
-        if (qrAmount) qrAmount.textContent = `₹${total}`;
         if (dQrAmount) dQrAmount.textContent = `₹${total}`;
     }
 }
