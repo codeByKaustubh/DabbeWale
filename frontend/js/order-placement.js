@@ -460,6 +460,8 @@ function renderCartDrawer() {
     container.innerHTML = lines.length ? lines.join('') : '<div style="color:#666; padding:20px; text-align:center;">Your cart is empty</div>';
     const { amount } = getCartTotals();
     subtotalEl.textContent = `₹${amount}`;
+    const clearBtn = document.getElementById('clear-cart');
+    if (clearBtn) clearBtn.onclick = () => clearCart();
 }
 
 // Remove or clear
