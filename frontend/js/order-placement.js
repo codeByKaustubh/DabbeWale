@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     bindSearch();
     loadProviders();
     bindPaymentSelector();
+    bindDrawerPaymentSelector();
     renderCartBadge();
 });
 
@@ -372,6 +373,7 @@ function updateOrderSummary() {
     const totalAmount = document.getElementById('total-amount');
     const itemCount = document.getElementById('item-count');
     const qrAmount = document.querySelector('#qr-details #qr-amount span');
+    const dQrAmount = document.querySelector('#d-qr-details #d-qr-amount span');
     
     let total = 0;
     let itemCountNum = 0;
@@ -393,6 +395,7 @@ function updateOrderSummary() {
         totalAmount.textContent = `₹${total}`;
         itemCount.textContent = `${itemCountNum} item${itemCountNum !== 1 ? 's' : ''}`;
         if (qrAmount) qrAmount.textContent = `₹${total}`;
+        if (dQrAmount) dQrAmount.textContent = `₹${total}`;
     }
 }
 
@@ -532,9 +535,9 @@ async function placeOrder() {
             specialInstructions: ''
         }));
         
-        const paymentMethod = document.getElementById('payment-method').value;
+        const paymentMethod = (document.getElementById('d-payment-method')?.value) || document.getElementById('payment-method').value;
         const address = collectAddress();
-        const allergyNotes = (document.getElementById('allergy-notes')?.value || '').trim();
+        const allergyNotes = (document.getElementById('d-allergy-notes')?.value || document.getElementById('allergy-notes')?.value || '').trim();
         
         // Calculate total for payment
         let total = 0;
@@ -545,10 +548,18 @@ async function placeOrder() {
         // Handle payment flows (demo)
         let paymentSuccess = false;
         if (paymentMethod === 'card') {
-            paymentSuccess = await handleOnlinePayment(total);
-            if (!paymentSuccess) return resetPlaceButton();
+            const num = (document.getElementById('d-card-number')?.value || '').replace(/\s+/g,'');
+            const exp = (document.getElementById('d-card-expiry')?.value || '');
+            const cvv = (document.getElementById('d-card-cvv')?.value || '');
+            if (!num || !exp || !cvv) {
+                showError('Please fill card details');
+                return resetPlaceButton();
+            }
+            await new Promise(r => setTimeout(r, 900));
+            showSuccess('Card charged (demo).');
+            paymentSuccess = true;
         } else if (paymentMethod === 'upi') {
-            const upiId = (document.getElementById('upi-id')?.value || '').trim();
+            const upiId = (document.getElementById('d-upi-id')?.value || document.getElementById('upi-id')?.value || '').trim();
             if (!upiId) {
                 showError('Please enter a valid UPI ID');
                 return resetPlaceButton();
@@ -656,10 +667,10 @@ function resetPlaceButton() {
 
 // Collect and validate address
 function collectAddress() {
-    const street = (document.getElementById('addr-street')?.value || '').trim();
-    const city = (document.getElementById('addr-city')?.value || '').trim();
-    const state = (document.getElementById('addr-state')?.value || '').trim();
-    const pincode = (document.getElementById('addr-pincode')?.value || '').trim();
+    const street = (document.getElementById('d-addr-street')?.value || document.getElementById('addr-street')?.value || '').trim();
+    const city = (document.getElementById('d-addr-city')?.value || document.getElementById('addr-city')?.value || '').trim();
+    const state = (document.getElementById('d-addr-state')?.value || document.getElementById('addr-state')?.value || '').trim();
+    const pincode = (document.getElementById('d-addr-pincode')?.value || document.getElementById('addr-pincode')?.value || '').trim();
     if (!street || !city || !state || !pincode) {
         showError('Please fill complete delivery address');
         throw new Error('Invalid address');
@@ -669,13 +680,16 @@ function collectAddress() {
 
 // Reset form fields after order
 function resetFormFields() {
-    ['addr-street','addr-city','addr-state','addr-pincode','allergy-notes','upi-id'].forEach(id => {
+    ['addr-street','addr-city','addr-state','addr-pincode','allergy-notes','upi-id','d-addr-street','d-addr-city','d-addr-state','d-addr-pincode','d-allergy-notes','d-upi-id','d-card-number','d-card-expiry','d-card-cvv'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
     });
     const paymentMethod = document.getElementById('payment-method');
     if (paymentMethod) paymentMethod.value = 'cod';
     togglePaymentDetails('cod');
+    const dPayment = document.getElementById('d-payment-method');
+    if (dPayment) dPayment.value = 'cod';
+    toggleDrawerPaymentDetails('cod');
 }
 
 // Payment method UI binding
@@ -705,6 +719,42 @@ function togglePaymentDetails(method) {
         wrapper.style.display = 'none';
         upi.style.display = 'none';
         qr.style.display = 'none';
+    }
+}
+
+// Drawer payment binding and toggling
+function bindDrawerPaymentSelector() {
+    const select = document.getElementById('d-payment-method');
+    if (!select) return;
+    select.addEventListener('change', (e) => toggleDrawerPaymentDetails(e.target.value));
+}
+
+function toggleDrawerPaymentDetails(method) {
+    const wrapper = document.getElementById('d-payment-details');
+    const upi = document.getElementById('d-upi-details');
+    const qr = document.getElementById('d-qr-details');
+    const card = document.getElementById('d-card-details');
+    if (!wrapper || !upi || !qr || !card) return;
+    if (method === 'upi') {
+        wrapper.style.display = 'block';
+        upi.style.display = 'block';
+        qr.style.display = 'none';
+        card.style.display = 'none';
+    } else if (method === 'qr') {
+        wrapper.style.display = 'block';
+        upi.style.display = 'none';
+        qr.style.display = 'block';
+        card.style.display = 'none';
+    } else if (method === 'card') {
+        wrapper.style.display = 'block';
+        upi.style.display = 'none';
+        qr.style.display = 'none';
+        card.style.display = 'block';
+    } else {
+        wrapper.style.display = 'none';
+        upi.style.display = 'none';
+        qr.style.display = 'none';
+        card.style.display = 'none';
     }
 }
 
