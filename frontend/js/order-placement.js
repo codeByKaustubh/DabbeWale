@@ -22,7 +22,10 @@ document.addEventListener('DOMContentLoaded', function() {
     loadProviders();
     bindPaymentSelector();
     bindDrawerPaymentSelector();
+    loadCartFromStorage();
     renderCartBadge();
+    // Render items if we are on cart page
+    renderCartDrawer();
 });
 
 // Load providers from API
@@ -333,6 +336,7 @@ function increaseQuantity(itemId, providerId, itemName, price) {
     updateOrderSummary();
     renderCartBadge();
     renderCartDrawer();
+    saveCartToStorage();
 }
 
 // Decrease item quantity
@@ -354,6 +358,7 @@ function decreaseQuantity(itemId, providerId) {
     updateOrderSummary();
     renderCartBadge();
     renderCartDrawer();
+    saveCartToStorage();
 }
 
 // Update quantity display
@@ -417,20 +422,13 @@ function renderCartBadge() {
 
 // Drawer open/close
 function openCart() {
-    renderCartDrawer();
-    const overlay = document.getElementById('cart-drawer-overlay');
-    if (!overlay) return;
-    overlay.classList.add('active');
-    overlay.style.opacity = '1';
-    overlay.style.visibility = 'visible';
+    // Navigate to dedicated cart page
+    try { saveCartToStorage(); } catch (_) {}
+    window.location.href = 'cart.html';
 }
 
 function closeCart() {
-    const overlay = document.getElementById('cart-drawer-overlay');
-    if (!overlay) return;
-    overlay.classList.remove('active');
-    overlay.style.opacity = '0';
-    overlay.style.visibility = 'hidden';
+    // No drawer in dedicated cart page; noop
 }
 
 // Render drawer content
@@ -472,6 +470,7 @@ function removeItem(itemId, providerId) {
         updateOrderSummary();
         renderCartBadge();
         renderCartDrawer();
+        saveCartToStorage();
     }
 }
 
@@ -480,6 +479,7 @@ function clearCart() {
     updateOrderSummary();
     renderCartBadge();
     renderCartDrawer();
+    saveCartToStorage();
 }
 
 // Place order
@@ -594,6 +594,7 @@ async function placeOrder() {
                 el.textContent = '0';
             });
             resetFormFields();
+            saveCartToStorage();
             
             // Redirect to order confirmation or dashboard
             setTimeout(() => {
@@ -626,6 +627,7 @@ async function placeOrder() {
                 el.textContent = '0';
             });
             resetFormFields();
+            saveCartToStorage();
             
             // Redirect to order confirmation or dashboard
             setTimeout(() => {
@@ -683,6 +685,25 @@ function resetFormFields() {
     const dPayment = document.getElementById('d-payment-method');
     if (dPayment) dPayment.value = 'cod';
     toggleDrawerPaymentDetails('cod');
+}
+
+// Cart persistence
+function saveCartToStorage() {
+    try {
+        localStorage.setItem('dw_cart', JSON.stringify(cart));
+    } catch (_) {}
+}
+
+function loadCartFromStorage() {
+    try {
+        const raw = localStorage.getItem('dw_cart');
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && typeof parsed === 'object') {
+                cart = parsed;
+            }
+        }
+    } catch (_) {}
 }
 
 // Payment method UI binding
