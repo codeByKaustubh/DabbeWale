@@ -53,7 +53,8 @@ exports.getProviders = async (req, res) => {
     let query = { isActive: true };
     
     if (city) {
-      query["address.city"] = { $regex: city, $options: "i" };
+      // Use a case-insensitive exact match for the city for more precise results.
+      query["address.city"] = { $regex: `^${city}$`, $options: "i" };
     }
     
     if (cuisine) {
