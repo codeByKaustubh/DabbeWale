@@ -7,8 +7,8 @@ exports.createOrder = async (req, res) => {
   try {
     const { providerId, items, deliveryAddress, deliveryInstructions, paymentMethod } = req.body;
     
-    // Check if user is a consumer
-    if (req.userType !== 'user') {
+    // Check if user is a consumer. The role is 'consumer', not 'user'.
+    if (req.user.role !== 'consumer') {
       return res.status(403).json({ msg: "Only consumers can place orders" });
     }
     
@@ -20,19 +20,29 @@ exports.createOrder = async (req, res) => {
       return res.status(404).json({ msg: "Provider not found" });
     }
 
-    // Calculate totals
+    // --- Secure Price Calculation ---
+    // The backend, not the frontend, must be the source of truth for prices.
     let totalAmount = 0;
     const orderItems = [];
 
     for (const item of items) {
-      // For now, use the price from the frontend since we're using sample menu
-      const itemTotal = item.price * item.quantity;
+      // Find the menu item in the provider's menu from the database
+      const menuItemFromDB = provider.menu.find(
+        (menuItem) => menuItem._id.toString() === item.menuItemId
+      );
+
+      if (!menuItemFromDB) {
+        return res.status(400).json({ msg: `Item '${item.name}' not found in provider's menu.` });
+      }
+
+      // Use the price from the database, NOT the price from the request body
+      const itemTotal = menuItemFromDB.price * item.quantity;
       totalAmount += itemTotal;
 
       orderItems.push({
-        menuItem: item.menuItemId || 'sample-id',
-        name: item.name,
-        price: item.price,
+        menuItem: menuItemFromDB._id,
+        name: menuItemFromDB.name,
+        price: menuItemFromDB.price, // Use the secure price
         quantity: item.quantity,
         specialInstructions: item.specialInstructions || ''
       });
@@ -82,30 +92,8 @@ exports.createOrder = async (req, res) => {
       });
     } catch (dbError) {
       console.error("Database error:", dbError);
-      
-      // If database is not available, create a mock response for testing
-      if (dbError.name === 'MongoNetworkError' || dbError.message.includes('connect')) {
-        console.log("Database not available, creating mock order for testing");
-        
-        const mockOrder = {
-          _id: 'mock-order-' + Date.now(),
-          totalAmount,
-          finalAmount,
-          status: 'pending'
-        };
-        
-        res.status(201).json({
-          msg: "Order created successfully (Mock - Database not available)",
-          order: {
-            id: mockOrder._id,
-            totalAmount: mockOrder.totalAmount,
-            finalAmount: mockOrder.finalAmount,
-            status: mockOrder.status
-          }
-        });
-      } else {
-        throw dbError;
-      }
+      // Removed the mock order creation block. We want to see the real database error.
+      res.status(500).json({ msg: "Database error while creating order", error: dbError.message });
     }
   } catch (err) {
     console.error("Error creating order:", err);

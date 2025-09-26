@@ -36,22 +36,17 @@ async function loadProviders() {
         const data = await response.json();
         providers = data.providers || data; // Handle both array and object response
         console.log("Loaded providers:", providers);
-        
-        // If no providers from API, use sample providers
-        if (!providers || providers.length === 0) {
-            console.log("No providers from API, using sample providers");
-            providers = getSampleProviders();
-        }
-        
+
         displayProviders(providers);
         showLoading(false);
         
     } catch (error) {
         console.error('Error loading providers:', error);
-        console.log("API failed, using sample providers");
-        providers = getSampleProviders();
-        displayProviders(providers);
+        // API failed, so we show an empty list and an error message.
+        // We no longer fall back to sample providers.
+        displayProviders([]); // Display an empty state
         showLoading(false);
+        showError("Could not load providers. Please check your connection and try again.");
     }
 }
 
@@ -303,7 +298,7 @@ function createMenuItem(providerId, item) {
             <div class="quantity-controls">
                 <button class="qty-btn" onclick="decreaseQuantity('${itemId}', '${providerId}')">-</button>
                 <span class="qty-display" id="qty-${itemId}">0</span>
-                <button class="qty-btn" onclick="increaseQuantity('${itemId}', '${providerId}', '${item.name}', ${item.price})">+</button>
+                <button class="qty-btn" onclick="increaseQuantity('${itemId}', '${providerId}', '${item.name}', ${item.price}, '${item._id}')">+</button>
             </div>
             <div class="item-price">₹${item.price}</div>
         </div>
@@ -311,13 +306,14 @@ function createMenuItem(providerId, item) {
 }
 
 // Increase item quantity
-function increaseQuantity(itemId, providerId, itemName, price) {
+function increaseQuantity(itemId, providerId, itemName, price, menuItemId) {
     if (!cart[providerId]) {
         cart[providerId] = {};
     }
     
     if (!cart[providerId][itemId]) {
         cart[providerId][itemId] = {
+            menuItemId: menuItemId, // Store the real menu item ID
             name: itemName,
             price: price,
             quantity: 0
@@ -441,7 +437,7 @@ function renderCartDrawer() {
                     <div class="quantity-controls">
                         <button class="qty-btn" onclick="decreaseQuantity('${itemId}', '${providerId}')">-</button>
                         <span class="qty-display">${it.quantity}</span>
-                        <button class="qty-btn" onclick="increaseQuantity('${itemId}', '${providerId}', '${it.name}', ${it.price})">+</button>
+                        <button class="qty-btn" onclick="increaseQuantity('${itemId}', '${providerId}', '${it.name}', ${it.price}, '${it.menuItemId}')">+</button>
                     </div>
                     <button onclick="removeItem('${itemId}', '${providerId}')" style="border:none; background:transparent; color:#f44336; cursor:pointer; font-weight:800;">✕</button>
                 </div>
@@ -514,7 +510,7 @@ async function placeOrder() {
         
     // Prepare order items
         const items = Object.values(cart[providerId]).map(item => ({
-            menuItemId: 'sample-id', // In real app, this would be the actual menu item ID
+            menuItemId: item.menuItemId, // Now sending the real ID
             name: item.name,
             price: item.price,
             quantity: item.quantity,
