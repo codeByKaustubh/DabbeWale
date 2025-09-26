@@ -248,7 +248,15 @@ function displayProviders(providers) {
         return;
     }
     
-    container.innerHTML = providers.map(provider => createProviderCard(provider)).join('');
+    // Use a robust mapping that can handle errors in individual provider data
+    container.innerHTML = providers.map(provider => {
+        try {
+            return createProviderCard(provider);
+        } catch (e) {
+            console.error(`Failed to render provider card for provider ID: ${provider?._id}. Error:`, e);
+            return ''; // Return an empty string for the failed card, so others can still render
+        }
+    }).join('');
 }
 
 // Create provider card HTML
