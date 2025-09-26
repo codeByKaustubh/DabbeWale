@@ -66,7 +66,7 @@ exports.getProviders = async (req, res) => {
     }
 
     const providers = await Provider.find(query)
-      .select("name description address rating totalRatings cuisine images")
+      .select("name description address rating totalRatings cuisine images menu")
       .limit(parseInt(limit))
       .skip((parseInt(page) - 1) * parseInt(limit))
       .sort({ rating: -1, totalRatings: -1 });
