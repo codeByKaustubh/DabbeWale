@@ -256,27 +256,39 @@ function createProviderCard(provider) {
     const rating = provider.rating || 0;
     const totalRatings = provider.totalRatings || 0;
     const location = provider.address?.city || provider.location || 'Location not specified';
-    
-    // Use real menu items from provider.menu
     const menuItems = provider.menu || [];
+
+    // Use the first image from the provider's images array as a cover.
+    // If no image is available, a default placeholder is used.
+    const coverImage = (provider.images && provider.images.length > 0)
+        ? provider.images[0]
+        : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80';
+
+    // Create tags for each cuisine type.
+    const cuisineTags = (provider.cuisine && provider.cuisine.length > 0)
+        ? provider.cuisine.map(c => `<span class="cuisine-tag">${c}</span>`).join('')
+        : '<span class="cuisine-tag">Home-style</span>';
     
     return `
         <div class="provider-card" data-provider-id="${provider._id}">
-            <div class="provider-header">
-                <h3 class="provider-name">${provider.name}</h3>
-                <div class="provider-rating">
-                    ⭐ ${rating.toFixed(1)} (${totalRatings})
+            <div class="provider-card-image" style="background-image: url('${coverImage}');"></div>
+            <div class="provider-card-content">
+                <div class="provider-header">
+                    <h3 class="provider-name">${provider.name}</h3>
+                    <div class="provider-rating">
+                        ⭐ ${rating.toFixed(1)} <span>(${totalRatings})</span>
+                    </div>
                 </div>
-            </div>
-            <div class="provider-info">
-                <p><strong>Location:</strong> ${location}</p>
-                <p><strong>Description:</strong> ${provider.description || 'Fresh home-cooked meals'}</p>
+                <div class="provider-details">
+                    <div class="cuisine-tags">${cuisineTags}</div>
+                    <div class="provider-location">${location}</div>
+                </div>
+                <p class="provider-description">${provider.description || 'Fresh and delicious home-cooked meals.'}</p>
             </div>
             <div class="menu-section">
-                <h4 style="margin-bottom: 15px; color: #333;">Menu</h4>
                 ${menuItems.length > 0 
                     ? menuItems.map(item => createMenuItem(provider._id, item)).join('')
-                    : '<p style="color: #666; font-style: italic;">No menu items available</p>'
+                    : '<p class="no-menu-message">Menu not available at the moment.</p>'
                 }
             </div>
         </div>
