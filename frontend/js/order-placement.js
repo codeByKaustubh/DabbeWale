@@ -292,8 +292,8 @@ function createMenuItem(providerId, item) {
     
     return `
         <div class="menu-item">
-            <div>
-                <div class="item-name">${item.name}</div>
+            <div style="flex-grow: 1;">
+                <div class="item-name">${item.name || 'Unnamed Item'}</div>
                 <div style="font-size: 0.9rem; color: #666;">
                     ${item.description || 'Fresh and delicious'} • ${item.type || 'Vegetarian'} • ${item.category || 'Lunch'}
                 </div>
@@ -301,9 +301,9 @@ function createMenuItem(providerId, item) {
             <div class="quantity-controls">
                 <button class="qty-btn" onclick="decreaseQuantity('${itemId}', '${providerId}')">-</button>
                 <span class="qty-display" id="qty-${itemId}">${cart[providerId]?.[itemId]?.quantity || 0}</span>
-                <button class="qty-btn" onclick="increaseQuantity('${itemId}', '${providerId}', '${item.name}', ${item.price}, '${item._id}')">+</button>
+                <button class="qty-btn" onclick="increaseQuantity('${itemId}', '${providerId}', '${item.name || 'Unnamed Item'}', ${item.price || 0}, '${item._id}')">+</button>
             </div>
-            <div class="item-price">₹${item.price}</div>
+            <div class="item-price">₹${item.price || 'N/A'}</div>
         </div>
     `;
 }
