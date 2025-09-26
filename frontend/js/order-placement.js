@@ -263,7 +263,7 @@ function createProviderCard(provider) {
     return `
         <div class="provider-card" data-provider-id="${provider._id}">
             <div class="provider-header">
-                <h3 class="provider-name">${provider.providerName || provider.name}</h3>
+                <h3 class="provider-name">${provider.name}</h3>
                 <div class="provider-rating">
                     ⭐ ${rating.toFixed(1)} (${totalRatings})
                 </div>
@@ -285,7 +285,10 @@ function createProviderCard(provider) {
 
 // Create menu item HTML
 function createMenuItem(providerId, item) {
-    const itemId = `${providerId}-${item.name.replace(/\s+/g, '-').toLowerCase()}`;
+    // Use the unique _id from the database for a reliable ID.
+    // Fallback to name for any older/sample data that might not have _id.
+    const safeName = item.name || 'Unnamed Item';
+    const itemId = `${providerId}-${(item._id || safeName.replace(/\s+/g, '-')).toLowerCase()}`;
     
     return `
         <div class="menu-item">
@@ -297,7 +300,7 @@ function createMenuItem(providerId, item) {
             </div>
             <div class="quantity-controls">
                 <button class="qty-btn" onclick="decreaseQuantity('${itemId}', '${providerId}')">-</button>
-                <span class="qty-display" id="qty-${itemId}">0</span>
+                <span class="qty-display" id="qty-${itemId}">${cart[providerId]?.[itemId]?.quantity || 0}</span>
                 <button class="qty-btn" onclick="increaseQuantity('${itemId}', '${providerId}', '${item.name}', ${item.price}, '${item._id}')">+</button>
             </div>
             <div class="item-price">₹${item.price}</div>
