@@ -20,7 +20,8 @@ exports.registerProvider = async (req, res) => {
 
     // Create provider profile
     const provider = await Provider.create({
-      name: req.body.name,
+      actualName: req.body.name, // Use actualName for the person's name
+      providerName: req.body.providerName, // Use providerName for the business name
       email: user.email,       // always from User
       phone: req.body.phone,
       address: req.body.address,
@@ -33,7 +34,7 @@ exports.registerProvider = async (req, res) => {
       msg: "Provider registered successfully",
       provider: {
         id: provider._id,
-        name: provider.name,
+        name: provider.providerName,
         email: provider.email,
         city: provider.address?.city
       }
@@ -66,7 +67,7 @@ exports.getProviders = async (req, res) => {
     }
 
     const providers = await Provider.find(query)
-      .select("name description address rating totalRatings cuisine images menu")
+      .select("providerName description address rating totalRatings cuisine images menu")
       .limit(parseInt(limit))
       .skip((parseInt(page) - 1) * parseInt(limit))
       .sort({ rating: -1, totalRatings: -1 });
