@@ -13,12 +13,10 @@ router.use(authorize("admin"));
 // Users (consumers and any user entries)
 router.get("/users", async (req, res) => {
   try {
-    const { limit = 50, page = 1, q = "" } = req.query;
+    const { q = "" } = req.query;
     const filter = q ? { $or: [{ name: new RegExp(q, "i") }, { email: new RegExp(q, "i") }] } : {};
     const items = await User.find(filter)
-      .sort({ createdAt: -1 })
-      .limit(parseInt(limit))
-      .skip((parseInt(page) - 1) * parseInt(limit));
+      .sort({ createdAt: -1 });
     const total = await User.countDocuments(filter);
     res.json({ items, total });
   } catch (err) {
@@ -29,12 +27,10 @@ router.get("/users", async (req, res) => {
 // Providers
 router.get("/providers", async (req, res) => {
   try {
-    const { limit = 50, page = 1, q = "" } = req.query;
+    const { q = "" } = req.query;
     const filter = q ? { $or: [{ providerName: new RegExp(q, "i") }, { email: new RegExp(q, "i") }] } : {};
     const items = await Provider.find(filter)
-      .sort({ createdAt: -1 })
-      .limit(parseInt(limit))
-      .skip((parseInt(page) - 1) * parseInt(limit));
+      .sort({ createdAt: -1 });
     const total = await Provider.countDocuments(filter);
     res.json({ items, total });
   } catch (err) {
@@ -45,12 +41,10 @@ router.get("/providers", async (req, res) => {
 // Delivery Agents
 router.get("/agents", async (req, res) => {
   try {
-    const { limit = 50, page = 1, q = "" } = req.query;
+    const { q = "" } = req.query;
     const filter = q ? { $or: [{ name: new RegExp(q, "i") }, { email: new RegExp(q, "i") }] } : {};
     const items = await DeliveryAgent.find(filter)
-      .sort({ createdAt: -1 })
-      .limit(parseInt(limit))
-      .skip((parseInt(page) - 1) * parseInt(limit));
+      .sort({ createdAt: -1 });
     const total = await DeliveryAgent.countDocuments(filter);
     res.json({ items, total });
   } catch (err) {
@@ -77,5 +71,3 @@ router.get("/orders", async (req, res) => {
 });
 
 module.exports = router;
-
-
