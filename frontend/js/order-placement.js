@@ -282,7 +282,7 @@ function createProviderCard(provider) {
             <div class="provider-card-image" style="background-image: url('${coverImage}');"></div>
             <div class="provider-card-content">
                 <div class="provider-header">
-                    <h3 class="provider-name">${provider.name}</h3>
+                    <h3 class="provider-name">${provider.providerName}</h3>
                     <div class="provider-rating">
                         ⭐ ${rating.toFixed(1)} <span>(${totalRatings})</span>
                     </div>
