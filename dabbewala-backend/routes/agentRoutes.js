@@ -60,3 +60,5 @@ router.get("/agents", async (req, res) => {
 });
 
 module.exports = router;
+const directoryRoutes = require('./routes/directoryRoutes');
+app.use('/api/directory', directoryRoutes);
