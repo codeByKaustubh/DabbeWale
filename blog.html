@@ -55,28 +55,8 @@
         color: var(--color-primary);
         text-decoration: underline;
       }
-      .blog-featured h2, .blog-categories h2, .blog-latest h2, .blog-newsletter h2 {
+      .blog-featured h2, .blog-latest h2 {
         color: var(--color-primary);
-      }
-      .blog-categories ul {
-        list-style: none;
-        padding: 0;
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        margin: 0 0 1.5rem 0;
-      }
-      .blog-categories a {
-        color: var(--color-accent);
-        font-weight: 600;
-        text-decoration: none;
-        padding: 4px 12px;
-        border-radius: 6px;
-        transition: background 0.2s, color 0.2s;
-      }
-      .blog-categories a:hover, .blog-categories a:focus {
-        background: var(--color-accent);
-        color: #fff;
       }
       .blog-posts-list {
         display: flex;
@@ -120,40 +100,6 @@
       }
       .blog-pagination a:hover, .blog-pagination a:focus {
         background: var(--color-button-hover);
-      }
-      .blog-newsletter form {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        margin-top: 1rem;
-      }
-      .blog-newsletter input[type="email"] {
-        border: 1px solid var(--color-form-input-border);
-        border-radius: 6px;
-        padding: 0.6rem 0.8rem;
-        font-size: 1rem;
-        background: var(--color-form-input-bg);
-        color: var(--color-text);
-        transition: border 0.2s, background 0.2s;
-      }
-      .blog-newsletter input[type="email"]:focus {
-        border: 1.5px solid var(--color-form-input-focus);
-        background: #fff;
-        outline: 2px solid var(--color-accent);
-        outline-offset: 1px;
-      }
-      .blog-newsletter button {
-        background: var(--color-form-btn-bg);
-        color: var(--color-form-btn-text);
-        font-weight: bold;
-        padding: 0.7rem 1.2rem;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-      .blog-newsletter button:hover, .blog-newsletter button:focus {
-        background: var(--color-accent);
       }
       .zoomed-img {
         object-fit: cover !important;
@@ -284,10 +230,6 @@
         <section class="blog-hero">
             <h1>Our Blog</h1>
             <p>Tips, stories, and updates from the DabbeWale community.</p>
-            <form class="blog-search-form">
-                <input type="text" placeholder="Search articles..." name="search">
-                <button type="submit">🔎 Search</button>
-            </form>
         </section>
         <section class="blog-featured">
             <h2>Featured Posts</h2>
@@ -312,16 +254,6 @@
                 </article>
             </div>
         </section>
-        <section class="blog-categories">
-            <h2>Categories</h2>
-            <ul>
-                <li><a href="#">All</a></li>
-                <li><a href="#">Tips</a></li>
-                <li><a href="#">Health</a></li>
-                <li><a href="#">Stories</a></li>
-                <li><a href="#">Updates</a></li>
-            </ul>
-        </section>
         <section class="blog-latest">
             <h2>Latest Articles</h2>
             <div class="blog-posts-list">
@@ -345,13 +277,6 @@
                 <a href="#" class="prev">&laquo; Previous</a>
                 <a href="#" class="next">Next &raquo;</a>
             </div>
-        </section>
-        <section class="blog-newsletter">
-            <h2>Subscribe to Our Newsletter</h2>
-            <form>
-                <input type="email" placeholder="Your email address" required>
-                <button type="submit">Subscribe</button>
-            </form>
         </section>
     </main>
     <script src="frontend/js/main.js"></script>
@@ -382,23 +307,6 @@
           margin-bottom: 1.5rem;
         }
         
-        .blog-search-form {
-          flex-direction: column;
-          gap: 0.8rem;
-          max-width: 100%;
-        }
-        
-        .blog-search-form input {
-          width: 100%;
-          padding: 0.8rem;
-          font-size: 1rem;
-        }
-        
-        .blog-search-form button {
-          width: 100%;
-          padding: 0.8rem;
-          font-size: 1rem;
-        }
         
         /* Featured posts grid */
         .blog-posts-grid {
@@ -428,27 +336,6 @@
           margin-bottom: 1rem;
         }
         
-        /* Categories */
-        .blog-categories {
-          padding: 0 1rem;
-        }
-        
-        .blog-categories h2 {
-          font-size: 1.5rem;
-          text-align: center;
-          margin-bottom: 1rem;
-        }
-        
-        .blog-categories ul {
-          flex-wrap: wrap;
-          gap: 0.5rem;
-          justify-content: center;
-        }
-        
-        .blog-categories a {
-          padding: 0.5rem 0.8rem;
-          font-size: 0.9rem;
-        }
         
         /* Blog list items */
         .blog-posts-list {
@@ -470,36 +357,6 @@
           line-height: 1.4;
         }
         
-        /* Newsletter section */
-        .blog-newsletter {
-          padding: 1.5rem 1rem;
-          margin: 1.5rem 0.5rem;
-        }
-        
-        .blog-newsletter h2 {
-          font-size: 1.4rem;
-          margin-bottom: 1rem;
-        }
-        
-        .blog-newsletter p {
-          font-size: 1rem;
-          margin-bottom: 1.2rem;
-        }
-        
-        .blog-newsletter form {
-          flex-direction: column;
-          gap: 0.8rem;
-        }
-        
-        .blog-newsletter input {
-          width: 100%;
-          padding: 0.8rem;
-        }
-        
-        .blog-newsletter button {
-          width: 100%;
-          padding: 0.8rem;
-        }
         
         /* Pagination */
         .blog-pagination {
@@ -549,14 +406,6 @@
           height: 140px;
         }
         
-        .blog-categories h2 {
-          font-size: 1.3rem;
-        }
-        
-        .blog-categories a {
-          padding: 0.4rem 0.6rem;
-          font-size: 0.85rem;
-        }
         
         .blog-post-list-item {
           padding: 0.8rem;
@@ -571,18 +420,6 @@
           font-size: 0.85rem;
         }
         
-        .blog-newsletter {
-          padding: 1.2rem 0.8rem;
-          margin: 1rem 0.3rem;
-        }
-        
-        .blog-newsletter h2 {
-          font-size: 1.2rem;
-        }
-        
-        .blog-newsletter p {
-          font-size: 0.9rem;
-        }
         
         .blog-pagination a {
           padding: 0.5rem 0.8rem;
