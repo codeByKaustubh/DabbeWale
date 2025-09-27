@@ -22,6 +22,8 @@ app.use("/api/providers", require("./routes/providerRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/agent", require("./routes/agentRoutes"));
+app.use("/api/directory", require("./routes/directoryRoutes"));
+
 
 
 // Health check route
