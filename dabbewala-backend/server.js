@@ -9,23 +9,17 @@ dotenv.config();
 
 const app = express();
 
-// CORS setup
-const allowedOrigins = new Set([
-  "http://localhost:5000",
-  "http://127.0.0.1:5000",
-  "http://localhost:3000",
-  "http://127.0.0.1:3000",
-  "http://localhost:5500",
-  "http://127.0.0.1:5500",
-  "https://dabbewale.netlify.app"
-]);
-
+// CORS: Allow requests from your Netlify frontend and any localhost for development.
+// This is more robust for deployment platforms like Render.
+const allowedOrigins = ["https://dabbewale.netlify.app"];
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || origin === "null") return callback(null, true);
-    if (allowedOrigins.has(origin)) return callback(null, true);
-    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return callback(null, true);
-    return callback(null, false);
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.startsWith('http://localhost:')) {
+      return callback(null, true);
+    }
+    return callback(new Error('The CORS policy for this site does not allow access from the specified Origin.'), false);
   },
   credentials: true
 }));
@@ -80,6 +74,7 @@ app.use("/api/providers", require("./routes/providerRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/agent", require("./routes/agentRoutes"));
+app.use("/api/directory", require("./routes/directoryRoutes"));
 
 const PORT = process.env.PORT || 5000;
 
