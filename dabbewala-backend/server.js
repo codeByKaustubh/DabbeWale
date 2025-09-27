@@ -9,7 +9,7 @@ dotenv.config();
 
 const app = express();
 
-// CORS: allow local dev, Netlify, and file:// (Origin: 'null')
+// CORS setup
 const allowedOrigins = new Set([
   "http://localhost:5000",
   "http://127.0.0.1:5000",
@@ -19,13 +19,12 @@ const allowedOrigins = new Set([
   "http://127.0.0.1:5500",
   "https://dabbewale.netlify.app"
 ]);
+
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow same-origin requests (no Origin header), file:// (Origin: 'null'), and localhost/netlify
-    if (!origin || origin === 'null') return callback(null, true);
+    if (!origin || origin === "null") return callback(null, true);
     if (allowedOrigins.has(origin)) return callback(null, true);
-    // Allow any localhost/127.0.0.1 port during development
-    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\\d+)?$/.test(origin)) return callback(null, true);
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return callback(null, true);
     return callback(null, false);
   },
   credentials: true
@@ -38,17 +37,20 @@ async function seedDefaultAdmin() {
   try {
     const email = "admin@gmail.com";
     const existing = await User.findOne({ email });
-    const passwordHash = await bcrypt.hash("admin", 10);
+
     if (!existing) {
+      const passwordHash = await bcrypt.hash("admin", 10);
       await User.create({ name: "Admin", email, password: passwordHash, role: "admin" });
       console.log("✅ Seeded default admin: admin@gmail.com / admin");
     } else {
+      const valid = await bcrypt.compare("admin", existing.password).catch(() => false);
       const needsRole = existing.role !== "admin";
-      const bcryptjs = require("bcryptjs");
-      const valid = await bcryptjs.compare("admin", existing.password).catch(() => false);
+
       if (needsRole || !valid) {
         existing.role = "admin";
-        existing.password = passwordHash;
+        if (!valid) {
+          existing.password = await bcrypt.hash("admin", 10);
+        }
         await existing.save();
         console.log("🔁 Ensured admin credentials for admin@gmail.com (password reset to 'admin')");
       }
@@ -58,12 +60,11 @@ async function seedDefaultAdmin() {
   }
 }
 
-// Test route to verify server is working
+// Routes
 app.get("/api/test", (req, res) => {
   res.json({ message: "Server is running!", timestamp: new Date().toISOString() });
 });
 
-// Test database connection
 app.get("/api/test-db", async (req, res) => {
   try {
     const Order = require("./models/Order");
@@ -85,12 +86,12 @@ const PORT = process.env.PORT || 5000;
 async function start() {
   try {
     await connectDB();
-    app.listen(PORT, async () => {
+    await seedDefaultAdmin();
+    app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
-      await seedDefaultAdmin();
     });
   } catch (err) {
-    console.error('❌ Failed to start server:', err.message);
+    console.error("❌ Failed to start server:", err.message);
     process.exit(1);
   }
 }
