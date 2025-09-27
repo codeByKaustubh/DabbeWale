@@ -26,6 +26,9 @@ app.use(cors({
 
 app.use(express.json());
 
+// Connect to the database first thing. This is crucial for deployment.
+connectDB();
+
 // Seed a default admin user if missing
 async function seedDefaultAdmin() {
   try {
@@ -80,7 +83,6 @@ const PORT = process.env.PORT || 5000;
 
 async function start() {
   try {
-    await connectDB();
     await seedDefaultAdmin();
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
