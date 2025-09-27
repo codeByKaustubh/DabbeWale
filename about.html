@@ -8,164 +8,18 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="icon" type="image/png" href="assets/new-removebg-preview.png">
   <style>
-      /* About Page Specific Styles */
-      .about-hero-logo-container {
-        text-align: center;
-        margin-bottom: 20px;
+      .view-all-posts-btn {
+        display:inline-block;
+        background:var(--color-primary);
+        color:var(--color-form-btn-text);
+        padding:10px 28px;
+        border-radius:6px;
+        text-decoration:none;
+        font-weight:600;
+        transition:background 0.2s;
       }
-      .about-hero-logo {
-        max-width: 250px;
-        width: 100%;
-        height: auto;
-      }
-      .about-content-section {
-        margin: 3rem 0;
-        padding: 2rem;
-        background: var(--color-form-bg);
-        border-radius: 12px;
-        box-shadow: var(--shadow-sm);
-      }
-      .about-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 3rem;
-        align-items: center;
-        margin-bottom: 2rem;
-      }
-      .about-image {
-        width: 100%;
-        border-radius: 12px;
-        box-shadow: var(--shadow-md);
-      }
-      .section-heading {
-        color: var(--color-primary);
-        font-size: 1.8rem;
-        margin-bottom: 1rem;
-      }
-      .about-text {
-        line-height: 1.6;
-      }
-      .mb-1 {
-        margin-bottom: 1rem;
-      }
-      .mb-1-5 {
-        margin-bottom: 1.5rem;
-      }
-      .about-list {
-        list-style: disc;
-        padding-left: 1.5rem;
-        color: var(--color-text);
-      }
-      .about-list li {
-        margin-bottom: 0.5rem;
-      }
-      .mission-section {
-        background: var(--color-primary);
-        color: white;
-        padding: 2rem;
-        border-radius: 12px;
-        text-align: center;
-        margin: 2rem 0;
-      }
-      .mission-heading {
-        color: white;
-        font-size: 1.8rem;
-        margin-bottom: 1rem;
-      }
-      .mission-text {
-        max-width: 800px;
-        margin: 0 auto;
-        font-size: 1.1rem;
-        line-height: 1.6;
-      }
-      .features-section {
-        margin: 3rem 0;
-      }
-      .features-heading {
-        text-align: center;
-        color: var(--color-primary);
-        font-size: 1.8rem;
-        margin-bottom: 2rem;
-      }
-      .feature-icon {
-        font-size: 2rem;
-        color: var(--color-primary);
-        margin-bottom: 1rem;
-      }
-
-      /* Navbar Styles */
-      .improved-navbar {
-        background: linear-gradient(90deg, #f9fbe7 60%, #e0f2f1 100%);
-        box-shadow: 0 2px 16px rgba(56,142,60,0.10);
-        border-radius: 18px;
-        margin: 1.5rem auto 2.5rem auto;
-        max-width: 950px;
-        padding: 0.7em 2em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        z-index: 10;
-      }
-      .improved-navbar .nav-links {
-        display: flex;
-        gap: 2.2em;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: nowrap;
-      }
-      .improved-navbar .nav-links a {
-        color: #388e3c;
-        font-size: 1.25rem;
-        font-weight: 600;
-        text-decoration: none;
-        padding: 0.5em 1.1em;
-        border-radius: 8px;
-        transition: background 0.18s, color 0.18s, box-shadow 0.18s;
-        position: relative;
-        white-space: nowrap;
-        z-index: 11;
-      }
-      .improved-navbar .nav-links a:hover,
-      .improved-navbar .nav-links a:focus {
-        background: #e0f2f1;
-        color: #1b5e20;
-        box-shadow: 0 2px 8px rgba(56,142,60,0.10);
-      }
-      .improved-navbar .nav-links a.active {
-        background: #388e3c;
-        color: #fff;
-        box-shadow: 0 2px 12px rgba(56,142,60,0.13);
-      }
-
-      /* Responsive Styles */
-      @media (max-width: 768px) {
-        .about-grid {
-          grid-template-columns: 1fr;
-          gap: 2rem;
-        }
-        .about-grid img {
-          max-height: 300px;
-          object-fit: cover;
-        }
-        .features-grid {
-          grid-template-columns: 1fr;
-          gap: 1rem;
-        }
-      }
-      @media (max-width: 700px) {
-        .improved-navbar {
-          padding: 0.7em 0.5em;
-          max-width: 99vw;
-        }
-        .improved-navbar .nav-links {
-          gap: 0.7em;
-        }
-        .improved-navbar .nav-links a {
-          font-size: 1.05rem;
-          padding: 0.5em 0.6em;
-        }
+      .view-all-posts-btn:hover, .view-all-posts-btn:focus {
+        background:var(--color-button-hover);
       }
       .improved-navbar {
         background: linear-gradient(90deg, #f9fbe7 60%, #e0f2f1 100%);
@@ -222,26 +76,6 @@
         .improved-navbar .nav-links a {
           font-size: 1.05rem;
           padding: 0.5em 0.6em;
-        }
-      }
-      @media (max-width: 480px) {
-        main {
-          padding: 1rem 0.5rem;
-        }
-        .about-content-section, .mission-section {
-          padding: 1rem;
-        }
-        .section-heading, .mission-heading, .features-heading {
-          font-size: 1.5rem;
-        }
-        .feature-card {
-          padding: 1rem;
-        }
-        .feature-card h3 {
-          font-size: 1.1rem;
-        }
-        .feature-card p {
-          font-size: 0.9rem;
         }
       }
   </style>
@@ -261,42 +95,42 @@
   </header>
 
   <main>
-    <div class="about-hero-logo-container">
-      <img src="assets/new.png" alt="Dabbewale Logo" class="about-hero-logo" />
+    <div style="text-align:center; margin-bottom: 20px;">
+      <img src="assets/new.png" alt="Dabbewale Logo" style="max-width: 250px; width: 100%; height: auto;" />
     </div>
     <h1>About DabbeWale</h1>
     <p>Your platform to find and order nutritious, affordable home-cooked meals from local tiffin providers.</p>
     
     <!-- About Content -->
-    <div class="about-content-section">
-      <div class="about-grid">
+    <div style="margin: 3rem 0; padding: 2rem; background: var(--color-form-bg); border-radius: 12px; box-shadow: var(--shadow-sm);">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-bottom: 2rem;">
         <div>
-          <img src="/assets/ChatGPT Image Sep 23, 2025, 11_41_11 AM.png" alt="Tiffin Service" class="about-image" />
+          <img src="/assets/ChatGPT Image Sep 23, 2025, 11_41_11 AM.png" alt="Tiffin Service" style="width: 100%; border-radius: 12px; box-shadow: var(--shadow-md);" />
         </div>
         <div>
-          <h2 class="section-heading">Who We Are</h2>
-          <p class="about-text mb-1">
+          <h2 style="color: var(--color-primary); font-size: 1.8rem; margin-bottom: 1rem;">Who We Are</h2>
+          <p style="margin-bottom: 1rem; line-height: 1.6;">
             Our Tiffin Service was started with one goal – to bring nutritious, home-style meals 
             to students, working professionals, and families who miss the comfort of homemade food.
           </p>
-          <p class="about-text mb-1-5">
+          <p style="margin-bottom: 1.5rem; line-height: 1.6;">
             We prepare fresh meals daily with high-quality ingredients, ensuring both taste and hygiene. 
             With flexible meal plans and timely delivery, we make sure you never miss a healthy meal.
           </p>
-          <ul class="about-list">
-            <li>Freshly cooked meals everyday</li>
-            <li>Affordable & customizable meal plans</li>
-            <li>Hygienic preparation & eco-friendly packaging</li>
-            <li>On-time doorstep delivery</li>
+          <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text);">
+            <li style="margin-bottom: 0.5rem;">Freshly cooked meals everyday</li>
+            <li style="margin-bottom: 0.5rem;">Affordable & customizable meal plans</li>
+            <li style="margin-bottom: 0.5rem;">Hygienic preparation & eco-friendly packaging</li>
+            <li style="margin-bottom: 0.5rem;">On-time doorstep delivery</li>
           </ul>
         </div>
       </div>
     </div>
 
     <!-- Mission Section -->
-    <div class="mission-section">
-      <h2 class="mission-heading">Our Mission</h2>
-      <p class="mission-text">
+    <div style="background: var(--color-primary); color: white; padding: 2rem; border-radius: 12px; text-align: center; margin: 2rem 0;">
+      <h2 style="color: white; font-size: 1.8rem; margin-bottom: 1rem;">Our Mission</h2>
+      <p style="max-width: 800px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">
         We aim to make healthy, home-cooked meals accessible to everyone.  
         Our mission is not just about food delivery but creating a connection to the warmth of home.  
         With every tiffin, we deliver happiness, nutrition, and care.
@@ -304,26 +138,26 @@
     </div>
 
     <!-- Features Section -->
-    <div class="features-section">
-      <h2 class="features-heading">Why Choose DabbeWale?</h2>
+    <div class="features" style="margin: 3rem 0;">
+      <h2 style="text-align: center; color: var(--color-primary); font-size: 1.8rem; margin-bottom: 2rem;">Why Choose DabbeWale?</h2>
       <div class="features-grid">
         <div class="feature-card">
-          <i class="fas fa-utensils feature-icon"></i>
+          <i class="fas fa-utensils" style="font-size: 2rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
           <h3>Fresh Daily Meals</h3>
           <p>Every meal is prepared fresh daily with high-quality ingredients and traditional cooking methods.</p>
         </div>
         <div class="feature-card">
-          <i class="fas fa-heart feature-icon"></i>
+          <i class="fas fa-heart" style="font-size: 2rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
           <h3>Made with Love</h3>
           <p>Our providers cook with the same love and care they would for their own families.</p>
         </div>
         <div class="feature-card">
-          <i class="fas fa-shield-alt feature-icon"></i>
+          <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
           <h3>Trusted Providers</h3>
           <p>All our tiffin providers are verified and trusted local cooks with excellent hygiene standards.</p>
         </div>
         <div class="feature-card">
-          <i class="fas fa-clock feature-icon"></i>
+          <i class="fas fa-clock" style="font-size: 2rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
           <h3>On-Time Delivery</h3>
           <p>Reliable delivery service ensuring your meals arrive fresh and on time, every time.</p>
         </div>
@@ -332,6 +166,51 @@
   </main>
 
   <script src="frontend/js/main.js"></script>
+
+  <style>
+    /* Responsive styles for about page */
+    @media (max-width: 768px) {
+      main div[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+      }
+      
+      main div[style*="grid-template-columns: 1fr 1fr"] img {
+        max-height: 300px;
+        object-fit: cover;
+      }
+      .features-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      main {
+        padding: 1rem 0.5rem !important;
+      }
+      
+      main div[style*="padding: 2rem"] {
+        padding: 1rem !important;
+      }
+      
+      main div[style*="padding: 2rem"] h2 {
+        font-size: 1.5rem !important;
+      }
+      
+      .feature-card {
+        padding: 1rem !important;
+      }
+      
+      .feature-card h3 {
+        font-size: 1.1rem !important;
+      }
+      
+      .feature-card p {
+        font-size: 0.9rem !important;
+      }
+    }
+  </style>
 
 </body>
 </html>
