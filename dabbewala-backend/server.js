@@ -72,17 +72,19 @@ app.get("/api/test-db", async (req, res) => {
   }
 });
 
-app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/providers", require("./routes/providerRoutes"));
-app.use("/api/orders", require("./routes/orderRoutes"));
-app.use("/api/admin", require("./routes/adminRoutes"));
-app.use("/api/agent", require("./routes/agentRoutes"));
-app.use("/api/directory", require("./routes/directoryRoutes"));
 
 const PORT = process.env.PORT || 5000;
 
 async function start() {
   try {
+    // Register routes after DB connection is up and before starting the server
+    app.use("/api/auth", require("./routes/authRoutes"));
+    app.use("/api/providers", require("./routes/providerRoutes"));
+    app.use("/api/orders", require("./routes/orderRoutes"));
+    app.use("/api/admin", require("./routes/adminRoutes"));
+    app.use("/api/agent", require("./routes/agentRoutes"));
+    app.use("/api/directory", require("./routes/directoryRoutes"));
+
     await seedDefaultAdmin();
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
