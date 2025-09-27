@@ -60,5 +60,3 @@ router.get("/agents", async (req, res) => {
 });
 
 module.exports = router;
-
-
