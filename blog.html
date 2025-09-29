@@ -28,6 +28,20 @@
         gap: 10px;
         color: var(--color-text);
       }
+      .more-content {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.4s ease-out, opacity 0.4s ease-out, margin-top 0.4s ease-out;
+        line-height: 1.6;
+        font-size: 0.95rem;
+        margin-top: 0;
+      }
+      .blog-post.expanded .more-content {
+        max-height: 200px; /* A value larger than the content's height */
+        opacity: 1;
+        margin-top: 10px;
+      }
       .blog-post h3 {
         margin-top: 0;
         color: var(--color-primary);
@@ -218,24 +232,47 @@
                 <article class="blog-post">
                     <img src="assets/tiffinservice2.jpeg" alt="Tiffin Service Tips">
                     <h3>How to Choose the Best Tiffin Service</h3>
-                    <p>Discover what to look for in a quality tiffin provider</p>
+                    <p>Discover what to look for in a quality tiffin provider to ensure you get healthy, delicious, and reliable meals...</p>
+                    <div class="more-content">
+                        <p>When selecting a tiffin service, consider the variety of the menu, the freshness of the ingredients, and the flexibility of subscription plans. Look for reviews from other customers to gauge reliability and taste. A good provider is transparent about their kitchen's hygiene standards and uses high-quality, eco-friendly packaging.</p>
+                    </div>
                     <a href="#" class="read-more">Read More</a>
                 </article>
                 <article class="blog-post">
                     <img src="assets/healthyeating1.jpeg" alt="Healthy Eating" class="zoomed-img">
                     <h3>Healthy Eating on a Busy Schedule</h3>
-                    <p>Quick tips for maintaining a balanced diet even with a packed workday</p>
+                    <p>Maintaining a balanced diet with a packed workday can be challenging. Here are some quick tips to help you stay on track...</p>
+                    <div class="more-content">
+                        <p>Plan your meals ahead of time, even if you're using a tiffin service. Opt for meals rich in protein and fiber to keep you full longer. Avoid sugary drinks and processed snacks. Staying hydrated by drinking plenty of water throughout the day is also crucial for your overall health and energy levels.</p>
+                    </div>
                     <a href="#" class="read-more">Read More</a>
                 </article>
                 <article class="blog-post">
                     <img src="assets/customerservice1.jpeg" alt="Customer Story" class="zoomed-img">
                     <h3>Customer Story: Lunches That Changed My Life</h3>
-                    <p>Hear from our users about how DabbeWale made their daily routine easier and tastier</p>
+                    <p>Hear from one of our loyal users about how DabbeWale transformed their daily routine, making it easier and much tastier...</p>
+                    <div class="more-content">
+                        <p>"As a busy software developer, I barely had time to cook. I used to rely on unhealthy takeout, which was affecting my health and my wallet. Discovering DabbeWale was a game-changer. Now, I get delicious, home-cooked meals delivered to my office every day. It's convenient, affordable, and feels like a warm hug from home." - Rohan M.</p>
+                    </div>
                     <a href="#" class="read-more">Read More</a>
                 </article>
             </div>
         </section>
     </main>
     <script src="frontend/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const readMoreLinks = document.querySelectorAll('.read-more');
+
+            readMoreLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const post = link.closest('.blog-post');
+                    post.classList.toggle('expanded');
+                    link.textContent = post.classList.contains('expanded') ? 'Read Less' : 'Read More';
+                });
+            });
+        });
+    </script>
 </body>
 </html>
