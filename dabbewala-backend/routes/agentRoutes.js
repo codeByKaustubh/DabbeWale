@@ -58,7 +58,4 @@ router.get("/agents", async (req, res) => {
     res.status(500).json({ msg: "Failed to fetch agents", error: err.message });
   }
 });
-
 module.exports = router;
-const directoryRoutes = require('./routes/directoryRoutes');
-app.use('/api/directory', directoryRoutes);
