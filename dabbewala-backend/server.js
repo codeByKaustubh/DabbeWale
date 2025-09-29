@@ -25,6 +25,11 @@ app.use("/api/agent", require("./routes/agentRoutes"));
 app.use("/api/directory", require("./routes/directoryRoutes"));
 
 
+// Test route for admin panel API check
+app.get("/api/test", (req, res) => {
+  res.json({ message: "✅ API is reachable" });
+});
+
 
 // Health check route
 app.get("/", (req, res) => {
