@@ -18,16 +18,9 @@ const protect = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, JWT_SECRET);
-    
-    // Check if it's a provider, delivery agent, or user
-    let user;
-    if (decoded.role === 'provider') {
-      user = await Provider.findById(decoded.id).select("-password");
-    } else if (decoded.role === 'delivery_agent') {
-      user = await DeliveryAgent.findById(decoded.id).select("-password");
-    } else {
-      user = await User.findById(decoded.id).select("-password");
-    }
+
+    // The JWT `id` always refers to the User model's _id.
+    const user = await User.findById(decoded.id).select("-password");
 
     if (!user) {
       return res.status(401).json({ msg: "Not authorized, user not found" });
