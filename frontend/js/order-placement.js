@@ -218,14 +218,17 @@ function updateQuantityDisplay(itemId) {
 // Update order summary
 function updateOrderSummary() {
     const emptyCart = document.getElementById('empty-cart');
+    const cartContainer = document.getElementById('cart-container'); // Get the main cart container
     const dQrAmount = document.querySelector('#d-qr-details #d-qr-amount span');
     
     let total = 0;
     let itemCountNum = 0;
     
     // Calculate total from all providers
-    Object.keys(cart).forEach(providerId => {
-        Object.values(cart[providerId]).forEach(item => {
+    Object.values(cart).forEach(providerCart => {
+        if (!providerCart) return;
+        Object.values(providerCart).forEach(item => {
+            if (!item || !item.price || !item.quantity) return;
             total += item.price * item.quantity;
             itemCountNum += item.quantity;
         });
@@ -233,9 +236,15 @@ function updateOrderSummary() {
     
     if (itemCountNum === 0) {
         emptyCart.style.display = 'block';
+        // Only hide the cart container if it exists (it's on the cart.html page)
+        if (cartContainer) {
+            cartContainer.style.display = 'none';
+        }
     } else {
         emptyCart.style.display = 'none';
         if (dQrAmount) dQrAmount.textContent = `₹${total}`;
+        // Ensure the cart container is visible if it exists and has items
+        if (cartContainer) cartContainer.style.display = 'grid';
     }
 }
 
