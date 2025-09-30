@@ -106,7 +106,9 @@ exports.getProviderById = async (req, res) => {
     }
 
     // Fetch all orders for this provider and attach them to the response
-    const orders = await Order.find({ provider: providerId }).sort({ createdAt: -1 });
+    const orders = await Order.find({ provider: providerId })
+      .populate('customer', 'name email') // Populate customer details for each order
+      .sort({ createdAt: -1 });
     provider.orders = orders;
 
     res.json(provider);
