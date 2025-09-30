@@ -102,8 +102,10 @@ exports.getProviderById = async (req, res) => {
 
     // Authorization: Ensure the logged-in user (a provider) owns this provider profile.
     // The user ID comes from the JWT token middleware.
-    if (req.user.id.toString() !== provider.owner._id.toString()) {
-      return res.status(403).json({ msg: "Not authorized to access this provider's data" });
+    // The `provider.owner` field is not being used in the current registration flow.
+    // The correct check is to see if the logged-in user's ID matches the provider ID from the URL.
+    if (req.user.id.toString() !== providerId) {
+      return res.status(403).json({ msg: "Not authorized to access this provider's data." });
     }
 
     // Fetch all orders for this provider and attach them to the response
