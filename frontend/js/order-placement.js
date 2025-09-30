@@ -382,6 +382,8 @@ async function placeOrder() {
         placeOrderBtn.textContent = 'Placing Order...';
         
     console.log("Collecting order data and handling payment.");
+    let orderDetailsForPopup = {};
+
     // Prepare order items
         const items = Object.values(cart[providerId]).map(item => ({
             menuItemId: item.menuItemId, // Now sending the real ID
@@ -445,19 +447,12 @@ async function placeOrder() {
         
         // If no token OR providerId is not a valid ObjectId (sample providers), create a mock order for demo
         if (!token || !isValidObjectId) {
-            console.log('Running in demo mode (no token or sample provider).');
-            console.log('Running in demo mode (no token or sample provider).');
-            // For demo orders, we skip the API call and go straight to the success popup.
-            cart = {};
-            updateOrderSummary();
-            console.log("Demo order success: Clearing cart, updating UI.");
-            document.querySelectorAll('[id^="qty-"]').forEach(el => { el.textContent = '0'; });
-            resetFormFields();
-            saveCartToStorage();
-            // Use a timeout to ensure the popup appears after the UI has re-rendered
-            setTimeout(() => togglePopup(true), 0);
-            resetPlaceButton();
-            return; // Exit after handling demo order
+            console.log('Running in demo mode (no token or sample provider). Creating mock order details.');
+            orderDetailsForPopup = {
+                orderId: `DEMO-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
+                total: total
+            };
+            // The rest of the success logic will handle this.
         }
         
         const response = await fetch(`${API_BASE_URL}/api/orders`, {
@@ -473,6 +468,9 @@ async function placeOrder() {
         
         if (response.ok) {
             console.log("Real order API response OK.");
+            const result = await response.json();
+            orderDetailsForPopup.orderId = result.order?._id || 'N/A';
+            orderDetailsForPopup.total = result.order?.finalAmount || total;
         } else {
             let errorMsg = 'Unknown error';
             try {
@@ -499,7 +497,7 @@ async function placeOrder() {
         resetFormFields();
         saveCartToStorage();
         // Use a timeout to ensure the popup appears after the UI has re-rendered
-        setTimeout(() => togglePopup(true), 0);
+        setTimeout(() => togglePopup(true, orderDetailsForPopup), 0);
         resetPlaceButton(); // Reset button state on success
         
     } catch (error) {
