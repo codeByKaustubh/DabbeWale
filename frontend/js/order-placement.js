@@ -558,7 +558,7 @@ async function placeOrder() {
             const cvv = (document.getElementById('d-card-cvv')?.value || '');
             if (!num || !exp || !cvv) {
                 showError('Please fill card details');
-                resetPlaceButton(); return; // Correctly exit after resetting button
+                 resetPlaceButton(); return; // Correctly exit after resetting button
             }
             await new Promise(r => setTimeout(r, 900));
             showSuccess('Card charged (demo).');
@@ -594,20 +594,7 @@ async function placeOrder() {
         
         // If no token OR providerId is not a valid ObjectId (sample providers), create a mock order for demo
         if (!token || !isValidObjectId) {
-            console.log('Creating mock order for demo');
-            // showSuccess('Order placed successfully! (Demo Mode)'); // Replaced by popup
-            
-            // Clear cart
-            cart = {};
-            updateOrderSummary();
-            
-            // Reset all quantity displays
-            document.querySelectorAll('[id^="qty-"]').forEach(el => {
-                el.textContent = '0';
-            });
-            resetFormFields();
-            saveCartToStorage();
-            showOrderPlacedPopup(); // Show custom success popup
+            console.log('Creating mock order for demo as token is missing or providerId is not valid.');
             return;
         }
         
@@ -623,21 +610,6 @@ async function placeOrder() {
         console.log('Order response status:', response.status);
         
         if (response.ok) {
-            const result = await response.json();
-            // showSuccess('Order placed successfully!'); // Replaced by popup
-            
-            // Clear cart
-            cart = {};
-            updateOrderSummary();
-            
-            // Reset all quantity displays
-            document.querySelectorAll('[id^="qty-"]').forEach(el => {
-                el.textContent = '0';
-            });
-            resetFormFields();
-            saveCartToStorage();
-            showOrderPlacedPopup(); // Show custom success popup
-            
         } else {
             let errorMsg = 'Unknown error';
             try {
@@ -645,7 +617,21 @@ async function placeOrder() {
                 errorMsg = error && (error.msg || error.message || JSON.stringify(error));
             } catch (_) {}
             showError('Failed to place order: ' + errorMsg);
+            return; // Stop execution on failure
         }
+
+        // --- This block now runs for ALL successful orders (real or demo) ---
+        // Clear cart
+        cart = {};
+        updateOrderSummary();
+        
+        // Reset all quantity displays
+        document.querySelectorAll('[id^="qty-"]').forEach(el => {
+            el.textContent = '0';
+        });
+        resetFormFields();
+        saveCartToStorage();
+        showOrderPlacedPopup(); // Show custom success popup
         
     } catch (error) {
         console.error('Error placing order:', error);
