@@ -35,6 +35,11 @@ document.addEventListener('DOMContentLoaded', function () {
           // Store token and redirect
           localStorage.setItem('token', result.token);
           localStorage.setItem('userName', result.user.name);
+          // CRITICAL FIX: Store the providerId from the login response.
+          // The dashboard uses this ID to fetch the correct data.
+          if (result.user.providerId) {
+            localStorage.setItem('providerId', result.user.providerId);
+          }
           window.location.href = 'provider-dashboard.html';
         } else {
           const errMsg = result && (result.msg || result.message || result.error);

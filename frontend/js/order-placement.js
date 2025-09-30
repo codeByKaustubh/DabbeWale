@@ -66,174 +66,6 @@ function bindSearch() {
     }
 }
 
-// Sample providers for demonstration
-function getSampleProviders() {
-    return [
-        {
-            _id: 'sample-provider-1',
-            providerName: "Priya's Home Kitchen",
-            location: "Andheri West, Mumbai",
-            address: { city: "Mumbai" },
-            description: "Authentic North Indian home-cooked meals",
-            rating: 4.5,
-            totalRatings: 25,
-            menu: [
-                {
-                    name: "North Indian Thali",
-                    price: 120,
-                    type: "Vegetarian",
-                    category: "Lunch",
-                    description: "Dal, Rice, 2 Roti, Sabzi, Salad, Pickle",
-                    available: true
-                },
-                {
-                    name: "Punjabi Special",
-                    price: 150,
-                    type: "Vegetarian",
-                    category: "Dinner",
-                    description: "Rajma, Rice, Naan, Paneer, Raita",
-                    available: true
-                }
-            ]
-        },
-        {
-            _id: 'sample-provider-2',
-            providerName: "Gujarati Tiffin Service",
-            location: "Navrangpura, Ahmedabad",
-            address: { city: "Ahmedabad" },
-            description: "Traditional Gujarati cuisine",
-            rating: 4.8,
-            totalRatings: 18,
-            menu: [
-                {
-                    name: "Gujarati Thali",
-                    price: 100,
-                    type: "Vegetarian",
-                    category: "Lunch",
-                    description: "Thepla, Dal, Khichdi, Shrikhand",
-                    available: true
-                },
-                {
-                    name: "Dhokla & Fafda",
-                    price: 80,
-                    type: "Vegetarian",
-                    category: "Breakfast",
-                    description: "Fresh dhokla with chutney and fafda",
-                    available: true
-                }
-            ]
-        },
-        {
-            _id: 'sample-provider-3',
-            providerName: "South Indian Delights",
-            location: "Koramangala, Bangalore",
-            address: { city: "Bangalore" },
-            description: "Authentic South Indian flavors",
-            rating: 4.6,
-            totalRatings: 32,
-            menu: [
-                {
-                    name: "South Indian Meal",
-                    price: 110,
-                    type: "Vegetarian",
-                    category: "Lunch",
-                    description: "Idli, Sambar, Coconut Chutney, Lemon Rice",
-                    available: true
-                },
-                {
-                    name: "Dosa Combo",
-                    price: 90,
-                    type: "Vegetarian",
-                    category: "Breakfast",
-                    description: "Masala Dosa with sambar and chutney",
-                    available: true
-                }
-            ]
-        },
-        {
-            _id: 'sample-provider-4',
-            providerName: "Bengali Home Kitchen",
-            location: "Salt Lake, Kolkata",
-            address: { city: "Kolkata" },
-            description: "Traditional Bengali cuisine",
-            rating: 4.7,
-            totalRatings: 28,
-            menu: [
-                {
-                    name: "Bengali Thali",
-                    price: 130,
-                    type: "Non-Vegetarian",
-                    category: "Lunch",
-                    description: "Fish Curry, Rice, Dal, Vegetables, Mishti",
-                    available: true
-                },
-                {
-                    name: "Vegetarian Bengali",
-                    price: 110,
-                    type: "Vegetarian",
-                    category: "Lunch",
-                    description: "Aloo Posto, Rice, Dal, Vegetables",
-                    available: true
-                }
-            ]
-        },
-        {
-            _id: 'sample-provider-5',
-            providerName: "Rajasthani Kitchen",
-            location: "Pink City, Jaipur",
-            address: { city: "Jaipur" },
-            description: "Royal Rajasthani flavors",
-            rating: 4.4,
-            totalRatings: 22,
-            menu: [
-                {
-                    name: "Rajasthani Thali",
-                    price: 140,
-                    type: "Vegetarian",
-                    category: "Lunch",
-                    description: "Dal Baati, Churma, Gatte ki Sabzi, Rice",
-                    available: true
-                },
-                {
-                    name: "Rajasthani Snacks",
-                    price: 70,
-                    type: "Vegetarian",
-                    category: "Snack",
-                    description: "Kachori, Samosa, Mirchi Vada",
-                    available: true
-                }
-            ]
-        },
-        {
-            _id: 'sample-provider-6',
-            providerName: "Kerala Spice Kitchen",
-            location: "Kochi, Kerala",
-            address: { city: "Kochi" },
-            description: "Authentic Kerala cuisine",
-            rating: 4.9,
-            totalRatings: 35,
-            menu: [
-                {
-                    name: "Kerala Sadya",
-                    price: 160,
-                    type: "Vegetarian",
-                    category: "Lunch",
-                    description: "Rice, Sambar, Avial, Thoran, Payasam",
-                    available: true
-                },
-                {
-                    name: "Kerala Breakfast",
-                    price: 85,
-                    type: "Vegetarian",
-                    category: "Breakfast",
-                    description: "Puttu, Kadala Curry, Appam",
-                    available: true
-                }
-            ]
-        }
-    ];
-}
-
 // Display providers on the page
 function displayProviders(providers) {
     const container = document.getElementById('providers-container');
@@ -594,8 +426,16 @@ async function placeOrder() {
         
         // If no token OR providerId is not a valid ObjectId (sample providers), create a mock order for demo
         if (!token || !isValidObjectId) {
-            console.log('Creating mock order for demo as token is missing or providerId is not valid.');
-            return;
+            console.log('Running in demo mode (no token or sample provider).');
+            // For demo orders, we skip the API call and go straight to the success popup.
+            cart = {};
+            updateOrderSummary();
+            document.querySelectorAll('[id^="qty-"]').forEach(el => { el.textContent = '0'; });
+            resetFormFields();
+            saveCartToStorage();
+            togglePopup(true); // Show the success popup
+            resetPlaceButton();
+            return; // Exit after handling demo order
         }
         
         const response = await fetch(`${API_BASE_URL}/api/orders`, {
@@ -631,7 +471,7 @@ async function placeOrder() {
         });
         resetFormFields();
         saveCartToStorage();
-        showOrderPlacedPopup(); // Show custom success popup
+        togglePopup(true); // Show the success popup
         
     } catch (error) {
         console.error('Error placing order:', error);
@@ -876,6 +716,11 @@ async function handleOnlinePayment(amount) {
         };
     });
 }
+function togglePopup(show = true) {
+  const popup = document.getElementById("order-popup");
+  if (popup) popup.style.display = show ? "flex" : "none";
+}
+
 
 // New function to show a prominent order placed popup
 function showOrderPlacedPopup() {
