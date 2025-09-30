@@ -145,7 +145,7 @@ exports.getOrderById = async (req, res) => {
     }
 
     // Check if user is authorized to view this order
-    if (order.customer._id.toString() !== req.user.id && req.user.role !== "admin") {
+    if (order.customer._id.toString() !== req.user.id) {
       return res.status(403).json({ msg: "Not authorized to view this order" });
     }
 
@@ -168,7 +168,7 @@ exports.updateOrderStatus = async (req, res) => {
     }
 
     // Check if user is the provider or admin
-    if (order.provider.owner.toString() !== req.user.id && req.user.role !== "admin") {
+    if (order.provider.owner.toString() !== req.user.id) {
       return res.status(403).json({ msg: "Not authorized to update this order" });
     }
 

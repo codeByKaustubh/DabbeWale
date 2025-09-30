@@ -8,8 +8,6 @@ A Node.js/Express backend for the DabbeWale tiffin service platform.
 - 👥 User Management (Consumer/Provider roles)
 - 🏪 Provider Management
 - 📋 Order Management
-- ⭐ Rating & Review System
-- 🔍 Location-based Provider Search
 - 📊 Order Tracking
 
 ## Tech Stack
@@ -77,9 +75,7 @@ A Node.js/Express backend for the DabbeWale tiffin service platform.
 - `GET /api/orders/my-orders` - Get user's orders (Protected)
 - `GET /api/orders/:id` - Get order by ID (Protected)
 - `PUT /api/orders/:id/status` - Update order status (Protected)
-- `POST /api/orders/:id/rate` - Rate an order (Protected)
-- `GET /api/orders/provider/:providerId` - Get provider's orders (Protected)
-
+- `GET /api/orders/provider/:providerId` - Get provi
 ## Database Models
 
 ### User

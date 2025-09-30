@@ -28,12 +28,8 @@
 ## Tech Stack
 - **Frontend:** HTML5, CSS3 (custom properties, responsive), JavaScript (ES6+)
 - **Backend:** Node.js, Express.js, MongoDB (Mongoose), JWT authentication
-<<<<<<< HEAD
 - **Security:** bcrypt for password hashing, JWT tokens, CORS enabled
-- **Deployment:** Netlify (frontend), local/cloud for backend
-=======
 - **Deployment:** Netlify (frontend), render for backend
->>>>>>> 364c02a2d90ba39949cec9b741fcdbbb3f32dd45
 - **Version Control:** Git (branches: main, ishwari)
 
 ## How to Run
@@ -115,11 +111,10 @@ DabbeWale/
 
 ## Future Enhancements
 - Payment gateway integration
-- Admin dashboard
 - Mobile app development
-- Analytics dashboard
 - Push notifications
 - Rating and review system
+- Order tracking enhancements
 - Advanced search filters
 
 ## Contributing

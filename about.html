@@ -105,7 +105,7 @@
     <div style="margin: 3rem 0; padding: 2rem; background: var(--color-form-bg); border-radius: 12px; box-shadow: var(--shadow-sm);">
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-bottom: 2rem;">
         <div>
-          <img src="/assets/ChatGPT Image Sep 23, 2025, 11_41_11 AM.png" alt="Tiffin Service" style="width: 100%; border-radius: 12px; box-shadow: var(--shadow-md);" />
+          <img src="/assets/IMG_20250930_200612.jpg" alt="Tiffin Service" style="width: 100%; border-radius: 12px; box-shadow: var(--shadow-md);" />
         </div>
         <div>
           <h2 style="color: var(--color-primary); font-size: 1.8rem; margin-bottom: 1rem;">Who We Are</h2>
@@ -168,6 +168,15 @@
   <script src="frontend/js/main.js"></script>
 
   <style>
+    /* Override hover effect for feature cards */
+    .feature-card:hover {
+      transform: none;
+      box-shadow: var(--shadow-sm); /* Revert to original shadow if it changes on hover */
+      border-top-color: transparent; /* Remove the green strip on hover */
+      border-color: #e0e0e0; /* Or revert to original border color if it changes */
+      cursor: default;
+    }
+
     /* Responsive styles for about page */
     @media (max-width: 768px) {
       main div[style*="grid-template-columns: 1fr 1fr"] {
