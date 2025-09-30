@@ -481,6 +481,7 @@ async function placeOrder() {
         resetFormFields();
         saveCartToStorage();
         togglePopup(true); // Use the simple, reliable popup
+        resetPlaceButton(); // Reset button state on success
         
     } catch (error) {
         console.error('Error placing order:', error);
@@ -511,16 +512,13 @@ function collectAddress() {
 
 // Reset form fields after order
 function resetFormFields() {
-    ['addr-street','addr-city','addr-state','addr-pincode','allergy-notes','upi-id','d-addr-street','d-addr-city','d-addr-state','d-addr-pincode','d-allergy-notes','d-upi-id','d-card-number','d-card-expiry','d-card-cvv'].forEach(id => {
+    // Reset all relevant input, textarea, and select fields to their default state.
+    ['d-addr-street', 'd-addr-city', 'd-addr-state', 'd-addr-pincode', 'd-allergy-notes', 'd-upi-id', 'd-card-number', 'd-card-expiry', 'd-card-cvv'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
     });
-    const paymentMethod = document.getElementById('payment-method');
-    if (paymentMethod) paymentMethod.value = 'cod';
-    togglePaymentDetails('cod');
     const dPayment = document.getElementById('d-payment-method');
     if (dPayment) dPayment.value = 'cod';
-    toggleDrawerPaymentDetails('cod');
 }
 
 // Cart persistence
