@@ -328,6 +328,7 @@ function clearCart() {
 
 // Place order
 async function placeOrder() {
+    console.log("placeOrder function called.");
     const token = localStorage.getItem('token');
     if (!token) {
         // For demo purposes, create a mock token
@@ -363,6 +364,7 @@ async function placeOrder() {
         placeOrderBtn.disabled = true;
         placeOrderBtn.textContent = 'Placing Order...';
         
+    console.log("Collecting order data and handling payment.");
     // Prepare order items
         const items = Object.values(cart[providerId]).map(item => ({
             menuItemId: item.menuItemId, // Now sending the real ID
@@ -427,9 +429,11 @@ async function placeOrder() {
         // If no token OR providerId is not a valid ObjectId (sample providers), create a mock order for demo
         if (!token || !isValidObjectId) {
             console.log('Running in demo mode (no token or sample provider).');
+            console.log('Running in demo mode (no token or sample provider).');
             // For demo orders, we skip the API call and go straight to the success popup.
             cart = {};
             updateOrderSummary();
+            console.log("Demo order success: Clearing cart, updating UI.");
             document.querySelectorAll('[id^="qty-"]').forEach(el => { el.textContent = '0'; });
             resetFormFields();
             saveCartToStorage();
@@ -450,10 +454,12 @@ async function placeOrder() {
         console.log('Order response status:', response.status);
         
         if (response.ok) {
+            console.log("Real order API response OK.");
         } else {
             let errorMsg = 'Unknown error';
             try {
                 const error = await response.json();
+                console.error("Real order API error:", error);
                 errorMsg = error && (error.msg || error.message || JSON.stringify(error));
                 resetPlaceButton(); // Reset button on failure
             } catch (_) {}
@@ -464,12 +470,14 @@ async function placeOrder() {
         // --- This block now runs for ALL successful orders (real or demo) ---
         // Clear cart
         cart = {};
+        console.log("Order success: Clearing cart, updating UI.");
         updateOrderSummary();
         
         // Reset all quantity displays
         document.querySelectorAll('[id^="qty-"]').forEach(el => {
             el.textContent = '0';
         });
+        console.log("Resetting form fields and saving cart.");
         resetFormFields();
         saveCartToStorage();
         togglePopup(true); // Use the simple, reliable popup
@@ -717,4 +725,5 @@ async function handleOnlinePayment(amount) {
 function togglePopup(show = true) {
   const popup = document.getElementById("order-popup");
   if (popup) popup.style.display = show ? "flex" : "none";
+  console.log(`togglePopup called for element #${popup ? 'order-popup' : 'NOT_FOUND'} with display=${show ? 'flex' : 'none'}`);
 }
