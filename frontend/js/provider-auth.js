@@ -59,21 +59,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const formData = new FormData(registerForm);
 
-      // Normalize menu into array of objects expected by backend schema
-      const rawMenu = (formData.get('menu') || '').toString();
-      const rawPrices = (formData.get('prices') || '').toString();
-      const parsedUnitPrice = parseFloat(rawPrices.replace(/[^0-9.]/g, '')) || 0;
-      const menuItems = rawMenu
-        .split(',')
-        .map(item => item.trim())
-        .filter(Boolean)
-        .map(name => ({ name, price: parsedUnitPrice }));
+      // Collect dynamically added menu items
+      const menuItems = [];
+      const itemDivs = document.querySelectorAll('.menu-item-field');
+      itemDivs.forEach(div => {
+        const name = div.querySelector('input[name="menuItemName"]').value.trim();
+        const price = parseFloat(div.querySelector('input[name="menuItemPrice"]').value);
+        if (name && !isNaN(price) && price > 0) {
+          menuItems.push({ name, price });
+        }
+      });
 
       const data = {
         name: formData.get('name'),
         providerName: formData.get('providerName'),
         menu: menuItems,
-        prices: rawPrices,
+        prices: menuItems.length > 0 ? `₹${Math.min(...menuItems.map(i => i.price))}-${Math.max(...menuItems.map(i => i.price))}` : 'N/A',
         location: formData.get('location'),
         email: formData.get('email'),
         phone: formData.get('phone'),
@@ -144,3 +145,26 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+
+function addMenuItemField() {
+    const container = document.getElementById('menu-items-container');
+    // Clear the placeholder text if it exists
+    if (container.querySelector('p')) {
+        container.innerHTML = '';
+    }
+
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'menu-item-field';
+    itemDiv.style.cssText = 'display: flex; gap: 10px; align-items: center;';
+
+    itemDiv.innerHTML = `
+        <input type="text" name="menuItemName" placeholder="Item Name (e.g., Veg Thali)" style="flex: 2;" required>
+        <input type="number" name="menuItemPrice" placeholder="Price (₹)" style="flex: 1;" required min="0">
+        <button type="button" onclick="this.parentElement.remove()" style="background: #ffebee; color: #c62828; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;">-</button>
+    `;
+
+    container.appendChild(itemDiv);
+}
+
+// Make function globally available for the inline onclick attribute
+window.addMenuItemField = addMenuItemField;
