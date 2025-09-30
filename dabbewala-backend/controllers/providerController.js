@@ -100,7 +100,8 @@ exports.getProviderById = async (req, res) => {
       return res.status(404).json({ msg: "Provider not found" });
     }
 
-    // Authorization: Ensure the logged-in user owns this provider profile
+    // Authorization: Ensure the logged-in user (a provider) owns this provider profile.
+    // The user ID comes from the JWT token middleware.
     if (req.user.id.toString() !== provider.owner._id.toString()) {
       return res.status(403).json({ msg: "Not authorized to access this provider's data" });
     }
