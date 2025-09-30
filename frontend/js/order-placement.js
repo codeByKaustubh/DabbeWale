@@ -226,14 +226,17 @@ function updateQuantityDisplay(itemId) {
 // Update order summary
 function updateOrderSummary() {
     const emptyCart = document.getElementById('empty-cart');
+    const cartContainer = document.getElementById('cart-container'); // Get the main cart container
     const dQrAmount = document.querySelector('#d-qr-details #d-qr-amount span');
     
     let total = 0;
     let itemCountNum = 0;
     
     // Calculate total from all providers
-    Object.keys(cart).forEach(providerId => {
-        Object.values(cart[providerId]).forEach(item => {
+    Object.values(cart).forEach(providerCart => {
+        if (!providerCart) return;
+        Object.values(providerCart).forEach(item => {
+            if (!item || !item.price || !item.quantity) return;
             total += item.price * item.quantity;
             itemCountNum += item.quantity;
         });
@@ -241,9 +244,15 @@ function updateOrderSummary() {
     
     if (itemCountNum === 0) {
         emptyCart.style.display = 'block';
+        // Only hide the cart container if it exists (it's on the cart.html page)
+        if (cartContainer) {
+            cartContainer.style.display = 'none';
+        }
     } else {
         emptyCart.style.display = 'none';
         if (dQrAmount) dQrAmount.textContent = `₹${total}`;
+        // Ensure the cart container is visible if it exists and has items
+        if (cartContainer) cartContainer.style.display = 'grid';
     }
 }
 
@@ -336,6 +345,7 @@ function clearCart() {
 
 // Place order
 async function placeOrder() {
+    console.log("placeOrder function called.");
     const token = localStorage.getItem('token');
     if (!token) {
         // For demo purposes, create a mock token
@@ -371,6 +381,7 @@ async function placeOrder() {
         placeOrderBtn.disabled = true;
         placeOrderBtn.textContent = 'Placing Order...';
         
+    console.log("Collecting order data and handling payment.");
     // Prepare order items
         const items = Object.values(cart[providerId]).map(item => ({
             menuItemId: item.menuItemId, // Now sending the real ID
@@ -435,13 +446,16 @@ async function placeOrder() {
         // If no token OR providerId is not a valid ObjectId (sample providers), create a mock order for demo
         if (!token || !isValidObjectId) {
             console.log('Running in demo mode (no token or sample provider).');
+            console.log('Running in demo mode (no token or sample provider).');
             // For demo orders, we skip the API call and go straight to the success popup.
             cart = {};
             updateOrderSummary();
+            console.log("Demo order success: Clearing cart, updating UI.");
             document.querySelectorAll('[id^="qty-"]').forEach(el => { el.textContent = '0'; });
             resetFormFields();
             saveCartToStorage();
-            togglePopup(true); // Show the success popup
+            // Use a timeout to ensure the popup appears after the UI has re-rendered
+            setTimeout(() => togglePopup(true), 0);
             resetPlaceButton();
             return; // Exit after handling demo order
         }
@@ -458,10 +472,12 @@ async function placeOrder() {
         console.log('Order response status:', response.status);
         
         if (response.ok) {
+            console.log("Real order API response OK.");
         } else {
             let errorMsg = 'Unknown error';
             try {
                 const error = await response.json();
+                console.error("Real order API error:", error);
                 errorMsg = error && (error.msg || error.message || JSON.stringify(error));
                 resetPlaceButton(); // Reset button on failure
             } catch (_) {}
@@ -472,15 +488,19 @@ async function placeOrder() {
         // --- This block now runs for ALL successful orders (real or demo) ---
         // Clear cart
         cart = {};
+        console.log("Order success: Clearing cart, updating UI.");
         updateOrderSummary();
         
         // Reset all quantity displays
         document.querySelectorAll('[id^="qty-"]').forEach(el => {
             el.textContent = '0';
         });
+        console.log("Resetting form fields and saving cart.");
         resetFormFields();
         saveCartToStorage();
-        togglePopup(true); // Show the success popup
+        // Use a timeout to ensure the popup appears after the UI has re-rendered
+        setTimeout(() => togglePopup(true), 0);
+        resetPlaceButton(); // Reset button state on success
         
     } catch (error) {
         console.error('Error placing order:', error);
@@ -511,16 +531,13 @@ function collectAddress() {
 
 // Reset form fields after order
 function resetFormFields() {
-    ['addr-street','addr-city','addr-state','addr-pincode','allergy-notes','upi-id','d-addr-street','d-addr-city','d-addr-state','d-addr-pincode','d-allergy-notes','d-upi-id','d-card-number','d-card-expiry','d-card-cvv'].forEach(id => {
+    // Reset all relevant input, textarea, and select fields to their default state.
+    ['d-addr-street', 'd-addr-city', 'd-addr-state', 'd-addr-pincode', 'd-allergy-notes', 'd-upi-id', 'd-card-number', 'd-card-expiry', 'd-card-cvv'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
     });
-    const paymentMethod = document.getElementById('payment-method');
-    if (paymentMethod) paymentMethod.value = 'cod';
-    togglePaymentDetails('cod');
     const dPayment = document.getElementById('d-payment-method');
     if (dPayment) dPayment.value = 'cod';
-    toggleDrawerPaymentDetails('cod');
 }
 
 // Cart persistence
@@ -725,53 +742,5 @@ async function handleOnlinePayment(amount) {
 function togglePopup(show = true) {
   const popup = document.getElementById("order-popup");
   if (popup) popup.style.display = show ? "flex" : "none";
-}
-
-
-// New function to show a prominent order placed popup
-function showOrderPlacedPopup() {
-    const popup = document.createElement('div');
-    popup.id = 'order-placed-popup';
-    popup.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        padding: 40px 30px;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        text-align: center;
-        z-index: 9999;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        max-width: 350px;
-        width: 90%;
-        animation: fadeIn 0.3s ease-out;
-    `;
-
-    popup.innerHTML = `
-        <div style="font-size: 4rem; color: #4CAF50; margin-bottom: 15px;">✓</div>
-        <h3 style="margin: 0 0 10px 0; color: #333; font-size: 1.8rem;">Order Placed!</h3>
-        <p style="color: #666; font-size: 1.1rem;">Your order has been successfully placed.</p>
-        <p style="color: #666; font-size: 0.9rem;">Redirecting to home page...</p>
-    `;
-
-    // Add a simple fade-in animation (if not already present)
-    if (!document.getElementById('popup-animations')) {
-        const style = document.createElement('style');
-        style.id = 'popup-animations';
-        style.innerHTML = `@keyframes fadeIn { from { opacity: 0; transform: translate(-50%, -60%); } to { opacity: 1; transform: translate(-50%, -50%); } } @keyframes fadeOut { from { opacity: 1; transform: translate(-50%, -50%); } to { opacity: 0; transform: translate(-50%, -60%); } }`;
-        document.head.appendChild(style);
-    }
-
-    document.body.appendChild(popup);
-
-    // Remove popup and redirect after a delay
-    setTimeout(() => {
-        popup.style.animation = 'fadeOut 0.3s ease-in forwards';
-        setTimeout(() => { document.body.removeChild(popup); window.location.href = 'index.html'; }, 300); // Match fadeOut animation duration
-    }, 2000); // Show popup for 2 seconds
+  console.log(`togglePopup called for element #${popup ? 'order-popup' : 'NOT_FOUND'} with display=${show ? 'flex' : 'none'}`);
 }

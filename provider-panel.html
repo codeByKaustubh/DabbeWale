@@ -162,14 +162,13 @@
             <div class="input-icon">
                 <input type="text" id="providerName" name="providerName" required placeholder="e.g. Priya's Tiffin Service">
             </div>
-            <label for="menu">Menu:</label>
-            <div class="input-icon">
-                <textarea id="menu" name="menu" rows="3" required placeholder="e.g. Dal, Rice, Roti, Sabzi, Salad"></textarea>
+            <label>Menu Items:</label>
+            <div id="menu-items-container" class="input-icon" style="display: grid; gap: 10px; padding: 10px; border: 1px solid #eee; border-radius: 8px;">
+                <!-- Dynamic menu items will be added here -->
+                <p style="color: #666; margin: 0;">Click "Add Item" to add your first menu item.</p>
             </div>
-            <label for="prices">Prices:</label>
-            <div class="input-icon">
-                <input type="text" id="prices" name="prices" required placeholder="e.g. ₹120 per tiffin">
-            </div>
+            <button type="button" onclick="addMenuItemField()" style="margin-top: 5px; width: auto; background: #f0f0f0; border: 1px solid #ddd;">+ Add Item</button>
+
             <label for="location">Location:</label>
             <div class="input-icon">
                 <input type="text" id="location" name="location" required placeholder="e.g. Andheri East, Mumbai">
