@@ -10,8 +10,16 @@ let selectedProvider = null;
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("Order placement page loaded");
+    console.log("Order placement page loaded");    
+    // Check for city in URL query params to pre-fill search
+    const urlParams = new URLSearchParams(window.location.search);
+    const cityFromUrl = urlParams.get('city');
+    const locationInput = document.getElementById('locationSearch');
+    if (cityFromUrl && locationInput) {
+        locationInput.value = cityFromUrl;
+    }
     bindSearch();
+    // loadProviders will now use the pre-filled city if it exists
     loadProviders();
     bindPaymentSelector();
     bindDrawerPaymentSelector();
