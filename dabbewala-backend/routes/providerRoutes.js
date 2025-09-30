@@ -3,7 +3,7 @@ const router = express.Router();
 const Provider = require("../models/Provider");
 const { protect } = require("../middleware/auth");
 const bcrypt = require("bcryptjs");
-const { getProviderOrders } = require("../controllers/providerController");
+const { getProviderById, getProviderOrders } = require("../controllers/providerController");
 
 // Get providers (optionally filter by city or search)
 router.get("/", async (req, res) => {
@@ -38,44 +38,7 @@ router.get("/", async (req, res) => {
 });
 
 // Get provider by ID
-router.get("/:id", async (req, res) => {
-  try {
-    const provider = await Provider.findById(req.params.id);
-    if (!provider) {
-      return res.status(404).json({ message: "Provider not found" });
-    }
-    res.json(provider);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Get provider dashboard stats (protected route)
-router.get("/:id/stats", protect, async (req, res) => {
-  try {
-    const providerId = req.params.id;
-    
-    // Ensure provider can only access their own stats
-    if (req.userType === 'provider' && req.user._id.toString() !== providerId) {
-      return res.status(403).json({ msg: "Not authorized to access this provider's data" });
-    }
-    
-    // For now, return mock data. Later we'll connect to Order model
-    const stats = {
-      totalOrders: 0,
-      pendingOrders: 0,
-      todayRevenue: 0,
-      rating: 0.0,
-      totalReviews: 0,
-      thisWeekOrders: 0,
-      popularItems: []
-    };
-    
-    res.json(stats);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+router.get("/:id", protect, getProviderById);
 
 // Get provider's recent orders (protected route)
 router.get("/:id/orders", protect, getProviderOrders);

@@ -90,13 +90,24 @@ exports.getProviders = async (req, res) => {
 // Get provider by ID
 exports.getProviderById = async (req, res) => {
   try {
-    const provider = await Provider.findById(req.params.id)
+    const providerId = req.params.id;
+    const provider = await Provider.findById(providerId)
       .populate("owner", "name email")
-      .select("-__v");
+      .select("-__v -password")
+      .lean(); // Use .lean() for a plain JS object
 
     if (!provider) {
       return res.status(404).json({ msg: "Provider not found" });
     }
+
+    // Authorization: Ensure the logged-in user owns this provider profile
+    if (req.user.id.toString() !== provider.owner._id.toString()) {
+      return res.status(403).json({ msg: "Not authorized to access this provider's data" });
+    }
+
+    // Fetch all orders for this provider and attach them to the response
+    const orders = await Order.find({ provider: providerId }).sort({ createdAt: -1 });
+    provider.orders = orders;
 
     res.json(provider);
   } catch (err) {
@@ -187,7 +198,7 @@ exports.getProviderOrders = async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(limit);
 
-    res.json(orders);
+    res.json({ orders }); // Keep the response structure consistent { orders: [...] }
   } catch (err) {
     res.status(500).json({ msg: "Error fetching provider orders", error: err.message });
   }

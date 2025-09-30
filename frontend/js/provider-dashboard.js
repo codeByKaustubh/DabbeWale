@@ -27,31 +27,34 @@ function getProviderId() {
   }
 }
 
-// Fetch provider dashboard stats
+// Fetch all provider dashboard data from a single endpoint
 async function fetchDashboardStats() {
   const providerId = getProviderId();
   if (!providerId) {
     console.error('No provider ID found');
+    showError('Could not identify provider. Please log in again.');
     return;
   }
 
   try {
     const token = localStorage.getItem('token');
     
-    // Fetch provider orders
-    const ordersResponse = await fetch(`${API_BASE_URL}/api/orders/provider/${providerId}?limit=50`, {
+    // Fetch the full provider profile, which now includes orders
+    const response = await fetch(`${API_BASE_URL}/api/providers/${providerId}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
     });
 
-    if (!ordersResponse.ok) {
-      throw new Error(`HTTP error! status: ${ordersResponse.status}`);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.msg || `HTTP error! status: ${response.status}`);
     }
 
-    const ordersData = await ordersResponse.json();
-    const orders = ordersData.orders || [];
+    const providerData = await response.json();
+    const orders = providerData.orders || [];
+    const menu = providerData.menu || [];
     
     // Calculate stats from real orders
     const stats = calculateStatsFromOrders(orders);
@@ -61,7 +64,7 @@ async function fetchDashboardStats() {
     updateOrdersPanel(orders);
     
     // Load provider menu
-    await loadProviderMenu(providerId);
+    updateMenuPanel(menu);
     
   } catch (error) {
     console.error('Error fetching dashboard stats:', error);
@@ -347,26 +350,6 @@ function logout() {
   window.location.href = 'index.html';
 }
 
-// Load provider menu
-async function loadProviderMenu(providerId) {
-  try {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${API_BASE_URL}/api/providers/${providerId}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (response.ok) {
-      const provider = await response.json();
-      updateMenuPanel(provider.menu || []);
-    }
-  } catch (error) {
-    console.error('Error loading provider menu:', error);
-  }
-}
-
 // Update menu panel with real data
 function updateMenuPanel(menuItems) {
   const menuList = document.querySelector('#panel-menu .list');
@@ -433,7 +416,7 @@ async function addMenuItem() {
     if (response.ok) {
       showSuccess('Menu item added successfully!');
       form.reset();
-      await loadProviderMenu(providerId);
+      await fetchDashboardStats(); // Refresh all dashboard data
     } else {
       const error = await response.json();
       showError('Failed to add menu item: ' + (error.msg || 'Unknown error'));
@@ -462,7 +445,7 @@ async function deleteMenuItem(index) {
     
     // For now, just show success. In a real app, you'd make an API call
     showSuccess('Menu item deleted successfully!');
-    await loadProviderMenu(providerId);
+    await fetchDashboardStats(); // Refresh all dashboard data
   } catch (error) {
     console.error('Error deleting menu item:', error);
     showError('Failed to delete menu item');
@@ -477,7 +460,7 @@ async function toggleMenuItemAvailability(index) {
     
     // For now, just show success. In a real app, you'd make an API call
     showSuccess('Menu item availability updated!');
-    await loadProviderMenu(providerId);
+    await fetchDashboardStats(); // Refresh all dashboard data
   } catch (error) {
     console.error('Error updating menu item availability:', error);
     showError('Failed to update menu item availability');

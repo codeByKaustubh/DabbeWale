@@ -13,6 +13,19 @@ app.use(cors({
   credentials: true
 }));
 
+// Flexible CORS configuration for local development and production
+const allowedOrigins = [
+  "https://dabbewale.netlify.app", // Production frontend
+  "http://localhost:3000",
+  "http://localhost:8000", // Common local server port
+  "http://127.0.0.1:5500"  // For Live Server extension
+];
+app.use(cors({ origin: (origin, callback) => {
+  // Allow requests with no origin (like mobile apps or curl requests) or from whitelisted domains
+  if (!origin || allowedOrigins.includes(origin)) { callback(null, true); } 
+  else { callback(new Error('Not allowed by CORS')); }
+}}));
+
 // Connect DB (this already prints your custom logs!)
 connectDB();
 
