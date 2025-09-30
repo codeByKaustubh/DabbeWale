@@ -452,35 +452,37 @@ async function placeOrder() {
                 orderId: `DEMO-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
                 total: total
             };
-            // The rest of the success logic will handle this.
-        }
-        
-        const response = await fetch(`${API_BASE_URL}/api/orders`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(orderData)
-        });
-        
-        console.log('Order response status:', response.status);
-        
-        if (response.ok) {
-            console.log("Real order API response OK.");
-            const result = await response.json();
-            orderDetailsForPopup.orderId = result.order?._id || 'N/A';
-            orderDetailsForPopup.total = result.order?.finalAmount || total;
+            // This was the bug: The code continued and tried to make a real API call.
+            // We now skip the API call and go directly to the success logic for demo orders.
         } else {
-            let errorMsg = 'Unknown error';
-            try {
-                const error = await response.json();
-                console.error("Real order API error:", error);
-                errorMsg = error && (error.msg || error.message || JSON.stringify(error));
+            // This is a real order, so we call the backend API.
+            const response = await fetch(`${API_BASE_URL}/api/orders`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData)
+            });
+            
+            console.log('Order response status:', response.status);
+            
+            if (response.ok) {
+                console.log("Real order API response OK.");
+                const result = await response.json();
+                orderDetailsForPopup.orderId = result.order?._id || 'N/A';
+                orderDetailsForPopup.total = result.order?.finalAmount || total;
+            } else {
+                let errorMsg = 'Unknown error';
+                try {
+                    const error = await response.json();
+                    console.error("Real order API error:", error);
+                    errorMsg = error && (error.msg || error.message || JSON.stringify(error));
+                } catch (_) {}
+                showError('Failed to place order: ' + errorMsg);
                 resetPlaceButton(); // Reset button on failure
-            } catch (_) {}
-            showError('Failed to place order: ' + errorMsg);
-            return; // Stop execution on failure
+                return; // Stop execution on failure
+            }
         }
 
         // --- This block now runs for ALL successful orders (real or demo) ---

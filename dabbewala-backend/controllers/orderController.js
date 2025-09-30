@@ -84,7 +84,7 @@ exports.createOrder = async (req, res) => {
       res.status(201).json({
         msg: "Order created successfully",
         order: {
-          id: order._id,
+          _id: order._id,
           totalAmount: order.totalAmount,
           finalAmount: order.finalAmount,
           status: order.status
