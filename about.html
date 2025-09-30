@@ -168,6 +168,15 @@
   <script src="frontend/js/main.js"></script>
 
   <style>
+    /* Override hover effect for feature cards */
+    .feature-card:hover {
+      transform: none;
+      box-shadow: var(--shadow-sm); /* Revert to original shadow if it changes on hover */
+      border-top-color: transparent; /* Remove the green strip on hover */
+      border-color: #e0e0e0; /* Or revert to original border color if it changes */
+      cursor: default;
+    }
+
     /* Responsive styles for about page */
     @media (max-width: 768px) {
       main div[style*="grid-template-columns: 1fr 1fr"] {
