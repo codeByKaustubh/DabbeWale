@@ -455,6 +455,7 @@ async function placeOrder() {
             try {
                 const error = await response.json();
                 errorMsg = error && (error.msg || error.message || JSON.stringify(error));
+                resetPlaceButton(); // Reset button on failure
             } catch (_) {}
             showError('Failed to place order: ' + errorMsg);
             return; // Stop execution on failure
@@ -476,10 +477,7 @@ async function placeOrder() {
     } catch (error) {
         console.error('Error placing order:', error);
         showError('Failed to place order. Please try again.');
-    } finally {
-        const placeOrderBtn = document.getElementById('place-order-btn');
-        placeOrderBtn.disabled = false;
-        placeOrderBtn.textContent = 'Place Order';
+        resetPlaceButton(); // Also reset button on exception
     }
 }
 
