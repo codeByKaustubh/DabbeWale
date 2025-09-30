@@ -154,7 +154,8 @@ After successful setup:
 1. Test user registration and login
 2. Test provider registration and login
 3. Verify data appears in MongoDB
-4. Continue with other features
+4. Test order placement from the `order-placement.html` page.
+5. Check the `delivery-dashboard.html` to see new orders.
 
 ## Support
 

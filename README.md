@@ -114,6 +114,7 @@ DabbeWale/
 - Mobile app development
 - Push notifications
 - Rating and review system
+- Order tracking enhancements
 - Advanced search filters
 
 ## Contributing

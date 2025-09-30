@@ -63,18 +63,6 @@ USER EXPERIENCE ENHANCEMENTS:
 28. Personalization (Favorites, Preferences) .......................... [Planned]
 29. Social Features (Reviews, Sharing) ................................ [Planned]
 
-TECHNICAL IMPROVEMENTS:
------------------------
-32. Performance Optimization .......................................... [Planned]
-33. Security Enhancements ............................................. [Planned]
-34. Mobile App Development ............................................ [Planned]
-
-INTEGRATION & THIRD-PARTY:
---------------------------
-35. Payment Gateway Integration ....................................... [Planned]
-36. Maps & Location Services .......................................... [Planned]
-37. Communication Tools (Email, SMS, WhatsApp) ........................ [Planned]
-
 NOTES:
 ------
 - Frontend is live and fully functional for core UI/UX.
