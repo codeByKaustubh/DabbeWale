@@ -152,7 +152,7 @@ npx http-server
 
 After successful setup:
 1. Test user registration and login
-2. Test provider registration and login  
+2. Test provider registration and login
 3. Verify data appears in MongoDB
 4. Continue with other features
 

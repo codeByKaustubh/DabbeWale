@@ -63,11 +63,6 @@ USER EXPERIENCE ENHANCEMENTS:
 28. Personalization (Favorites, Preferences) .......................... [Planned]
 29. Social Features (Reviews, Sharing) ................................ [Planned]
 
-ADMIN & ANALYTICS:
-------------------
-30. Admin Dashboard ................................................... [Planned]
-31. Analytics & Insights .............................................. [Planned]
-
 TECHNICAL IMPROVEMENTS:
 -----------------------
 32. Performance Optimization .......................................... [Planned]
