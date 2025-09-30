@@ -446,7 +446,8 @@ async function placeOrder() {
             document.querySelectorAll('[id^="qty-"]').forEach(el => { el.textContent = '0'; });
             resetFormFields();
             saveCartToStorage();
-            togglePopup(true); // Use the simple, reliable popup
+            // Use a timeout to ensure the popup appears after the UI has re-rendered
+            setTimeout(() => togglePopup(true), 0);
             resetPlaceButton();
             return; // Exit after handling demo order
         }
@@ -489,7 +490,8 @@ async function placeOrder() {
         console.log("Resetting form fields and saving cart.");
         resetFormFields();
         saveCartToStorage();
-        togglePopup(true); // Use the simple, reliable popup
+        // Use a timeout to ensure the popup appears after the UI has re-rendered
+        setTimeout(() => togglePopup(true), 0);
         resetPlaceButton(); // Reset button state on success
         
     } catch (error) {
