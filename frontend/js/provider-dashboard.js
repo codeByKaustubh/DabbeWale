@@ -335,6 +335,9 @@ function initializeDashboard() {
 
   // Load dashboard data
   fetchDashboardStats();
+
+  // Auto-refresh the dashboard every 15 seconds to fetch new orders
+  setInterval(fetchDashboardStats, 15000);
 }
 
 // Initialize when page loads
