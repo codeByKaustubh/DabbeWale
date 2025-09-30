@@ -558,7 +558,7 @@ async function placeOrder() {
             const cvv = (document.getElementById('d-card-cvv')?.value || '');
             if (!num || !exp || !cvv) {
                 showError('Please fill card details');
-                return resetPlaceButton();
+                resetPlaceButton(); return; // Correctly exit after resetting button
             }
             await new Promise(r => setTimeout(r, 900));
             showSuccess('Card charged (demo).');
@@ -567,7 +567,7 @@ async function placeOrder() {
             const upiId = (document.getElementById('d-upi-id')?.value || document.getElementById('upi-id')?.value || '').trim();
             if (!upiId) {
                 showError('Please enter a valid UPI ID');
-                return resetPlaceButton();
+                resetPlaceButton(); return; // Correctly exit after resetting button
             }
             // Simulate UPI collect request
             await new Promise(r => setTimeout(r, 1200));
