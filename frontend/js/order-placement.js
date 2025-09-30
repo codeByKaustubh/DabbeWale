@@ -433,7 +433,7 @@ async function placeOrder() {
             document.querySelectorAll('[id^="qty-"]').forEach(el => { el.textContent = '0'; });
             resetFormFields();
             saveCartToStorage();
-            togglePopup(true); // Show the success popup
+            showOrderPlacedPopup(); // Use the auto-redirecting success popup
             resetPlaceButton();
             return; // Exit after handling demo order
         }
@@ -472,7 +472,7 @@ async function placeOrder() {
         });
         resetFormFields();
         saveCartToStorage();
-        togglePopup(true); // Show the success popup
+        showOrderPlacedPopup(); // Use the auto-redirecting success popup
         
     } catch (error) {
         console.error('Error placing order:', error);
