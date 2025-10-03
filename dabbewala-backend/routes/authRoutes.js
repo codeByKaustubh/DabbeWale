@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const Provider = require("../models/Provider");
-const DeliveryAgent = require("../models/DeliveryAgent");
 const bcrypt = require("bcryptjs");
 
 // Register User (Consumer, Provider, or Delivery Agent)
@@ -13,8 +12,7 @@ router.post("/register", async (req, res) => {
     // Check if user already exists in either collection
     const existingUser = await User.findOne({ email });
     const existingProvider = await Provider.findOne({ email });
-    const existingAgent = await DeliveryAgent.findOne({ email });
-    if (existingUser || existingProvider || existingAgent) {
+    if (existingUser || existingProvider) {
       return res.status(400).json({ msg: "User already exists with this email" });
     }
 

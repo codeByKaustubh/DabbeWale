@@ -1,8 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Provider = require("../models/Provider");
-const DeliveryAgent = require("../models/DeliveryAgent");
-
 const JWT_SECRET = process.env.JWT_SECRET || "change_this";
 
 const protect = async (req, res, next) => {
@@ -19,8 +17,14 @@ const protect = async (req, res, next) => {
 
     const decoded = jwt.verify(token, JWT_SECRET);
 
-    // The JWT `id` always refers to the User model's _id.
-    const user = await User.findById(decoded.id).select("-password");
+    // The JWT `id` can refer to a User, Provider, or DeliveryAgent.
+    // We check the role from the token to know which collection to query.
+    let user;
+    if (decoded.role === 'provider') {
+      user = await Provider.findById(decoded.id).select("-password");
+    } else {
+      user = await User.findById(decoded.id).select("-password");
+    }
 
     if (!user) {
       return res.status(401).json({ msg: "Not authorized, user not found" });
@@ -44,4 +48,4 @@ const authorize = (...roles) => {
   };
 };
 
-module.exports = { protect, authorize }; 
+module.exports = { protect, authorize };

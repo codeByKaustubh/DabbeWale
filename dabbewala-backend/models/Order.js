@@ -38,8 +38,8 @@ const orderSchema = new mongoose.Schema({
   },
   paymentMethod: {
   type: String,
-  enum: ["cod", "online", "card", "upi", "qr"],
-  default: "cod"
+  enum: ["online", "card", "upi", "qr"],
+  default: "online"
   },
   deliveryInstructions: String,
   estimatedDeliveryTime: Date,
