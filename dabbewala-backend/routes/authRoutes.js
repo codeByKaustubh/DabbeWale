@@ -3,27 +3,36 @@ const router = express.Router();
 const User = require("../models/User");
 const Provider = require("../models/Provider");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 // Register User (Consumer, Provider, or Delivery Agent)
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password, role, providerName, menu, prices, location, phone, vehicleType, serviceArea } = req.body;
+    const { name, email, password, role, providerName, menu, prices, location, phone } = req.body;
     
-    // Check if user already exists in either collection
+    // Check if a user already exists with this email
     const existingUser = await User.findOne({ email });
-    const existingProvider = await Provider.findOne({ email });
-    if (existingUser || existingProvider) {
+    if (existingUser) {
       return res.status(400).json({ msg: "User already exists with this email" });
     }
 
     const hashedPass = await bcrypt.hash(password, 10);
     
+    // 1. Always create a User record first for authentication purposes.
+    const newUser = new User({ 
+      name: name, 
+      email, 
+      password: hashedPass,
+      role: role || 'consumer' // Default to 'consumer' if role is not provided
+    });
+    await newUser.save();
+
+    // 2. If the role is 'provider', create a corresponding Provider profile.
     if (role === 'provider') {
-      // Register as provider - save to Provider collection
       const newProvider = new Provider({
         actualName: name,
         providerName: providerName,
-        email: email,
+        email: email, // Keep email for easier querying
         password: hashedPass,
         phone: phone,
         menu: menu,
@@ -31,36 +40,18 @@ router.post("/register", async (req, res) => {
         location: location,
         address: {
           city: location
-        }
+        },
+        owner: newUser._id // Link the provider profile to the new User account
       });
       
       await newProvider.save();
-      res.status(201).json({ message: "Provider registered successfully" });
-    } else if (role === 'delivery_agent') {
-      // Register as delivery agent - save to DeliveryAgent collection
-      const newAgent = new DeliveryAgent({
-        name,
-        email,
-        password: hashedPass,
-        phone,
-        vehicleType: vehicleType || 'bike',
-        serviceArea: serviceArea || { city: location, pincode: '' },
-        role: 'delivery_agent'
-      });
-      await newAgent.save();
-      res.status(201).json({ message: "Delivery agent registered successfully" });
-    } else {
-      // Register as regular user - save to User collection
-      const newUser = new User({ 
-        name, 
-        email, 
-        password: hashedPass,
-        role: role || 'consumer'
-      });
-      await newUser.save();
-      res.status(201).json({ message: "User registered successfully" });
     }
+
+    res.status(201).json({ message: "User registered successfully" });
+
   } catch (err) {
+    // Log the detailed error on the server for debugging
+    console.error("💥 Registration Error:", err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -71,19 +62,14 @@ router.post("/login", async (req, res) => {
     const { email, password } = req.body;
     console.log("🔐 Login attempt:", email);
     
-    // First check in User collection
+    // The User model is now the single source of truth for login credentials.
     let user = await User.findOne({ email });
-    let userType = 'user';
+    let providerId = null;
     
-    // If not found in User collection, check Provider collection
-    if (!user) {
-      user = await Provider.findOne({ email });
-      userType = 'provider';
-    }
-    // If still not found, check DeliveryAgent collection
-    if (!user) {
-      user = await DeliveryAgent.findOne({ email });
-      userType = 'delivery_agent';
+    // If the user is a provider, find their associated provider profile to get the providerId.
+    if (user && user.role === 'provider') {
+      const providerProfile = await Provider.findOne({ owner: user._id });
+      if (providerProfile) providerId = providerProfile._id;
     }
     
     if (!user) {
@@ -98,15 +84,14 @@ router.post("/login", async (req, res) => {
     }
 
     // Generate JWT token
-    const jwt = require("jsonwebtoken");
     const JWT_SECRET = process.env.JWT_SECRET || "change_this";
     const JWT_EXPIRES = process.env.JWT_EXPIRES || "7d";
     
     const token = jwt.sign(
       { 
         id: user._id, 
-        role: userType === 'provider' ? 'provider' : (userType === 'delivery_agent' ? 'delivery_agent' : (user.role || 'consumer')), 
-        name: user.actualName || user.name, 
+        role: user.role || 'consumer', 
+        name: user.name, 
         email: user.email 
       },
       JWT_SECRET,
@@ -118,10 +103,10 @@ router.post("/login", async (req, res) => {
       token,
       user: { 
         id: user._id, 
-        name: user.actualName || user.name, 
+        name: user.name, 
         email: user.email, 
-        role: userType === 'provider' ? 'provider' : (userType === 'delivery_agent' ? 'delivery_agent' : (user.role || 'consumer')),
-        providerId: userType === 'provider' ? user._id : null
+        role: user.role || 'consumer',
+        providerId: providerId
       },
     });
   } catch (err) {
