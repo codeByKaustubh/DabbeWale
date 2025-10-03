@@ -5,7 +5,7 @@ const User = require("../models/User");
 // Create a new order
 exports.createOrder = async (req, res) => {
   try {
-    const { providerId, items, deliveryAddress, deliveryInstructions, paymentMethod } = req.body;
+    const { providerId, items, specialInstructions, paymentMethod } = req.body;
     
     // Check if user is a consumer. The role is 'consumer', not 'user'.
     if (req.user.role !== 'consumer') {
@@ -57,7 +57,6 @@ exports.createOrder = async (req, res) => {
       provider: providerId,
       items: orderItems,
       totalAmount,
-      deliveryFee,
       tax,
       finalAmount,
       deliveryAddress,
@@ -71,11 +70,9 @@ exports.createOrder = async (req, res) => {
         provider: providerId,
         items: orderItems,
         totalAmount,
-        deliveryFee,
         tax,
         finalAmount,
-        deliveryAddress,
-        deliveryInstructions,
+        specialInstructions,
         paymentMethod
       });
 
@@ -173,10 +170,6 @@ exports.updateOrderStatus = async (req, res) => {
     }
 
     order.status = status;
-    
-    if (status === "delivered") {
-      order.actualDeliveryTime = new Date();
-    }
 
     await order.save();
 
