@@ -182,15 +182,14 @@
     </button>
       </div>
     </div>
-
+    
     <script>
-        // This function was missing. It controls the visibility of your order confirmation pop-up.
         function togglePopup(show, orderDetails = {}) {
             const popup = document.getElementById('order-popup');
             if (show) {
                 document.getElementById('popup-order-id').textContent = orderDetails.orderId || 'N/A';
                 document.getElementById('popup-total').textContent = orderDetails.total || '0';
-                popup.style.display = 'flex'; // Use flex to center the content
+                popup.style.display = 'flex';
             } else {
                 popup.style.display = 'none';
             }
