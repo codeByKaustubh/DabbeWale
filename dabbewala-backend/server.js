@@ -11,8 +11,10 @@ app.use(express.json());
 
 // Flexible CORS configuration for local development and production
 const allowedOrigins = [
-  "https://dabbewale.netlify.app", // Production frontend
-  "http://localhost:8000", // Common local server port
+   "https://dabbewale.netlify.app", // Production frontend
+  "http://localhost:3000",          // React dev server
+  "http://127.0.0.1:3000",          // React dev server (alternate)
+  "http://localhost:8000",          // Common local server port
   "http://127.0.0.1:5500"  // For Live Server extension
 ];
 app.use(cors({ origin: (origin, callback) => {
