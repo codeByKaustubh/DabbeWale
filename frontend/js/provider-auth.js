@@ -124,7 +124,6 @@ document.addEventListener('DOMContentLoaded', function () {
               localStorage.setItem('userId', loginResult.user.id);
               localStorage.setItem('providerId', loginResult.user.providerId || loginResult.user.id);
               
-              alert("Registration successful! Redirecting to your dashboard...");
               window.location.href = 'provider-dashboard.html';
             } else {
               alert("Registration successful! Please log in manually.");
