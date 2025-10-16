@@ -22,7 +22,7 @@ router.get("/:id/dashboard", protect, getProviderDashboardData);
 // Register provider directly into Provider collection
 router.post("/register", async (req, res) => {
   try {
-    const { name, actualName, providerName, menu, prices, location, email, password, phone } = req.body;
+    const { actualName, providerName, menu, prices, location, email, password, phone } = req.body;
     
     // Check if a user or provider already exists with this email
     const userExists = await User.findOne({ email });
@@ -35,7 +35,7 @@ router.post("/register", async (req, res) => {
 
     // 1. Create the User record for authentication
     const newUser = new User({
-      name: actualName || name,
+      name: actualName,
       email,
       password: hashedPass,
       role: 'provider'
@@ -44,7 +44,7 @@ router.post("/register", async (req, res) => {
 
     // 2. Create the Provider profile and link it to the new User
     const newProvider = new Provider({
-      actualName: actualName || name,
+      actualName: actualName,
       providerName,
       menu,
       prices,
