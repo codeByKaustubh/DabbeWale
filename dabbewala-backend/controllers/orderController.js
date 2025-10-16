@@ -5,7 +5,7 @@ const User = require("../models/User");
 // Create a new order
 exports.createOrder = async (req, res) => {
   try {
-    const { providerId, items, specialInstructions, paymentMethod } = req.body;
+    const { providerId, items, deliveryAddress, deliveryInstructions, paymentMethod } = req.body;
     
     // Check if user is a consumer. The role is 'consumer', not 'user'.
     if (req.user.role !== 'consumer') {
@@ -59,7 +59,7 @@ exports.createOrder = async (req, res) => {
       totalAmount,
       tax,
       finalAmount,
-      deliveryAddress,
+      deliveryAddress: deliveryAddress, // Pass the address from the request body
       deliveryInstructions,
       paymentMethod
     });
@@ -72,7 +72,8 @@ exports.createOrder = async (req, res) => {
         totalAmount,
         tax,
         finalAmount,
-        specialInstructions,
+        deliveryAddress: deliveryAddress,
+        deliveryInstructions: deliveryInstructions, // Use deliveryInstructions which was previously named specialInstructions
         paymentMethod
       });
 
