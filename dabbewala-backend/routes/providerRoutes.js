@@ -4,7 +4,6 @@ const Provider = require("../models/Provider");
 const User = require("../models/User");
 const { protect } = require("../middleware/auth");
 const bcrypt = require("bcryptjs");
-const { getProviderById, getProviderOrders } = require("../controllers/providerController");
 const { getProviderById, getProviderOrders, getProviderDashboardData } = require("../controllers/providerController");
 
 // Get providers (optionally filter by city or search)
