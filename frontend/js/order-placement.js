@@ -488,20 +488,19 @@ async function placeOrder() {
         }
 
         // --- This block now runs for ALL successful orders (real or demo) ---
+        // Show the success popup first.
+        togglePopup(true, orderDetailsForPopup);
+        
         // Clear cart
         cart = {};
         console.log("Order success: Clearing cart, updating UI.");
         updateOrderSummary();
+        saveCartToStorage();
         
         // Reset all quantity displays
         document.querySelectorAll('[id^="qty-"]').forEach(el => {
             el.textContent = '0';
         });
-        console.log("Resetting form fields and saving cart.");
-        resetFormFields();
-        saveCartToStorage();
-        // Use a timeout to ensure the popup appears after the UI has re-rendered
-        setTimeout(() => togglePopup(true, orderDetailsForPopup), 0);
         resetPlaceButton(); // Reset button state on success
         
     } catch (error) {

@@ -183,14 +183,9 @@
     
     <script>
         function togglePopup(show, orderDetails = {}) {
-            const popup = document.getElementById('order-popup');
-            if (show) {
-                document.getElementById('popup-order-id').textContent = orderDetails.orderId || 'N/A';
-                document.getElementById('popup-total').textContent = orderDetails.total || '0';
-                popup.style.display = 'flex';
-            } else {
-                popup.style.display = 'none';
-            }
+          const popup = document.getElementById("order-popup");
+          if (popup) popup.style.display = show ? "flex" : "none";
+          console.log(`togglePopup called for element #${popup ? 'order-popup' : 'NOT_FOUND'} with display=${show ? 'flex' : 'none'}`);
         }
     </script>
 </body>
