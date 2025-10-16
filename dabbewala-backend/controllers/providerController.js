@@ -208,3 +208,38 @@ exports.getProviderOrders = async (req, res) => {
     res.status(500).json({ msg: "Error fetching provider orders", error: err.message });
   }
 };
+
+const Order = require("../models/Order");
+
+exports.getProviderDashboardData = async (req, res) => {
+  try {
+    const providerId = req.params.id;
+
+    // Get all orders for this provider
+    const orders = await Order.find({ provider: providerId });
+
+    // Calculate statistics
+    const totalOrders = orders.length;
+    const pendingOrders = orders.filter(o => o.status === "pending").length;
+    const deliveredOrders = orders.filter(o => o.status === "delivered").length;
+    const revenueToday = orders
+      .filter(o => o.status === "delivered" && new Date(o.updatedAt).toDateString() === new Date().toDateString())
+      .reduce((sum, o) => sum + (o.finalAmount || 0), 0);
+
+    const avgRating =
+      orders.reduce((acc, o) => acc + (o.rating || 0), 0) /
+      (orders.filter(o => o.rating).length || 1);
+
+    res.json({
+      totalOrders,
+      pendingOrders,
+      revenueToday,
+      rating: avgRating.toFixed(1),
+      orders
+    });
+  } catch (err) {
+    console.error("Dashboard fetch error:", err);
+    res.status(500).json({ error: "Failed to load provider dashboard data" });
+  }
+};
+

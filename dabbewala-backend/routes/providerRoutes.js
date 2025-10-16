@@ -5,6 +5,7 @@ const User = require("../models/User");
 const { protect } = require("../middleware/auth");
 const bcrypt = require("bcryptjs");
 const { getProviderById, getProviderOrders } = require("../controllers/providerController");
+const { getProviderById, getProviderOrders, getProviderDashboardData } = require("../controllers/providerController");
 
 // Get providers (optionally filter by city or search)
 router.get("/", async (req, res) => {
@@ -43,6 +44,10 @@ router.get("/:id", protect, getProviderById);
 
 // Get provider's recent orders (protected route)
 router.get("/:id/orders", protect, getProviderOrders);
+
+// Get provider dashboard stats + orders
+router.get("/:id/dashboard", protect, getProviderDashboardData);
+
 
 // Register provider directly into Provider collection
 router.post("/register", async (req, res) => {
