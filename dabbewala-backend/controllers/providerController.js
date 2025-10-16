@@ -108,12 +108,6 @@ exports.getProviderById = async (req, res) => {
       return res.status(403).json({ msg: "Not authorized to access this provider's data." });
     }
 
-    // Fetch all orders for this provider and attach them to the response
-    const orders = await Order.find({ provider: providerId })
-      .populate('customer', 'name email') // Populate customer details for each order
-      .sort({ createdAt: -1 });
-    provider.orders = orders;
-
     res.json(provider);
   } catch (err) {
     res.status(500).json({ msg: "Error fetching provider", error: err.message });
@@ -213,30 +207,17 @@ exports.getProviderOrders = async (req, res) => {
 
 exports.getProviderDashboardData = async (req, res) => {
   try {
-    const providerId = req.params.id;
+    const provider = await Provider.findById(req.params.id).lean();
+    if (!provider) {
+      return res.status(404).json({ msg: "Provider not found" });
+    }
 
-    // Get all orders for this provider
-    const orders = await Order.find({ provider: providerId });
+    // Fetch all orders for this provider and attach them to the response
+    const orders = await Order.find({ provider: req.params.id })
+      .populate('customer', 'name email') // Populate customer details
+      .sort({ createdAt: -1 });
 
-    // Calculate statistics
-    const totalOrders = orders.length;
-    const pendingOrders = orders.filter(o => o.status === "pending").length;
-    const deliveredOrders = orders.filter(o => o.status === "delivered").length;
-    const revenueToday = orders
-      .filter(o => o.status === "delivered" && new Date(o.updatedAt).toDateString() === new Date().toDateString())
-      .reduce((sum, o) => sum + (o.finalAmount || 0), 0);
-
-    const avgRating =
-      orders.reduce((acc, o) => acc + (o.rating || 0), 0) /
-      (orders.filter(o => o.rating).length || 1);
-
-    res.json({
-      totalOrders,
-      pendingOrders,
-      revenueToday,
-      rating: avgRating.toFixed(1),
-      orders
-    });
+    res.json({ ...provider, orders });
   } catch (err) {
     console.error("Dashboard fetch error:", err);
     res.status(500).json({ error: "Failed to load provider dashboard data" });
