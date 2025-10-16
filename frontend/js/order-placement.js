@@ -299,6 +299,16 @@ function renderCartDrawer() {
     if (!container || !subtotalEl) return;
     const lines = [];
     Object.entries(cart).forEach(([providerId, items]) => {
+        // Find the provider's name to display as a header
+        const provider = providers.find(p => p._id === providerId);
+        const providerName = provider ? provider.providerName : 'Unknown Provider';
+
+        // Add a header for the provider
+        lines.push(`
+            <div style="padding: 10px 0; font-weight: 800; color: #333; border-bottom: 2px solid #2e7d32; margin-bottom: 5px;">
+                Order from: ${providerName}
+            </div>
+        `);
         Object.entries(items).forEach(([itemId, it]) => {
             lines.push(`
                 <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 0; border-bottom:1px solid #f0f0f0;">
