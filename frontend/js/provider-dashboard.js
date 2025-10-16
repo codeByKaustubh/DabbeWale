@@ -40,7 +40,7 @@ async function fetchDashboardStats() {
     const token = localStorage.getItem('token');
     
     // Fetch the full provider profile, which now includes orders
-    const response = await fetch(`${API_BASE_URL}/api/providers/${providerId}`, {
+    const response = await fetch(`${API_BASE_URL}/api/providers/${providerId}/dashboard`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
