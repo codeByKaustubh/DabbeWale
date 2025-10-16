@@ -209,7 +209,7 @@ exports.getProviderOrders = async (req, res) => {
   }
 };
 
-const Order = require("../models/Order");
+
 
 exports.getProviderDashboardData = async (req, res) => {
   try {

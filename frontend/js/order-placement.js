@@ -345,13 +345,58 @@ function clearCart() {
 
 // Place order
 async function placeOrder() {
-    console.log("placeOrder function called.");
-    const token = localStorage.getItem('token');
-    if (!token) {
-        // For demo purposes, create a mock token
-        console.log('No token found, using demo mode');
-        // Don't redirect, just continue with demo
+  console.log("placeOrder function called.");
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    console.log('No token found, using demo mode');
+    // For now, allow placing mock orders without auth
+  }
+
+  // Example order data — replace with actual cart or form data
+  const orderData = {
+    customer: localStorage.getItem("userId"),  // If you have this stored
+    provider: selectedProviderId,              // The provider user is ordering from
+    items: [
+      { name: "Paneer Tikka", price: 150, quantity: 2 }
+    ],
+    totalAmount: 300,
+    finalAmount: 300,
+    deliveryAddress: {
+      street: "123 Main St",
+      city: "Mumbai",
+      state: "MH",
+      pincode: "400001"
+    },
+    paymentMethod: "online"
+  };
+
+  console.log("Sending order data:", orderData);
+
+  try {
+    const res = await fetch("https://your-backend-url/api/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : ""
+      },
+      body: JSON.stringify(orderData)
+    });
+
+    const data = await res.json();
+    console.log("Order response:", data);
+
+    if (res.ok) {
+      alert("🎉 Order placed successfully!");
+    } else {
+      alert(`⚠️ Failed to place order: ${data.error || data.msg}`);
     }
+  } catch (err) {
+    console.error("Error placing order:", err);
+    alert("Something went wrong while placing your order.");
+  }
+}
+
     
     // Check if cart has items
     let hasItems = false;
@@ -507,7 +552,7 @@ async function placeOrder() {
         showError('Failed to place order. Please try again.');
         resetPlaceButton(); // Also reset button on exception
     }
-}
+
 
 // Reset place button state helper
 function resetPlaceButton() {
