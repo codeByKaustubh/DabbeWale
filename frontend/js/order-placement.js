@@ -306,7 +306,7 @@ function renderCartDrawer() {
         // Add a header for the provider
         lines.push(`
             <div style="padding: 10px 0; font-weight: 800; color: #333; border-bottom: 2px solid #2e7d32; margin-bottom: 5px;">
-                Order from: ${providerName}
+                Provider: ${providerName}
             </div>
         `);
         Object.entries(items).forEach(([itemId, it]) => {
