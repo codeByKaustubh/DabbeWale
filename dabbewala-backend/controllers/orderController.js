@@ -40,7 +40,7 @@ exports.createOrder = async (req, res) => {
       totalAmount += itemTotal;
 
       orderItems.push({
-        menuItem: menuItemFromDB._id,
+        menuItem: menuItemFromDB._id, // This ID must reference an item in the Provider's menu sub-document array
         name: menuItemFromDB.name,
         price: menuItemFromDB.price, // Use the secure price
         quantity: item.quantity,
