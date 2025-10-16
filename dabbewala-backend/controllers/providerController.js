@@ -54,12 +54,12 @@ exports.getProviders = async (req, res) => {
     let query = { isActive: true };
     
     if (city) {
-      // Use a case-insensitive exact match for the city for more precise results.
-      query["address.city"] = { $regex: `^${city}$`, $options: "i" };
+      // Use a case-insensitive regex search for the city.
+      query["address.city"] = { $regex: city, $options: "i" };
     }
     
     if (cuisine) {
-      query.cuisine = { $in: [cuisine] };
+      query.cuisine = { $in: Array.isArray(cuisine) ? cuisine : [cuisine] };
     }
     
     if (rating) {
@@ -103,7 +103,7 @@ exports.getProviderById = async (req, res) => {
     // Authorization: Ensure the logged-in user (a provider) owns this provider profile.
     // The user ID comes from the JWT token middleware.
     // The correct check is to see if the logged-in user's ID matches the provider's `owner` field.
-    // We also need to handle the case where `provider.owner` might be null for older data.
+    // We also need to handle the case where `provider.owner` might be null for older data or not populated correctly.
     if (!provider.owner || req.user._id.toString() !== provider.owner._id.toString()) {
       return res.status(403).json({ msg: "Not authorized to access this provider's data." });
     }
@@ -242,4 +242,3 @@ exports.getProviderDashboardData = async (req, res) => {
     res.status(500).json({ error: "Failed to load provider dashboard data" });
   }
 };
-

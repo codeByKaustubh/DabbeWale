@@ -18,16 +18,12 @@ const allowedOrigins = [
   "http://127.0.0.1:5500"  // For Live Server extension
 ];
 app.use(cors({ origin: (origin, callback) => {
-  // Allow requests with no origin (like mobile apps or curl requests) or from whitelisted domains
-  if (!origin || allowedOrigins.includes(origin)) { callback(null, true); } 
-  else { callback(new Error(`Origin '${origin}' not allowed by CORS`)); }
-    // Allow requests with no origin (like file://, mobile apps, or curl requests)
-    // and requests from whitelisted domains.
-    if (!origin || origin === 'null' || allowedOrigins.includes(origin)) {
-        callback(null, true);
-    } else {
-        callback(new Error(`Origin '${origin}' not allowed by CORS`));
-    }
+  // Allow requests with no origin (like mobile apps, curl, or file://) and from whitelisted domains.
+  if (!origin || origin === 'null' || allowedOrigins.includes(origin)) {
+    callback(null, true);
+  } else {
+    callback(new Error(`Origin '${origin}' not allowed by CORS`));
+  }
 }}));
 
 // Connect DB (this already prints your custom logs!)
