@@ -40,7 +40,14 @@ exports.registerUser = async (req, res) => {
       });
     }
 
-    res.status(201).json({ msg: "User registered successfully" });
+    // Return the new user's data so the frontend can auto-login
+    res.status(201).json({
+      msg: "User registered successfully",
+      user: {
+        email: user.email,
+        password: password // Send back the plain password for auto-login
+      }
+    });
   } catch (err) {
     res.status(500).json({ msg: "Registration error", error: err.message });
   }

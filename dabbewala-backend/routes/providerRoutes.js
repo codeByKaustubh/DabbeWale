@@ -58,7 +58,14 @@ router.post("/register", async (req, res) => {
 
     await newProvider.save();
 
-    res.status(201).json({ message: "Provider registered successfully" });
+    // Return the new user's data so the frontend can auto-login
+    res.status(201).json({
+      msg: "Provider registered successfully",
+      user: {
+        email: newUser.email,
+        password: password // Send back the plain password for auto-login
+      }
+    });
   } catch (err) {
     console.error("Provider registration error:", err);
     res.status(500).json({ error: err.message });
