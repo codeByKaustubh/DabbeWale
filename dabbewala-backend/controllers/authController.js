@@ -9,13 +9,13 @@ const JWT_EXPIRES = process.env.JWT_EXPIRES || "7d";
 
 
 exports.registerUser = async (req, res) => {
-  const { name, email, password, role, providerName, menu, prices, location, phone } = req.body;
+  const { name, email, password, role, providerName, menu, prices, location, phone, actualName } = req.body;
   try {
     const userExists = await User.findOne({ email });
     if (userExists) return res.status(400).json({ msg: "User already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashedPassword, role });
+    const user = await User.create({ name: actualName || name, email, password: hashedPassword, role: role || 'consumer' });
 
     // If the role is 'provider', create a corresponding Provider document
     if (role === 'provider') {
@@ -28,10 +28,9 @@ exports.registerUser = async (req, res) => {
 
       await Provider.create({
         owner: user._id, // Link the provider profile to the user account
-        actualName: name,
+        actualName: actualName || name,
         providerName: providerName || `${name}'s Kitchen`,
         email: email,
-        password: hashedPassword, // Also store hashed password here for consistency
         phone: phone || 'N/A',
         location: location || 'N/A',
         address: { city: location || 'N/A' },
@@ -39,7 +38,6 @@ exports.registerUser = async (req, res) => {
         prices: prices || 'N/A'
       });
     }
-
     // Return the new user's data so the frontend can auto-login
     res.status(201).json({
       msg: "User registered successfully",
@@ -52,6 +50,7 @@ exports.registerUser = async (req, res) => {
     res.status(500).json({ msg: "Registration error", error: err.message });
   }
 };
+
 
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;

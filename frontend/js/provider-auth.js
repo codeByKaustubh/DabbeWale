@@ -85,9 +85,8 @@ document.addEventListener('DOMContentLoaded', function () {
       console.log("Sending registration data:", { ...data, password: '[HIDDEN]' });
 
       try {
-        // This is the correct endpoint for creating both a User and a Provider profile
-        // in a single step on the backend.
-        const url = `${PROVIDER_API_BASE_URL}/api/providers/register`;
+        // All registrations now go through the unified /api/auth/register endpoint
+        const url = `${PROVIDER_API_BASE_URL}/api/auth/register`;
         console.log('POST register to:', url, 'with payload:', data);
         const response = await fetch(url, {
           method: 'POST',
