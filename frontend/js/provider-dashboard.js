@@ -53,53 +53,20 @@ async function fetchDashboardStats() {
     }
 
     const providerData = await response.json();
-    const orders = providerData.orders || [];
-    const menu = providerData.menu || [];
     
-    // Calculate stats from real orders
-    const stats = calculateStatsFromOrders(orders);
-    updateDashboardUI(stats);
+    // Update UI with data directly from the backend
+    updateDashboardUI(providerData);
     
     // Update orders panel with real data
-    updateOrdersPanel(orders);
+    updateOrdersPanel(providerData.orders || []);
     
     // Load provider menu
-    updateMenuPanel(menu);
+    updateMenuPanel(providerData.menu || []);
     
   } catch (error) {
     console.error('Error fetching dashboard stats:', error);
     showError('Failed to load dashboard data');
   }
-}
-
-// Calculate stats from real orders
-function calculateStatsFromOrders(orders) {
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  
-  const totalOrders = orders.length;
-  const pendingOrders = orders.filter(order => 
-    ['pending', 'confirmed', 'preparing'].includes(order.status)
-  ).length;
-  
-  const todayOrders = orders.filter(order => 
-    new Date(order.createdAt) >= today && order.status === 'delivered'
-  );
-  const todayRevenue = todayOrders.reduce((sum, order) => sum + order.finalAmount, 0);
-  
-  // Calculate average rating from orders with ratings
-  const ratedOrders = orders.filter(order => order.rating);
-  const avgRating = ratedOrders.length > 0 
-    ? ratedOrders.reduce((sum, order) => sum + order.rating, 0) / ratedOrders.length 
-    : 0;
-  
-  return {
-    totalOrders,
-    pendingOrders,
-    todayRevenue,
-    rating: avgRating,
-    totalReviews: ratedOrders.length
-  };
 }
 
 // Update dashboard UI with real data
@@ -109,7 +76,7 @@ function updateDashboardUI(stats) {
   const pendingOrdersEl = document.querySelectorAll('.metric .value')[1];
   const todayRevenueEl = document.querySelectorAll('.metric .value')[2];
   const ratingEl = document.querySelectorAll('.metric .value')[3];
-  
+
   if (totalOrdersEl) totalOrdersEl.textContent = stats.totalOrders || 0;
   if (pendingOrdersEl) pendingOrdersEl.textContent = stats.pendingOrders || 0;
   if (todayRevenueEl) todayRevenueEl.textContent = `₹${stats.todayRevenue || 0}`;

@@ -214,27 +214,30 @@ exports.getProviderOrders = async (req, res) => {
 exports.getProviderDashboardData = async (req, res) => {
   try {
     const providerId = req.params.id;
+    // Fetch both provider profile and orders
+    const provider = await Provider.findById(providerId);
+    if (!provider) {
+      return res.status(404).json({ msg: "Provider not found" });
+    }
 
     // Get all orders for this provider
-    const orders = await Order.find({ provider: providerId });
+    const orders = await Order.find({ provider: providerId })
+      .populate('customer', 'name email') // Populate customer details
+      .sort({ createdAt: -1 });
 
     // Calculate statistics
     const totalOrders = orders.length;
-    const pendingOrders = orders.filter(o => o.status === "pending").length;
-    const deliveredOrders = orders.filter(o => o.status === "delivered").length;
+    const pendingOrders = orders.filter(o => ['pending', 'confirmed', 'preparing'].includes(o.status)).length;
     const revenueToday = orders
       .filter(o => o.status === "delivered" && new Date(o.updatedAt).toDateString() === new Date().toDateString())
       .reduce((sum, o) => sum + (o.finalAmount || 0), 0);
-
-    const avgRating =
-      orders.reduce((acc, o) => acc + (o.rating || 0), 0) /
-      (orders.filter(o => o.rating).length || 1);
 
     res.json({
       totalOrders,
       pendingOrders,
       revenueToday,
-      rating: avgRating.toFixed(1),
+      rating: provider.rating.toFixed(1), // Use the provider's own rating
+      totalRatings: provider.totalRatings, // Use the provider's total ratings
       orders
     });
   } catch (err) {
