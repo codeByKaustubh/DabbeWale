@@ -31,16 +31,21 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Login response:", { status: response.status, url: response.url, body: result });
 
         if (response.ok) {
-          alert("Login successful!");
-          // Store token and redirect
+          // Store token and user info
           localStorage.setItem('token', result.token);
           localStorage.setItem('userName', result.user.name);
-          // CRITICAL FIX: Store the providerId from the login response.
-          // The dashboard uses this ID to fetch the correct data.
-          if (result.user.providerId) {
+          localStorage.setItem('userRole', result.user.role);
+          localStorage.setItem('userId', result.user.id);
+
+          // Redirect based on user role
+          if (result.user.role === 'provider') {
+            // Store providerId and redirect to provider dashboard
             localStorage.setItem('providerId', result.user.providerId);
+            window.location.href = 'provider-dashboard.html';
+          } else {
+            // Redirect customer to their page
+            window.location.href = 'order-placement.html';
           }
-          window.location.href = 'provider-dashboard.html';
         } else {
           const errMsg = result && (result.msg || result.message || result.error);
           alert("Login failed: " + (errMsg || "Unknown error"));
