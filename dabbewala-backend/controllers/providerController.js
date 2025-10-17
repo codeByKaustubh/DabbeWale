@@ -222,13 +222,14 @@ exports.getProviderDashboardData = async (req, res) => {
 
     // Authorization check: Ensure the logged-in user owns this dashboard
     // The user's ID comes from the 'protect' middleware (JWT)
-    if (provider.owner.toString() !== req.user.id) {
+    if (!provider.owner || provider.owner.toString() !== req.user.id) {
       return res.status(403).json({ msg: "Not authorized to access this dashboard" });
     }
 
     // Get all orders for this provider
     const orders = await Order.find({ provider: providerId })
-      .populate('customer', 'name email') // Populate customer details
+      .populate('customer', 'name email') // Populate customer details for each order
+      .populate('provider', 'address') // Populate provider's address for pickup location
       .sort({ createdAt: -1 });
 
     // Calculate statistics
