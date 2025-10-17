@@ -214,38 +214,42 @@ exports.getProviderOrders = async (req, res) => {
 exports.getProviderDashboardData = async (req, res) => {
   try {
     const providerId = req.params.id;
-    // Fetch both provider profile and orders
-    const provider = await Provider.findById(providerId);
+
+    // ✅ Fetch provider and populate menu
+    const provider = await Provider.findById(providerId).lean();
     if (!provider) {
       return res.status(404).json({ msg: "Provider not found" });
     }
 
-    // Authorization check: Ensure the logged-in user owns this dashboard
-    // The user's ID comes from the 'protect' middleware (JWT)
-    if (!provider.owner || provider.owner.toString() !== req.user.id) {
-      return res.status(403).json({ msg: "Not authorized to access this dashboard" });
-    }
-
-    // Get all orders for this provider
+    // ✅ Fetch all orders for this provider
     const orders = await Order.find({ provider: providerId })
-      .populate('customer', 'name email') // Populate customer details for each order
-      .populate('provider', 'address') // Populate provider's address for pickup location
-      .sort({ createdAt: -1 });
+      .populate("customer", "name email")
+      .sort({ createdAt: -1 })
+      .lean();
 
-    // Calculate statistics
+    // ✅ Calculate dashboard stats
     const totalOrders = orders.length;
-    const pendingOrders = orders.filter(o => ['pending', 'confirmed', 'preparing'].includes(o.status)).length;
-    const revenueToday = orders
-      .filter(o => o.status === "delivered" && new Date(o.updatedAt).toDateString() === new Date().toDateString())
+    const pendingOrders = orders.filter(o => o.status === "pending").length;
+    const deliveredOrders = orders.filter(o => o.status === "delivered").length;
+
+    const today = new Date().toDateString();
+    const todayRevenue = orders
+      .filter(o => o.status === "delivered" && new Date(o.updatedAt).toDateString() === today)
       .reduce((sum, o) => sum + (o.finalAmount || 0), 0);
 
+    const avgRating =
+      orders.reduce((acc, o) => acc + (o.rating || 0), 0) /
+      (orders.filter(o => o.rating).length || 1);
+
+    // ✅ Send everything the frontend needs
     res.json({
       totalOrders,
       pendingOrders,
-      revenueToday,
-      rating: (provider.rating || 0).toFixed(1), // Safely handle undefined rating
-      totalRatings: provider.totalRatings || 0, // Safely handle undefined totalRatings
-      orders
+      deliveredOrders,
+      todayRevenue,
+      rating: Number.isFinite(avgRating) ? avgRating.toFixed(1) : "0.0",
+      orders,
+      menu: provider.menu || [],
     });
   } catch (err) {
     console.error("Dashboard fetch error:", err);
