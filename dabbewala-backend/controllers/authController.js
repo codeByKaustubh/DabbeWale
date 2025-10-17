@@ -35,7 +35,9 @@ exports.registerUser = async (req, res) => {
         location: location || 'N/A',
         address: { city: location || 'N/A' },
         menu: menu || [],
-        prices: prices || 'N/A'
+        prices: prices || 'N/A',
+        rating: 0, // Initialize rating
+        totalRatings: 0 // Initialize total ratings
       });
     }
 

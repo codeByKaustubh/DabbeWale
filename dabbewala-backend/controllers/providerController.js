@@ -236,8 +236,8 @@ exports.getProviderDashboardData = async (req, res) => {
       totalOrders,
       pendingOrders,
       revenueToday,
-      rating: provider.rating.toFixed(1), // Use the provider's own rating
-      totalRatings: provider.totalRatings, // Use the provider's total ratings
+      rating: (provider.rating || 0).toFixed(1), // Safely handle undefined rating
+      totalRatings: provider.totalRatings || 0, // Safely handle undefined totalRatings
       orders
     });
   } catch (err) {
