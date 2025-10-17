@@ -38,6 +38,9 @@ async function fetchDashboardStats() {
 
   try {
     const token = localStorage.getItem('token');
+    console.log(" Provider ID:", providerId);
+console.log(" Token being sent:", token);
+
     
     // Fetch the full provider profile, which now includes orders
     const response = await fetch(`${API_BASE_URL}/api/providers/${providerId}/dashboard`, {
@@ -80,7 +83,7 @@ function updateDashboardUI(stats) {
   if (totalOrdersEl) totalOrdersEl.textContent = stats.totalOrders || 0;
   if (pendingOrdersEl) pendingOrdersEl.textContent = stats.pendingOrders || 0;
   if (todayRevenueEl) todayRevenueEl.textContent = `₹${stats.todayRevenue || 0}`;
-  if (ratingEl) ratingEl.textContent = (stats.rating || 0).toFixed(1);
+  if (ratingEl) ratingEl.textContent = (Number(stats.rating) || 0).toFixed(1);
 
   // Add click handlers to cards
   addCardClickHandlers();
