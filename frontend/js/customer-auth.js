@@ -35,40 +35,20 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Registration response:", { status: response.status, body: result });
 
         if (response.ok) {
-          // Auto-login after successful registration
-          try {
-            const loginResponse = await fetch(`${CUSTOMER_API_BASE_URL}/api/auth/login`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                email: result.user.email,
-                password: result.user.password
-              })
-            });
-
-            const loginResult = await loginResponse.json();
+          // Auto-login successful since backend now returns token on registration
+          if (result.token && result.user) {
+            // Store token and user info
+            localStorage.setItem('token', result.token);
+            localStorage.setItem('userName', result.user.name);
+            localStorage.setItem('userRole', result.user.role);
+            localStorage.setItem('userId', result.user.id);
             
-            if (loginResponse.ok) {
-              // Store token and user info
-              localStorage.setItem('token', loginResult.token);
-              localStorage.setItem('userName', loginResult.user.name);
-              localStorage.setItem('userRole', loginResult.user.role);
-              localStorage.setItem('userId', loginResult.user.id);
-              
-              showSuccess("Registration successful! Redirecting to order page...");
-              setTimeout(() => {
-                window.location.href = 'order-placement.html';
-              }, 2000);
-            } else {
-              showSuccess("Registration successful! Please log in manually.");
-              setTimeout(() => {
-                window.location.href = 'login.html';
-              }, 2000);
-            }
-          } catch (loginErr) {
-            console.error("Auto-login failed:", loginErr);
+            showSuccess("Registration successful! Redirecting...");
+            setTimeout(() => {
+              // Redirect based on role, defaulting to customer page
+              window.location.href = 'order-placement.html';
+            }, 2000);
+          } else {
             showSuccess("Registration successful! Please log in manually.");
             setTimeout(() => {
               window.location.href = 'login.html';

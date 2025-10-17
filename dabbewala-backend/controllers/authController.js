@@ -38,14 +38,33 @@ exports.registerUser = async (req, res) => {
         prices: prices || 'N/A'
       });
     }
-    // Return the new user's data so the frontend can auto-login
+
+    // Generate JWT for auto-login
+    const token = jwt.sign(
+      { id: user._id, role: user.role, name: user.name, email: user.email },
+      JWT_SECRET,
+      { expiresIn: JWT_EXPIRES }
+    );
+
+    // If provider, get their provider profile
+    let providerProfile = null;
+    if (user.role === 'provider') {
+      providerProfile = await Provider.findOne({ owner: user._id });
+    }
+
+    // Return everything needed for frontend to auto-login and redirect
     res.status(201).json({
-      msg: "User registered successfully",
+      msg: "Registration successful",
+      token,
       user: {
+        id: user._id,
+        name: user.name,
         email: user.email,
-        password: password // Send back the plain password for auto-login
+        role: user.role,
+        providerId: providerProfile ? providerProfile._id : null
       }
     });
+
   } catch (err) {
     res.status(500).json({ msg: "Registration error", error: err.message });
   }
