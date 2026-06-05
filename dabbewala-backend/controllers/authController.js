@@ -3,7 +3,7 @@ const Provider = require("../models/Provider")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = process.env.JWT_SECRET || "change_this";
+const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES = process.env.JWT_EXPIRES || "7d";
 
 
@@ -68,7 +68,7 @@ exports.registerUser = async (req, res) => {
     });
 
   } catch (err) {
-    res.status(500).json({ msg: "Registration error", error: err.message });
+    next(err);
   }
 };
 
@@ -103,6 +103,6 @@ exports.loginUser = async (req, res) => {
       user: { id: user._id, name: user.name, email: user.email, role: user.role, providerId: providerId },
     });
   } catch (err) {
-    res.status(500).json({ msg: "Login error", error: err.message });
+    next(err);
   }
 };
