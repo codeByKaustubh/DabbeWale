@@ -1,7 +1,4 @@
 # DabbeWale
-
-[Live Site: dabbewale.netlify.app](https://dabbewale.netlify.app/)
-
 ## Project Status
 - **Frontend:** ✅ Live, modern UI/UX, responsive, user authentication, provider discovery, user info in profile dropdown.
 - **Backend:** ✅ Node.js/Express/MongoDB API fully functional. User authentication, provider management, and order endpoints implemented and tested. JWT includes user name and email for improved UX.
